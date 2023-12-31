@@ -1,37 +1,62 @@
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import PreachersIndexScreen from "../screens/preachers/IndexScreen";
 import PreachersNewScreen from "../screens/preachers/NewScreen";
 import PreachersEditScreen from "../screens/preachers/EditScreen";
 import PreachersSearchScreen from "../screens/preachers/SearchScreen";
+import { StyleSheet } from "react-native";
+import PreacherDeleteConfirmScreen from "../screens/preachers/DeleteConfirmScreen";
+import PreacherTerritoriesScreen from "../screens/preachers/PreacherTerritoriesScreen";
 
 const Stack = createStackNavigator()
 
 const PreachersNavigator = () => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false}}>
+        <Stack.Navigator screenOptions={{ headerStyle: headerStyles.header, headerTitleStyle: headerStyles.title, headerTintColor: 'white'}}>
             <Stack.Screen 
-                name="Preachers list" 
+                name="PreachersList" 
                 component={PreachersIndexScreen} 
                 options={{ headerTitle: 'Głosiciele' }}
             />  
             <Stack.Screen 
-                name="Add preacher" 
+                name="AddPreacher" 
                 component={PreachersNewScreen} 
                 options={{ headerTitle: 'Dodaj głosiciela' }}
             /> 
             <Stack.Screen 
-                name="Edit Preacher" 
+                name="EditPreacher" 
                 component={PreachersEditScreen} 
                 options={{ headerTitle: 'Edytuj głosiciela' }}
             />
             <Stack.Screen 
-                name="Search Preacher" 
+                name="SearchPreacher" 
                 component={PreachersSearchScreen} 
                 options={{ headerTitle: 'Szukaj głosiciela' }}
+            /> 
+            <Stack.Screen 
+                name="PreacherTerritories" 
+                component={PreacherTerritoriesScreen} 
+                options={{ headerTitle: 'Tereny głosiciela' }}
+            />  
+            <Stack.Screen 
+                name="DeleteConfirmPreacher" 
+                component={PreacherDeleteConfirmScreen} 
+                options={{ headerTitle: 'Potwierdź usunięcie' }}
             />  
             
         </Stack.Navigator>
     )
 }
+
+const headerStyles = StyleSheet.create({
+    header: {
+      backgroundColor: '#28a745',
+    },
+    title: { 
+      color: 'white',
+      fontFamily: 'MontserratSemiBold', 
+      fontSize: 20 
+    }
+  })
 
 export default PreachersNavigator;

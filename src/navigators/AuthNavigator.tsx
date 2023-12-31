@@ -1,3 +1,4 @@
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import CongregationsLoginScreen from "../screens/congregations/LoginScreen";
 import CongregationsTwoFactorScreen from "../screens/congregations/TwoFactorScreen";
@@ -9,7 +10,9 @@ const AuthNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{
             headerStyle: headerStyles.header,
-            headerTitleStyle: headerStyles.title
+            headerTitleStyle: headerStyles.title,
+            headerTintColor: 'white',
+            
         }}>
             <Stack.Screen 
                 name="Log in" 
@@ -17,7 +20,7 @@ const AuthNavigator = () => {
                 options={{ headerTitle: 'Logowanie' }}
             />  
             <Stack.Screen 
-                name="Two Factor verification" 
+                name="TwoFactor" 
                 component={CongregationsTwoFactorScreen} 
                 options={{ headerTitle: 'Dwustopniowa weryfikacja' }}
             />  

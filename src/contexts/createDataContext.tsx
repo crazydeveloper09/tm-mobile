@@ -21,7 +21,7 @@ export default <T, U>(
         }
 
         return (
-            <Context.Provider value={{ state, ...boundActions } as unknown as U }>
+            <Context.Provider value={{ state, ...boundActions, dispatch } as unknown as U }>
                 {children}
             </Context.Provider>
         );

@@ -1,14 +1,64 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { NavigationProp } from '@react-navigation/native';
+import React, { useEffect, useContext, useState } from 'react';
+import { View, StyleSheet} from 'react-native';
+import { Context as PreachersContext } from '../../contexts/PreachersContext';
+import ButtonC from '../../components/Button';
+import { Input } from '@rneui/themed';
+import Loading from '../../components/Loading';
 
-const PreachersEditScreen: React.FC = () => {
+interface PreachersEditScreenProps {
+    navigation: NavigationProp<any>;
+    route: {
+        params: {
+            id: string;
+            preacherName: string;
+        }
+    }
+}
+
+const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, route }) => {
+    const { id, preacherName } = route.params;
+    const { state, loadPreacherInfo, editPreacher} = useContext(PreachersContext)
+    const [name, setName] = useState(preacherName)
+
+    useEffect(() => {
+        loadPreacherInfo(id)
+    }, [id])
+
+    if(state.isLoading){
+        return <Loading />
+    }
+
+
     return (
-        <View>
-            <Text>Ekran wyświetlający formularz edytowania głosiciela</Text>
+        <View style={styles.container}>
+            <Input 
+                label="Edytuj imię i nazwisko głosiciela"
+                placeholder='Wpisz imię i nazwisko'
+                inputContainerStyle={styles.inputContainer}
+                value={name}
+                onChangeText={setName}
+            />
+            <ButtonC title="Edytuj głosiciela" onPress={() => editPreacher(name, id)} />
         </View>
     )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#ece9e9',
+        padding: 15,
+        flex: 1,
+        justifyContent: 'center'
+    },
+    inputContainer: {
+        backgroundColor: "white",
+        borderWidth: 1,
+        borderRadius: 6,
+        padding: 5,
+        borderColor: '#28a745',
+        color: '#28a745'
+    },
+})
 
 export default PreachersEditScreen;

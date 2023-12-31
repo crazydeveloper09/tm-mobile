@@ -1,15 +1,17 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { GestureResponderEvent, StyleSheet } from "react-native";
 import { Button  } from "@rneui/themed";
 
 interface ButtonProps {
     title: string;
+    onPress: () => void
 }
 
-const ButtonC: React.FC<ButtonProps> = ({ title }) => {
+const ButtonC: React.FC<ButtonProps> = ({ title, onPress }) => {
     return <Button 
             title={title}
             buttonStyle={styles.button}
+            onPress={onPress}
         />
 }
 

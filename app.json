@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "territorymanager_mobile",
+    "name": "Territory Manager",
     "slug": "territorymanager_mobile",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/tm_icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/tm_logo_zielony.png",
@@ -19,12 +19,19 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/tm_icon.png",
+        "backgroundColor": "#28a745"
+      },
+      "supportsTablet": true,
+      "package": "com.crazydev09.territorymanager_mobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0c1566a8-d70c-4d6b-bec3-43e399b735d9"
+      }
     }
   }
 }
