@@ -24,7 +24,7 @@
       },
       "supportsTablet": true,
       "package": "com.territorymanager_mobile.territorymanager_mobile",
-      "versionCode": 2
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"
