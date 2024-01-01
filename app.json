@@ -23,7 +23,7 @@
         "backgroundColor": "#28a745"
       },
       "package": "com.territorymanager_mobile.territorymanager_mobile",
-      "versionCode": 3
+      "versionCode": 4
     },
     "web": {
       "favicon": "./assets/favicon.png"
