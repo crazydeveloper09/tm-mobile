@@ -22,7 +22,6 @@
         "foregroundImage": "./assets/tm_icon.png",
         "backgroundColor": "#28a745"
       },
-      "supportsTablet": true,
       "package": "com.territorymanager_mobile.territorymanager_mobile",
       "versionCode": 3
     },
