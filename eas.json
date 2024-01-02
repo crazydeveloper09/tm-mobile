@@ -1,8 +1,18 @@
 {
     "build": {
       "development": {
-        "developmentClient": true,
-        "distribution": "internal"
+        "distribution": "internal",
+        "releaseChannel": "development",
+        "env": {
+          "ENVIRONMENT": "production",
+          "NODE_ENV": "development",
+          "BABEL_ENV": "release",
+          "APP_VARIANT": "release"
+        },
+        "node": "16.15.1",
+        "ios": {
+          "resourceClass": "m-medium"
+        }
       },
       "preview": {
         "ios": {
