@@ -17,7 +17,9 @@ const AuthNavigator = () => {
             <Stack.Screen 
                 name="Log in" 
                 component={CongregationsLoginScreen} 
-                options={{ headerTitle: 'Logowanie' }}
+                options={{ 
+                    headerTitle: 'Logowanie', 
+                }}
             />  
             <Stack.Screen 
                 name="TwoFactor" 

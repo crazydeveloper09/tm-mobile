@@ -8,6 +8,7 @@ import { Provider as TerritoryProvider } from './src/contexts/TerritoriesContext
 import { Provider as MinistryGroupProvider } from './src/contexts/MinistryGroupContext';
 import { navigationRef } from './src/RootNavigation';
 import SwitchNavigator from './src/navigators/SwitchNavigator';
+import Animated from 'react-native-reanimated';
 
 
 setStatusBarStyle('light')
