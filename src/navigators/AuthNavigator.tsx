@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import CongregationsLoginScreen from "../screens/congregations/LoginScreen";
 import CongregationsTwoFactorScreen from "../screens/congregations/TwoFactorScreen";
 import { StyleSheet } from "react-native";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Stack = createStackNavigator()
 
 const AuthNavigator = () => {
+    
+    const {state, loadColor} = useContext(SettingsContext);
+    useEffect(() => {
+      loadColor()
+    }, [state.mainColor])
+
     return (
         <Stack.Navigator screenOptions={{
-            headerStyle: headerStyles.header,
+            headerStyle: { backgroundColor: state?.mainColor },
             headerTitleStyle: headerStyles.title,
             headerTintColor: 'white',
             

@@ -69,8 +69,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     padding: 5,
-    borderColor: "#28a745",
-    color: "#28a745",
   },
   noParamContainer: {
     marginTop: 65,

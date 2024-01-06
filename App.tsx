@@ -8,7 +8,7 @@ import { Provider as TerritoryProvider } from './src/contexts/TerritoriesContext
 import { Provider as MinistryGroupProvider } from './src/contexts/MinistryGroupContext';
 import { navigationRef } from './src/RootNavigation';
 import SwitchNavigator from './src/navigators/SwitchNavigator';
-import Animated from 'react-native-reanimated';
+import { Provider as SettingsProvider } from './src/contexts/SettingsContext';
 
 
 setStatusBarStyle('light')
@@ -33,15 +33,18 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <PreacherProvider>
-        <TerritoryProvider>
-          <MinistryGroupProvider>
-            <NavigationContainer ref={navigationRef}>
-              <SwitchNavigator />
-            </NavigationContainer>
-          </MinistryGroupProvider>
-        </TerritoryProvider>
-      </PreacherProvider>
+      <SettingsProvider>
+        <PreacherProvider>
+          <TerritoryProvider>
+            <MinistryGroupProvider>
+              <NavigationContainer ref={navigationRef}>
+                <SwitchNavigator />
+              </NavigationContainer>
+            </MinistryGroupProvider>
+          </TerritoryProvider>
+        </PreacherProvider>
+      </SettingsProvider>
+      
     </AuthProvider>
     
   )

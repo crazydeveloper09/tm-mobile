@@ -2,7 +2,7 @@
   "expo": {
     "name": "Territory Manager",
     "slug": "territorymanager_mobile",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/tm_icon.png",
     "userInterfaceStyle": "light",
@@ -23,7 +23,8 @@
         "backgroundColor": "#28a745"
       },
       "package": "com.territorymanager_mobile.territorymanager_mobile",
-      "versionCode": 5
+      "versionCode": 1,
+      "jsEngine": "hermes"
     },
     "web": {
       "favicon": "./assets/favicon.png"

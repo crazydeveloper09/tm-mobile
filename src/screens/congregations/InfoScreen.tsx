@@ -69,10 +69,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
                 longitudeDelta: 0.04,
                 latitudeDelta: 0.04
             }} style={styles.map} />
-            <Button 
-                title={'Wyloguj się'}
-                onPress={() => signOut()}
-            />
+           
         </ScrollView>
     )
 }

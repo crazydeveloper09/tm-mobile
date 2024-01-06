@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 interface PaginationProps {
   activePage: number;
@@ -8,6 +9,12 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ activePage, totalPages, updateState }) => {
+
+  const {state, loadColor} = useContext(SettingsContext);
+  useEffect(() => {
+    loadColor()
+  }, [state.mainColor])
+
   let pages = [];
   for (let i = 1; i <= totalPages; i++) {
     pages.push(i);
@@ -19,7 +26,7 @@ const Pagination: React.FC<PaginationProps> = ({ activePage, totalPages, updateS
         renderItem={({ item }) =>
           activePage === item ? (
             <TouchableOpacity
-              style={[styles.itemContainer, { backgroundColor: "#28a745" }]}
+              style={[styles.itemContainer, { backgroundColor: state.mainColor }]}
               onPress={() => updateState(item)}
             >
               <Text style={[styles.text, { color: 'white' }]}>{item}</Text>

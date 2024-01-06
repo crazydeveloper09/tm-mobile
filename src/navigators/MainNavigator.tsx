@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { StyleSheet } from "react-native";
 import TerritoriesAvailableScreen from "../screens/territories/AvailableScreen";
 import { FontAwesome } from "@expo/vector-icons";
@@ -7,15 +7,23 @@ import TerritoriesNavigator from "./TerritoriesNavigator";
 import PreachersNavigator from "./PreachersNavigator";
 import CongregationsInfoScreen from "../screens/congregations/InfoScreen";
 import CongregationsNavigator from "./CongregationNavigator";
+import SettingsScreen from "../screens/SettingsScreen";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Tab = createBottomTabNavigator()
 
 const MainNavigator = () => {
+
+    const {state, loadColor} = useContext(SettingsContext);
+    useEffect(() => {
+      loadColor()
+    }, [state.mainColor])
+
     return (
         <Tab.Navigator screenOptions={{
-            headerStyle: headerStyles.header,
+            headerStyle: { backgroundColor: state?.mainColor },
             headerTitleStyle: headerStyles.title,
-            tabBarActiveTintColor: '#28a745',
+            tabBarActiveTintColor: state?.mainColor,
           }}>
             <Tab.Screen 
               name="Home"
@@ -49,14 +57,18 @@ const MainNavigator = () => {
                 headerShown: false
               }}
             />
+            <Tab.Screen 
+              name="Ustawienia"
+              component={SettingsScreen}
+              options={{
+                tabBarIcon: ({color, size}) => <FontAwesome name='gear' color={color} size={size} />,
+              }}
+            />
           </Tab.Navigator>
     )
 }
 
 const headerStyles = StyleSheet.create({
-    header: {
-      backgroundColor: '#28a745',
-    },
     title: { 
       color: 'white',
       fontFamily: 'MontserratSemiBold', 
