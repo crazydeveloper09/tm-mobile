@@ -18,6 +18,7 @@ web-build/
 
 # Metro
 .metro-health-check*
+territory-manager-410207-be76841d7f2c.json
 
 # debug
 npm-debug.*
