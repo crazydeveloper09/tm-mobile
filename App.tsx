@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StatusBar, setStatusBarStyle } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -9,7 +9,7 @@ import { Provider as MinistryGroupProvider } from './src/contexts/MinistryGroupC
 import { navigationRef } from './src/RootNavigation';
 import SwitchNavigator from './src/navigators/SwitchNavigator';
 import { Provider as SettingsProvider } from './src/contexts/SettingsContext';
-
+import * as Updates from 'expo-updates';
 
 setStatusBarStyle('light')
 
@@ -26,6 +26,24 @@ const App = () => {
     'PoppinsSemiBold': require('./assets/fonts/Poppins/Poppins-SemiBold.ttf'),
     'PoppinsRegular': require('./assets/fonts/Poppins/Poppins-Regular.ttf')
   });
+
+  async function onFetchUpdateAsync() {
+    try {
+      const update = await Updates.checkForUpdateAsync();
+
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+        await Updates.reloadAsync();
+      }
+    } catch (error) {
+      // You can also add an alert() to see the error message in case of an error when fetching updates.
+      alert(`Error fetching latest Expo update: ${error}`);
+    }
+  }
+
+  useEffect(() => {
+    onFetchUpdateAsync()
+  }, [])
 
   if(!fontsLoaded) {
     return null;
