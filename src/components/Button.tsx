@@ -5,10 +5,11 @@ import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 interface ButtonProps {
     title: string;
-    onPress: () => void
+    onPress: () => void;
+    isLoading?: boolean;
 }
 
-const ButtonC: React.FC<ButtonProps> = ({ title, onPress }) => {
+const ButtonC: React.FC<ButtonProps> = ({ title, onPress, isLoading }) => {
 
     const {state, loadColor} = useContext(SettingsContext);
     useEffect(() => {
@@ -19,6 +20,7 @@ const ButtonC: React.FC<ButtonProps> = ({ title, onPress }) => {
             title={title}
             buttonStyle={{ backgroundColor: state.mainColor }}
             onPress={onPress}
+            loading={isLoading}
         />
 }
 

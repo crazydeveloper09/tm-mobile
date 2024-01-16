@@ -121,6 +121,8 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 value={number}
                 onChangeText={setNumber}
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
             />
             <DropDownPicker
                 open={kindOpen}
@@ -139,6 +141,8 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 label='Miejscowość'
                 placeholder='Wpisz miejscowość'
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={city}
                 onChangeText={setCity}
             />
@@ -147,6 +151,8 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 label='Ulica'
                 placeholder='Wpisz ulicę'
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={street}
                 onChangeText={setStreet}
             />
@@ -157,6 +163,8 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                     placeholder='Wpisz nr początkowy'
                     keyboardType='numeric'
                     inputContainerStyle={styles.inputContainer}
+                    labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                     value={beginNumber}
                     onChangeText={setBeginNumber}
                 />
@@ -165,6 +173,8 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                     placeholder='Wpisz nr końcowy'
                     keyboardType='numeric'
                     inputContainerStyle={styles.inputContainer}
+                    labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                     value={endNumber}
                     onChangeText={setEndNumber}
                 />
@@ -174,12 +184,14 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 label='Pełna lokalizacja'
                 placeholder='Wpisz lokalizację'
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={location}
                 onChangeText={setLocation}
             />
 
 
-            <TouchableOpacity onPress={() => setLastWorkedOpen(true)} style={styles.inputContainer}>
+            <TouchableOpacity onPress={() => setLastWorkedOpen(true)} style={{...styles.inputContainer, padding: 15}}>
                 <Text>
                     Ostatnio opracowane - aktualna data: {lastWorked.toLocaleDateString()}
                 </Text> 
@@ -213,7 +225,7 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 }}
             />
 
-            <TouchableOpacity onPress={() => setTakenOpen(true)} style={styles.inputContainer}>
+            <TouchableOpacity onPress={() => setTakenOpen(true)} style={{...styles.inputContainer, padding: 15}}>
                 <Text>
                  Pobrany - aktualna data: {taken.toLocaleDateString()} 
                 </Text>
@@ -240,6 +252,8 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 label='Opis'
                 placeholder='Wpisz opis'
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 multiline={true}
                 numberOfLines={5}
                 value={description}
@@ -270,6 +284,7 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
 
             <ButtonC 
                 title='Edytuj teren' 
+                isLoading={state.isLoading}
                 onPress={() => editTerritory(territoryID, { number, kind: kindValue, city, street, beginNumber, endNumber, location, lastWorked: new Date(lastWorked), preacher: preacherValue, taken: new Date(taken), description, isPhysicalCard: physicalCard})} 
             />
         </ScrollView>
@@ -287,7 +302,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 6,
         padding: 5,
+        borderColor: 'black',
     },
+    labelStyle: {
+        fontFamily: 'MontserratSemiBold',
+        marginBottom: 6,
+        color: 'black'
+    },
+    containerInput: {
+        paddingHorizontal: 0,
+        paddingVertical: 0,
+    }
 })
 
 export default TerritoriesEditScreen;

@@ -49,8 +49,13 @@ const styles = StyleSheet.create({
     padding: 25,
   },
   itemContainer: {
-    padding: 10,
-    borderRadius: 9,
+    height: 40,
+    width: 40,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    borderRadius: 9000,
   },
   text: {
     fontFamily: 'PoppinsSemiBold',

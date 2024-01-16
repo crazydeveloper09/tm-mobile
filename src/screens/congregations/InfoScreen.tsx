@@ -25,9 +25,6 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
         })
         const unsubscribe = navigation.addListener('focus', () => {
             loadCongregationInfo();
-            navigation.setOptions({
-                headerTitle: state.congregation?.username,
-            })
         });
     
         return unsubscribe;
@@ -37,6 +34,9 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
         return <Loading />
     }
 
+    navigation.setOptions({
+        headerTitle: state.congregation?.username,
+    })
 
     return (
         <ScrollView style={styles.container}>

@@ -223,7 +223,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             <Divider />
             <Text style={styles.historyTitle}>Historia</Text>
             <FlatList
-              data={state.territory?.history}
+              data={state.territory?.history.reverse()}
               renderItem={({ item }) => (
                 <View style={{ marginTop: 15 }}>
                   <Text style={styles.recordDate}>

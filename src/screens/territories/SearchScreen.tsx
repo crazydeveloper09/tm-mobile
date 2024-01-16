@@ -47,12 +47,13 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
   const { searchTerritory, state } = useContext(TerritoriesContext);
 
   useEffect(() => {
-    searchTerritory(mainValue, paramValue, page, limit);
+    searchTerritory(mainValue, paramValue, page, limit, typeValue);
   }, [page])
 
   return (
     <ScrollView style={styles.container}>
       <DropDownPicker
+        placeholder='Wybierz rodzaj wyszukiwania'
         open={mainOpen}
         value={mainValue}
         items={mainItems}
@@ -76,6 +77,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
           value={paramValue}
           onChangeText={setParamValue}
           inputContainerStyle={styles.inputContainer}
+          containerStyle={styles.containerInput}
         />
       )}
 
@@ -85,6 +87,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
           value={paramValue}
           onChangeText={setParamValue}
           inputContainerStyle={styles.inputContainer}
+          containerStyle={styles.containerInput}
         />
       )}
 
@@ -94,11 +97,13 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
           value={paramValue}
           onChangeText={setParamValue}
           inputContainerStyle={styles.inputContainer}
+          containerStyle={styles.containerInput}
         />
       )}
 
       {mainValue === "kind" && !mainOpen && (
         <DropDownPicker
+            placeholder="Wybierz rodzaj terenu"
             open={kindOpen}
             value={paramValue}
             items={kindItems}
@@ -126,6 +131,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
         <ButtonC
             title="Szukaj"
             onPress={() => {
+            setPage(1)
             searchTerritory(mainValue, paramValue, page, limit, typeValue);
             setSubmitted(true);
         }}
@@ -171,8 +177,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     padding: 5,
-
+    borderColor: 'black',
     marginTop: 15
+  },
+
+  containerInput: {
+      paddingHorizontal: 0,
+      paddingVertical: 0,
   },
   noParamContainer: {
     marginTop: 65,

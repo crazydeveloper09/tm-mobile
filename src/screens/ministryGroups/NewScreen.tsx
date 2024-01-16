@@ -63,6 +63,8 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                 label='Nazwa grupy'
                 placeholder="Wpisz nazwę grupy"
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={name}
                 onChangeText={setName}
             />
@@ -77,6 +79,7 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                 containerStyle={{
                     marginVertical: 20
                 }}
+                placeholder="Dodaj głosicieli"
             />
 
             {!preachersOpen && <DropDownPicker
@@ -86,9 +89,13 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                 setOpen={setOverseerOpen}
                 setValue={setOverseerValue}
                 searchable={true}
+                containerStyle={{
+                    marginBottom: 20
+                }}
+                placeholder="Wybierz nadzorcę grupy"
             />}
 
-            <ButtonC title="Dodaj grupę" onPress={() => ministryGroup.addMinistryGroup(route.params.congregationID, name, preachersValue, overseerValue)} />
+            <ButtonC title="Dodaj grupę" isLoading={ministryGroup.state.isLoading} onPress={() => ministryGroup.addMinistryGroup(route.params.congregationID, name, preachersValue, overseerValue)} />
         </View>
     )
 }
@@ -105,7 +112,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 6,
         padding: 5,
+        borderColor: 'black',
     },
+    labelStyle: {
+        fontFamily: 'MontserratSemiBold',
+        marginBottom: 6,
+        color: 'black'
+    },
+    containerInput: {
+        paddingHorizontal: 0,
+        paddingVertical: 0,
+    }
 })
 
 export default MinistryGroupNewScreen;

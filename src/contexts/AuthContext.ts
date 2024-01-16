@@ -36,16 +36,16 @@ const authReducer = (state: IAuth, action: { type: string; payload: any }) => {
     case 'add_error': 
         return { ...state, errMessage: action.payload, isLoading: false }
     case 'add_success': 
-        return { ...state, successMessage: action.payload.message, errMessage: '', userID: action.payload.userID }
+        return { ...state, successMessage: action.payload.message, errMessage: '', userID: action.payload.userID, isLoading: false }
     case 'signin': 
-        return { ...state, errMessage: '', successMessage: action.payload.message, token: action.payload.token}
+        return { ...state, errMessage: '', successMessage: action.payload.message, token: action.payload.token, isLoading: false}
     case 'signout': 
         return {...state, token: '', userID: '', successMessage: 'Wylogowano z Territory Manager'}
     case 'add_cong_info': 
       return {...state, isLoading: false, congregation: action.payload}
     case 'turn_on_loading': 
       return {...state, isLoading: true}
-    case 'turn_on_loading': 
+    case 'turn_off_loading': 
       return {...state, isLoading: false}
     case 'debug':
         return state;
@@ -57,6 +57,7 @@ const authReducer = (state: IAuth, action: { type: string; payload: any }) => {
 const signIn = (dispatch: Function) => {
   return async (body: ISignIn) => {
     try {
+      dispatch({ type: 'turn_on_loading' })
       const response = await tmApi.post("/login", body);
       if(response.data === 'Zła nazwa użytkownika lub hasło'){
         dispatch({ type: 'add_error', payload: response.data })
@@ -80,6 +81,7 @@ const signOut = (dispatch: Function) => {
 const verifyUser = (dispatch: Function) => {
     return async(body: ITwoFactor) => {
         try {
+          dispatch({ type: 'turn_on_loading' })
             const response = await tmApi.post(`/congregations/${body?.userID}/two-factor`, body);
             await AsyncStorage.setItem('token', response.data.token);
             dispatch({ type: 'signin', payload: { token: response.data.token, message: response.data.message } });

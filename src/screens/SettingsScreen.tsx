@@ -1,12 +1,17 @@
 import React, { useContext, useEffect } from "react";
-import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { FlatList, StyleSheet, Switch, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 import { Context as AuthContext } from '../contexts/AuthContext';
 import packageJson from '../../package.json';
 import { Button } from "@rneui/themed";
+import { NavigationProp } from "@react-navigation/native";
 
-const SettingsScreen: React.FC = () => {
+interface SettingsScreenProps {
+    navigation: NavigationProp<any>
+}
+
+const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
     const auth = useContext(AuthContext)
     const {state, changeMainColor, loadColor} = useContext(SettingsContext)
 
@@ -28,12 +33,18 @@ const SettingsScreen: React.FC = () => {
                 contentContainerStyle={{ gap: 15, marginTop: 15 }}
                 scrollEnabled={false}
             />
+
+            <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
+                <Text style={{ color: state.mainColor, fontFamily: 'MontserratRegular', textAlign: 'center', fontSize: 16 }}>Polityka prywatności i klauzula RODO</Text>
+            </TouchableOpacity>
+            
             <Button 
                 title='Wyloguj się' 
                 titleStyle={{ color: state.mainColor, fontFamily: 'MontserratRegular' }} 
                 buttonStyle={{ backgroundColor: 'rgba(52, 52, 52, 0.0)' }} 
                 onPress={() => auth.signOut()}
             />
+        
             <Text style={styles.versionText}>© Stworzone z ❤️ przez Maciej Kuta</Text>
             <Text style={styles.versionText}>Wersja {packageJson.version}</Text>
         </View>
@@ -44,7 +55,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "#ece9e9",
         padding: 15,
-        flex: 1,
+        flex: 1
     },
     title: {
         fontSize: 20,
@@ -53,7 +64,8 @@ const styles = StyleSheet.create({
     color: {
         width: '49%',
         height: 100,
-        marginRight: 10
+        marginRight: 10,
+        borderRadius: 10
     },
     versionText: {
         fontSize: 13,
