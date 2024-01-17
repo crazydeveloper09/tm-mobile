@@ -95,7 +95,7 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
             setKindValue(response.data.territory.kind!);
             setLocation(response.data.territory.location!);
             setLastWorked(new Date(response.data.territory.lastWorked!));
-            setPreacherValue(response.data.territory.preacher?.name ? response.data.territory.preacher.name : '');
+            setPreacherValue(response.data.territory.preacher?._id ? response.data.territory.preacher._id : '');
             setTaken(new Date(response.data.territory.taken!))
             setDescription(response.data.territory.description!)
             if(response.data.territory.isPhysicalCard){

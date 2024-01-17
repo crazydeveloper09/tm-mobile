@@ -151,8 +151,8 @@ const editTerritory = (dispatch: Function) => {
                 }
             });
 
-            navigate('TerritoryHistory', { id: territoryID });
             dispatch({ type: 'turn_off_loading' })
+            navigate('TerritoryHistory', { id: territoryID });
         } catch(err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }

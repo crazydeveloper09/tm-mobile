@@ -60,6 +60,9 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
         })
     }, [territoryID])
 
+    console.log('territoryID', territoryID)
+    console.log('route', route.params.id)
+
     if(state.isLoading){
         return <Loading />
     }

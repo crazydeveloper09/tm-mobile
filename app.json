@@ -26,7 +26,7 @@
         "backgroundColor": "#28a745"
       },
       "package": "com.territorymanager_mobile.territorymanager_mobile",
-      "versionCode": 6,
+      "versionCode": 7,
       "jsEngine": "hermes"
     },
     "web": {
