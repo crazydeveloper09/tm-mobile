@@ -74,7 +74,7 @@ def enableProguardInReleaseBuilds = (findProperty('android.enableProguardInRelea
  * give correct results when using with locales other than en-US. Note that
  * this variant is about 6MiB larger per architecture than default.
  */
-def jscFlavor = 'org.webkit:android-jsc:+'
+def jscFlavor = 'com.facebook.soloader:soloader:0.9.0+'
 
 android {
     ndkVersion rootProject.ext.ndkVersion
