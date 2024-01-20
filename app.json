@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSFaceIDUsageDescription": "This app uses Face ID to check identity of user before automatic signin."
+        "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to use Face ID."
       }
     },
     "android": {
@@ -27,7 +27,11 @@
       },
       "package": "com.territorymanager_mobile.territorymanager_mobile",
       "versionCode": 7,
-      "jsEngine": "hermes"
+      "jsEngine": "hermes",
+      "permissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -45,6 +49,9 @@
           "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
         }
       ]
-    ]
+    ],
+    "updates": {
+      "url": "https://u.expo.dev/0c1566a8-d70c-4d6b-bec3-43e399b735d9"
+    }
   }
 }
