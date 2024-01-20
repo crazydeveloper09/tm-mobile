@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { IPreacher } from "../contexts/interfaces";
 import { FontAwesome } from "@expo/vector-icons";
 import { CommonActions, useNavigation } from "@react-navigation/native";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 interface PreacherProps {
     preacher: IPreacher;
@@ -10,6 +11,11 @@ interface PreacherProps {
 
 const Preacher: React.FC<PreacherProps> = ({ preacher }) => {
     const navigation = useNavigation();
+
+    const {state, loadColor} = useContext(SettingsContext);
+    useEffect(() => {
+        loadColor()
+    }, [state.mainColor])
 
     return (
         <View style={styles.container}>
@@ -25,7 +31,7 @@ const Preacher: React.FC<PreacherProps> = ({ preacher }) => {
                 </View>
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('PreacherTerritories', {preacherID: preacher._id})}>
-                <Text style={styles.link}>Zobacz tereny głosiciela</Text>
+                <Text style={[styles.link, { color: state.mainColor }]}>Zobacz tereny głosiciela</Text>
             </TouchableOpacity>
         </View>
     )
@@ -56,7 +62,6 @@ const styles = StyleSheet.create({
         fontSize: 19
     },
     link: {
-        color: '#28a745',
         letterSpacing: 1.6,
         fontSize: 17,
         fontFamily: 'MontserratRegular'

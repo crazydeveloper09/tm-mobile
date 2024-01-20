@@ -1,6 +1,6 @@
 {
   "name": "territorymanager_rn",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
+    "@jsamr/counter-style": "^2.0.2",
+    "@jsamr/react-native-li": "^2.3.1",
     "@react-native-async-storage/async-storage": "1.18.2",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
@@ -20,6 +22,7 @@
     "expo": "~49.0.15",
     "expo-font": "~11.4.0",
     "expo-splash-screen": "~0.20.5",
+    "expo-local-authentication": "~13.4.1",
     "expo-status-bar": "~1.6.0",
     "expo-updates": "~0.18.19",
     "fix": "^0.0.6",
@@ -30,7 +33,6 @@
     "react-native-gesture-handler": "~2.12.0",
     "react-native-maps": "1.7.1",
     "react-native-modal-datetime-picker": "^17.1.0",
-    "react-native-reanimated": "~3.3.0",
     "react-native-safe-area-context": "4.6.3",
     "react-native-safe-area-view": "^1.1.1",
     "react-native-screens": "~3.22.0",

@@ -10,6 +10,7 @@ import {
 import { TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 interface MinistryGroupsProps {
   congregationID: string;
@@ -18,13 +19,16 @@ interface MinistryGroupsProps {
 const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
   const { state, loadMinistryGroups, deleteMinistryGroup } = useContext(MinistryGroupContext);
   const navigation = useNavigation()
+  const settings = useContext(SettingsContext);
+
 
   useEffect(() => {
+    settings.loadColor()
     loadMinistryGroups(congregationID);
-  }, []);
+  }, [settings.state.mainColor, congregationID]);
 
   if (state.isLoading) {
-    return <ActivityIndicator size={"large"} color={"#28a745"} />;
+    return <ActivityIndicator size={"large"} color={settings.state.mainColor} />;
   }
 
   return (

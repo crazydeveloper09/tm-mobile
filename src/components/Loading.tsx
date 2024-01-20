@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Loading: React.FC = () => {
+    const {state, loadColor} = useContext(SettingsContext);
+    useEffect(() => {
+      loadColor()
+    }, [state.mainColor])
+
     return (
         <View style={styles.container}>
-            <ActivityIndicator size={'large'} color={'#28a745'} />
+            <ActivityIndicator size={'large'} color={state.mainColor} />
         </View>
     )
 }

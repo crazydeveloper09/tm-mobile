@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StatusBar, setStatusBarStyle } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -8,8 +8,8 @@ import { Provider as TerritoryProvider } from './src/contexts/TerritoriesContext
 import { Provider as MinistryGroupProvider } from './src/contexts/MinistryGroupContext';
 import { navigationRef } from './src/RootNavigation';
 import SwitchNavigator from './src/navigators/SwitchNavigator';
-import Animated from 'react-native-reanimated';
-
+import { Provider as SettingsProvider } from './src/contexts/SettingsContext';
+import * as Updates from 'expo-updates';
 
 setStatusBarStyle('light')
 
@@ -27,21 +27,42 @@ const App = () => {
     'PoppinsRegular': require('./assets/fonts/Poppins/Poppins-Regular.ttf')
   });
 
+  async function onFetchUpdateAsync() {
+    try {
+      const update = await Updates.checkForUpdateAsync();
+
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+        await Updates.reloadAsync();
+      }
+    } catch (error) {
+      // You can also add an alert() to see the error message in case of an error when fetching updates.
+      alert(`Error fetching latest Expo update: ${error}`);
+    }
+  }
+
+  useEffect(() => {
+    onFetchUpdateAsync()
+  }, [])
+
   if(!fontsLoaded) {
     return null;
   }
 
   return (
     <AuthProvider>
-      <PreacherProvider>
-        <TerritoryProvider>
-          <MinistryGroupProvider>
-            <NavigationContainer ref={navigationRef}>
-              <SwitchNavigator />
-            </NavigationContainer>
-          </MinistryGroupProvider>
-        </TerritoryProvider>
-      </PreacherProvider>
+      <SettingsProvider>
+        <PreacherProvider>
+          <TerritoryProvider>
+            <MinistryGroupProvider>
+              <NavigationContainer ref={navigationRef}>
+                <SwitchNavigator />
+              </NavigationContainer>
+            </MinistryGroupProvider>
+          </TerritoryProvider>
+        </PreacherProvider>
+      </SettingsProvider>
+      
     </AuthProvider>
     
   )

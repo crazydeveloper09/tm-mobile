@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import PreachersIndexScreen from "../screens/preachers/IndexScreen";
 import PreachersNewScreen from "../screens/preachers/NewScreen";
@@ -7,12 +7,19 @@ import PreachersSearchScreen from "../screens/preachers/SearchScreen";
 import { StyleSheet } from "react-native";
 import PreacherDeleteConfirmScreen from "../screens/preachers/DeleteConfirmScreen";
 import PreacherTerritoriesScreen from "../screens/preachers/PreacherTerritoriesScreen";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Stack = createStackNavigator()
 
 const PreachersNavigator = () => {
+
+    const {state, loadColor} = useContext(SettingsContext);
+    useEffect(() => {
+      loadColor()
+    }, [state.mainColor])
+    
     return (
-        <Stack.Navigator screenOptions={{ headerStyle: headerStyles.header, headerTitleStyle: headerStyles.title, headerTintColor: 'white'}}>
+        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: state?.mainColor }, headerTitleStyle: headerStyles.title, headerTintColor: 'white'}}>
             <Stack.Screen 
                 name="PreachersList" 
                 component={PreachersIndexScreen} 

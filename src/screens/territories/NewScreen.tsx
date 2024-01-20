@@ -51,7 +51,7 @@ const TerritoriesNewScreen: React.FC = () => {
     const [lastWorked, setLastWorked] = useState(new Date())
     const [takenOpen, setTakenOpen] = useState(false)
     const [taken, setTaken] = useState(new Date())
-    const {addTerritory} = useContext(TerritoriesContext);
+    const {addTerritory, state} = useContext(TerritoriesContext);
 
     const loadPreachers = async () => {
         const token = await AsyncStorage.getItem('token')
@@ -77,7 +77,7 @@ const TerritoriesNewScreen: React.FC = () => {
         
 
     return (
-        <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center'}}>
+        <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', marginBottom: 40}}>
             <Input 
                 label='Numer terenu'
                 placeholder='Wpisz nr terenu'
@@ -85,8 +85,12 @@ const TerritoriesNewScreen: React.FC = () => {
                 value={number}
                 onChangeText={setNumber}
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
             />
+            
             <DropDownPicker
+                placeholder='Wybierz rodzaj terenu'
                 open={kindOpen}
                 value={kindValue}
                 items={kindItems}
@@ -105,6 +109,8 @@ const TerritoriesNewScreen: React.FC = () => {
                 inputContainerStyle={styles.inputContainer}
                 value={city}
                 onChangeText={setCity}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
             />
 
             <Input 
@@ -113,6 +119,8 @@ const TerritoriesNewScreen: React.FC = () => {
                 inputContainerStyle={styles.inputContainer}
                 value={street}
                 onChangeText={setStreet}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
             />
 
             {kindValue === 'city' && <>
@@ -123,6 +131,8 @@ const TerritoriesNewScreen: React.FC = () => {
                     inputContainerStyle={styles.inputContainer}
                     value={beginNumber}
                     onChangeText={setBeginNumber}
+                    labelStyle={styles.labelStyle}
+                    containerStyle={styles.containerInput}
                 />
                 <Input 
                     label='Numer końcowy'
@@ -131,6 +141,8 @@ const TerritoriesNewScreen: React.FC = () => {
                     inputContainerStyle={styles.inputContainer}
                     value={endNumber}
                     onChangeText={setEndNumber}
+                    labelStyle={styles.labelStyle}
+                    containerStyle={styles.containerInput}
                 />
             </>}
 
@@ -140,10 +152,12 @@ const TerritoriesNewScreen: React.FC = () => {
                 inputContainerStyle={styles.inputContainer}
                 value={location}
                 onChangeText={setLocation}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
             />
 
 
-            <TouchableOpacity onPress={() => setLastWorkedOpen(true)} style={styles.inputContainer}>
+            <TouchableOpacity onPress={() => setLastWorkedOpen(true)} style={{...styles.inputContainer, padding: 15}}>
                 <Text>
                     Ostatnio opracowane - aktualna data: {lastWorked.toLocaleDateString()}
                 </Text> 
@@ -177,7 +191,7 @@ const TerritoriesNewScreen: React.FC = () => {
                 }}
             />
 
-            <TouchableOpacity onPress={() => setTakenOpen(true)} style={styles.inputContainer}>
+            <TouchableOpacity onPress={() => setTakenOpen(true)} style={{...styles.inputContainer, padding: 15}}>
                 <Text>
                  Pobrany - aktualna data: {taken.toLocaleDateString()} 
                 </Text>
@@ -198,6 +212,9 @@ const TerritoriesNewScreen: React.FC = () => {
                     borderColor: 'black'
                 }}
                 locale='pl'
+                style={{
+                    marginBottom: 20
+                }}
             />
 
             <Input
@@ -208,8 +225,10 @@ const TerritoriesNewScreen: React.FC = () => {
                 numberOfLines={5}
                 value={description}
                 onChangeText={setDescription}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
             />
-            <Text>
+            <Text style={styles.labelStyle}>
                 Czy jest fizyczna karta terenu?
             </Text>
             <CheckBox
@@ -234,6 +253,7 @@ const TerritoriesNewScreen: React.FC = () => {
 
             <ButtonC 
                 title='Dodaj teren' 
+                isLoading={state.isLoading}
                 onPress={() => addTerritory({ number, kind: kindValue, city, street, beginNumber, endNumber, location, lastWorked: new Date(lastWorked), preacher: preacherValue, taken: new Date(taken), description, isPhysicalCard: physicalCard})} 
             />
         </ScrollView>
@@ -251,9 +271,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 6,
         padding: 5,
-        borderColor: '#28a745',
-        color: '#28a745'
+        borderColor: 'black',
     },
+    labelStyle: {
+        fontFamily: 'MontserratSemiBold',
+        marginBottom: 6,
+        color: 'black'
+    },
+    containerInput: {
+        paddingHorizontal: 0,
+        paddingVertical: 0,
+    }
 })
 
 export default TerritoriesNewScreen;

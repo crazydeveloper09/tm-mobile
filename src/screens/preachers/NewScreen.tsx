@@ -6,7 +6,7 @@ import { Context as PreachersContext } from '../../contexts/PreachersContext';
 
 const PreachersNewScreen: React.FC = () => {
     const [name, setName] = useState('');
-    const {addPreacher} = useContext(PreachersContext)
+    const {addPreacher, state} = useContext(PreachersContext)
 
     return (
         <View style={styles.container}>
@@ -14,10 +14,12 @@ const PreachersNewScreen: React.FC = () => {
                 label="Imię i nazwisko głosiciela"
                 placeholder='Wpisz imię i nazwisko'
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={name}
                 onChangeText={setName}
             />
-            <ButtonC title="Dodaj głosiciela" onPress={() => addPreacher(name)} />
+            <ButtonC title="Dodaj głosiciela" isLoading={state.isLoading} onPress={() => addPreacher(name)} />
         </View>
     )
 }
@@ -34,9 +36,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 6,
         padding: 5,
-        borderColor: '#28a745',
-        color: '#28a745'
+        borderColor: 'black',
     },
+    labelStyle: {
+        fontFamily: 'MontserratSemiBold',
+        marginBottom: 6,
+        color: 'black'
+    },
+    containerInput: {
+        paddingHorizontal: 0,
+        paddingVertical: 0,
+    }
 })
 
 export default PreachersNewScreen;

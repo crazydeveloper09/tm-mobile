@@ -71,6 +71,8 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
                 label='Edytuj nazwę grupy'
                 placeholder="Wpisz nazwę grupy"
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={name}
                 onChangeText={setName}
             />
@@ -96,7 +98,7 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
                 searchable={true}
             />}
 
-            <ButtonC title="Edytuj grupę" onPress={() => ministryGroup.editMinistryGroup(route.params.congregationID, ministryGroupID, name, preachersValue, overseerValue)} />
+            <ButtonC title="Edytuj grupę" isLoading={ministryGroup.state.isLoading} onPress={() => ministryGroup.editMinistryGroup(route.params.congregationID, ministryGroupID, name, preachersValue, overseerValue)} />
         </View>
     )
 }
@@ -113,9 +115,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 6,
         padding: 5,
-        borderColor: '#28a745',
-        color: '#28a745'
+        borderColor: 'black',
     },
+    labelStyle: {
+        fontFamily: 'MontserratSemiBold',
+        marginBottom: 6,
+        color: 'black'
+    },
+    containerInput: {
+        paddingHorizontal: 0,
+        paddingVertical: 0,
+    }
 })
 
 export default MinistryGroupEditScreen;

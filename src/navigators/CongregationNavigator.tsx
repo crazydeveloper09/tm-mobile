@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StyleSheet } from "react-native";
 import CongregationsInfoScreen from "../screens/congregations/InfoScreen";
 import CongregationEditScreen from "../screens/congregations/EditScreen";
 import MinistryGroupNewScreen from "../screens/ministryGroups/NewScreen";
 import MinistryGroupEditScreen from "../screens/ministryGroups/EditScreen";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Stack = createStackNavigator()
 
 const CongregationsNavigator = () => {
+
+    const {state, loadColor} = useContext(SettingsContext);
+    useEffect(() => {
+      loadColor()
+    }, [state.mainColor])
     return (
-        <Stack.Navigator screenOptions={{ headerStyle: headerStyles.header, headerTitleStyle: headerStyles.title , headerTintColor: 'white'}}>
+        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: state?.mainColor }, headerTitleStyle: headerStyles.title , headerTintColor: 'white'}}>
             <Stack.Screen 
                 name="CongInfo" 
                 component={CongregationsInfoScreen} 

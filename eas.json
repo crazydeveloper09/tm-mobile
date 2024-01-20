@@ -2,7 +2,7 @@
     "build": {
       "development": {
         "distribution": "internal",
-        "releaseChannel": "development",
+        "channel": "main",
         "env": {
           "ENVIRONMENT": "production",
           "NODE_ENV": "development",

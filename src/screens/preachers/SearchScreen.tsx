@@ -20,6 +20,7 @@ const PreachersSearchScreen: React.FC = () => {
         value={param}
         onChangeText={setParam}
         inputContainerStyle={styles.inputContainer}
+        containerStyle={styles.containerInput}
       />
       <ButtonC
         title="Szukaj"
@@ -69,8 +70,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     padding: 5,
-    borderColor: "#28a745",
-    color: "#28a745",
+    borderColor: 'black',
+  },
+
+  containerInput: {
+      paddingHorizontal: 0,
+      paddingVertical: 0,
   },
   noParamContainer: {
     marginTop: 65,
