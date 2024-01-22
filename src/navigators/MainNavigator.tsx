@@ -10,6 +10,7 @@ import CongregationsNavigator from "./CongregationNavigator";
 import SettingsScreen from "../screens/SettingsScreen";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 import SettingsNavigator from "./SettingsNavigator";
+import { isTablet } from "../helpers/devices";
 
 const Tab = createBottomTabNavigator()
 
@@ -27,7 +28,7 @@ const MainNavigator = () => {
             tabBarActiveTintColor: 'white',
             tabBarInactiveTintColor: '#B3A8A8',
             tabBarActiveBackgroundColor: state.mainColor,
-            tabBarShowLabel: false
+            tabBarShowLabel: isTablet
           }}>
             <Tab.Screen 
               name="Home"

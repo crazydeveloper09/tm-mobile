@@ -10,6 +10,7 @@ import MapView, { Marker } from 'react-native-maps';
 import Pagination from '../../components/Pagination';
 import TerritoriesNavigator from '../../navigators/TerritoriesNavigator';
 import { navigate } from '../../RootNavigation';
+import { columnsNum } from '../../helpers/devices';
 
 interface TerritoriesAvailableScreenProps {
     navigation: NavigationProp<any>
@@ -56,9 +57,11 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
                 
             </MapView>
             <FlatList 
+                keyExtractor={((territory) => territory._id)}
                 data={state.territories?.docs}
                 renderItem={({ item }) => <Territory territory={item} />}
                 scrollEnabled={false}
+                numColumns={columnsNum}
             />
             <Pagination activePage={state.territories?.page!} totalPages={state.territories?.totalPages!} updateState={setPage}/>
         </ScrollView>

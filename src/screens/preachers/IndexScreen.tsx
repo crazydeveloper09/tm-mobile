@@ -6,6 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
+import { columnsNum } from '../../helpers/devices';
 
 interface PreachersIndexScreenProps {
     navigation: NavigationProp<any>
@@ -46,9 +47,11 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
     return (
         <ScrollView style={styles.container}>
             <FlatList 
+                keyExtractor={((preacher) => preacher._id)}
                 data={state.preachers?.docs}
                 renderItem={({ item }) => <Preacher preacher={item} />}
                 scrollEnabled={false}
+                numColumns={columnsNum}
             />
             <Pagination activePage={state.preachers?.page!} totalPages={state.preachers?.totalPages!} updateState={setPage}/>
         </ScrollView>

@@ -6,6 +6,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Badge } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { changeColorForDates, countDaysFromNow } from "../helpers/dates";
+import { isTablet } from "../helpers/devices";
 
 interface TerritoryProps {
     territory: ITerritory
@@ -97,7 +98,10 @@ const styles = StyleSheet.create({
     container: {
         padding: 15,
         marginBottom: 15,
-        borderRadius: 10
+        borderRadius: 10,
+        height: 'auto',
+        width: isTablet ? '49%' : 'auto',
+        marginRight: isTablet ? 15 : 0
     },
     titleContainer: {
         flexDirection: 'row',

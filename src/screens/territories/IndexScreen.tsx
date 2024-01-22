@@ -1,13 +1,14 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ScrollView, Platform, Dimensions } from 'react-native';
 import { Context as TerritoryContext } from '../../contexts/TerritoriesContext';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import Territory from '../../components/Territory';
 import Loading from '../../components/Loading';
 import MapView, { MapMarker, Marker } from 'react-native-maps';
 import Pagination from '../../components/Pagination';
+import { columnsNum, isTablet } from '../../helpers/devices';
 
 interface TerritoriesIndexScreenProps {
     navigation: NavigationProp<any>
@@ -20,6 +21,7 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
     const congregationContext = useContext(AuthContext)
     const [page, setPage] = useState(1)
     const [limit, setLimit] = useState(20)
+
 
     useEffect(() => {
         navigation.setOptions({
@@ -59,9 +61,12 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
                 
             </MapView>
             <FlatList 
+                keyExtractor={((territory) => territory._id)}
                 data={state.territories?.docs}
                 renderItem={({ item }) => <Territory territory={item} />}
                 scrollEnabled={false}
+                contentContainerStyle={ isTablet && { gap: 10 }}
+                numColumns={columnsNum}
             />
 
             <Pagination activePage={state.territories?.page!} totalPages={state.territories?.totalPages!} updateState={setPage} />

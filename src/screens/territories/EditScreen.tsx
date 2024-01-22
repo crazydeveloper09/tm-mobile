@@ -34,7 +34,7 @@ interface TerritoriesEditScreenProps {
 }
 
 const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) => {
-    const [territoryID, setTerritoryID] = useState(route.params.id);
+    const [territoryID, setTerritoryID] = useState('');
     const [physicalCard, setPhysicalCard] = useState(false);
     const [noPhysicalCard, setNoPhysicalCard] = useState(false);
     const [number, setNumber] = useState('');
@@ -60,7 +60,7 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
     const [lastWorked, setLastWorked] = useState(new Date())
     const [takenOpen, setTakenOpen] = useState(false)
     const [taken, setTaken] = useState(new Date())
-    const {editTerritory, loadTerritoryHistory, state} = useContext(TerritoriesContext);
+    const {editTerritory, loadTerritoryHistory, state, turnOffLoading, turnOnLoading} = useContext(TerritoriesContext);
 
     const loadPreachers = async () => {
         const token = await AsyncStorage.getItem('token')
@@ -80,6 +80,7 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
     }
 
     const loadTerritory = async (id: string) => {
+        turnOnLoading()
         const token = await AsyncStorage.getItem('token')
         territories.get<{territory: ITerritory}>(`/territories/${id}`, {
             headers: {
@@ -87,7 +88,7 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
             }
         })
         .then((response) => {
-            setNumber(response.data.territory.number!.toString()!)
+            setNumber(response.data.territory?.number!.toString()!)
             setEndNumber(response.data.territory.endNumber?.toString()!)
             setBeginNumber(response.data.territory.beginNumber?.toString()!)
             setCity(response.data.territory.city!)
@@ -103,14 +104,19 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
             } else {
                 setNoPhysicalCard(true)
             }
+            turnOffLoading()
         })
         .catch((err) => console.log(err))
     }
     useEffect(() => {
         loadPreachers()
+        setTerritoryID(route.params.id)
         loadTerritory(territoryID);
-    }, [territoryID])
+    }, [route.params.id, territoryID])
 
+    if(state.isLoading){
+        return <Loading />
+    }
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center'}}>

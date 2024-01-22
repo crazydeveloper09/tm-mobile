@@ -60,9 +60,6 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
         })
     }, [territoryID])
 
-    console.log('territoryID', territoryID)
-    console.log('route', route.params.id)
-
     if(state.isLoading){
         return <Loading />
     }
@@ -93,7 +90,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             }
             disabled={state.currentIndex! - 1 === -1}
           >
-            <FontAwesome name="angle-left" size={25} />
+            <FontAwesome name="angle-left" size={30} />
           </TouchableOpacity>
 
           <Text style={styles.title}>Teren nr {state.territory?.number}</Text>
@@ -106,7 +103,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             }
             disabled={state.currentIndex! + 1 >= state.allTerritories?.length!}
           >
-            <FontAwesome name="angle-right" size={25} />
+            <FontAwesome name="angle-right" size={30} />
           </TouchableOpacity>
         </View>
         <Text style={styles.text}>
