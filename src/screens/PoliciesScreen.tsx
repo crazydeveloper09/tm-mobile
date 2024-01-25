@@ -18,7 +18,7 @@ const PoliciesScreen: React.FC = () => {
                     <MarkedList counterRenderer={point}>
                         <Text style={styles.listElement}>Niniejsza polityka dotyczy aplikacji mobilnej: Territory Manager</Text>
                         <Text style={styles.listElement}>Operatorem serwisu oraz Administratorem danych osobowych jest Maciej Kuta zamieszkały na ul. Obrońców Pokoju 30B/30 w Głogowie</Text>
-                        <Text style={styles.listElement}>Adres kontaktowy poczty elektronicznej operatora: admin@wbesiteswithpassion.pl</Text>
+                        <Text style={styles.listElement}>Adres kontaktowy poczty elektronicznej operatora: admin@websiteswithpassion.pl</Text>
                         <Text style={styles.listElement}>Operator jest Administratorem Twoich danych osobowych w odniesieniu do danych podanych dobrowolnie w Serwisie.</Text>
                         <View style={{ flexShrink: 1 }}>
                             <Text style={styles.listElement}>Serwis wykorzystuje dane osobowe w następujących celach:</Text>
