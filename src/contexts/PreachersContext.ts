@@ -80,6 +80,7 @@ const loadAllPreachers = (dispatch: Function) => {
             console.log('request done')
             dispatch({ type: 'load_all', payload: response.data })
         } catch (err) {
+            console.log(err)
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
         

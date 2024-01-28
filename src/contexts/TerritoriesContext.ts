@@ -35,7 +35,7 @@ const TerritoryReducer = (state: ITerritoryState, action: { type: string, payloa
         case 'turn_off_loading':
             return { ...state, isLoading: false }
         case 'load_data':
-            return { ...state, isLoading: false, territories: action.payload }
+            return { ...state, isLoading: false, territories: action.payload, errMessage: '' }
         case 'load_territory':
             return { 
                 ...state, 

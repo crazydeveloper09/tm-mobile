@@ -70,4 +70,6 @@ export interface ICheckout {
     date: Date;
     record: ITerritory;
     preacher: IPreacher;
+    passedBackDate: Date;
+    takenDate: Date
 }

@@ -1,7 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Context as TerritoryContext } from '../../contexts/TerritoriesContext';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import Territory from '../../components/Territory';
@@ -39,7 +39,7 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
         });
     
         return unsubscribe;
-    }, [navigation, page])
+    }, [navigation, page, limit])
     
     if(state.isLoading && congregationContext.state.isLoading){
         return <Loading />

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Share, Alert } from
 import { Context as TerritoriesContext } from '../../contexts/TerritoriesContext';
 import Loading from '../../components/Loading';
 import { FontAwesome } from '@expo/vector-icons';
-import { Badge } from '@rneui/base';
+import { Badge, Dialog } from '@rneui/base';
 import { changeColorForDates, countDaysFromNow } from '../../helpers/dates';
 import MapView, { Marker } from 'react-native-maps';
 import { Divider } from '@rneui/themed';
@@ -22,6 +22,11 @@ interface TerritoriesHistoryScreenProps {
 const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ navigation, route }) => {
     const [territoryID, setTerritoryID] = useState(route.params.id);
     const {state, loadTerritoryHistory} = useContext(TerritoriesContext)
+    const [infoOpen, setInfoOpen] = useState(false);
+
+    const toggleInfo = () => {
+      setInfoOpen(!infoOpen);
+    };
 
     const onShare = async (territory: ITerritory) => {
         console.log(territory)
@@ -66,19 +71,18 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
 
     let backgroundColor;
     switch(state.territory?.kind){
-        case 'city':
-            backgroundColor = '#f6edd9'
-            break;
-        case 'market':
-            backgroundColor = '#e1f1ff'
-            break;
-        case 'village':
-            backgroundColor = 'white'
-            break;
-        default:
-            break;
-    }
-
+      case 'city':
+          backgroundColor = '#f6edd9'
+          break;
+      case 'market':
+          backgroundColor = 'white'
+          break;
+      case 'village':
+          backgroundColor = '#e1f1ff'
+          break;
+      default:
+          break;
+  }
     return (
       <View style={[styles.container, { backgroundColor }]}>
         <View style={styles.titleContainer}>
@@ -226,63 +230,46 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
               data={state.territory?.history.reverse()}
               renderItem={({ item }) => (
                 <View style={{ marginTop: 15 }}>
-                  <Text style={styles.recordDate}>
+                  { !item.passedBackDate || !item.takenDate ? <View style={{ flexDirection: "row", flex: 1, justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Text style={styles.recordDate}>
                     {new Date(item?.date).toLocaleDateString()}
                   </Text>
-                  {item.record?.type === "free" && (
-                    <>
-                      <Text style={styles.text}>
-                        <Text>Ostatnio opracowane: </Text>
+                  <TouchableOpacity onPress={toggleInfo}>
+                    <FontAwesome name='info-circle' size={25} />
+                  </TouchableOpacity>
+                  
+                  </View> :  <Text style={styles.recordDate}>
+                    {new Date(item?.date).toLocaleDateString()}
+                  </Text> }
+        
+                 
+
+                  <Dialog
+                    isVisible={infoOpen}
+                    onBackdropPress={toggleInfo}
+                  >
+                    <Dialog.Title title="Ważna informacja !!" titleStyle={{ color: 'white' }} />
+                    <Text style={{ color: 'white' }}>Niedawno zmieniłem strukturę rekodu historii. W związku z tym, jeśli chcesz, żeby poprawnie się wszystko wyświetlało zachęcam do edycji tego rekordu w aplikacji internetowej. Wszelkie szczegóły są tam podane.</Text>
+                  </Dialog>
+                  <Text style={styles.text}>
+                        <Text>Data opracowania: </Text>
                         <Text style={styles.textBold}>
-                          {item.record?.lastWorked}
+                          {new Date(item.passedBackDate)?.toLocaleDateString()}
                         </Text>
                       </Text>
                       <Text style={styles.text}>
-                        <Text>Teren nie był opracowywany od </Text>
-                        <Text
-                          style={[
-                            styles.textBold,
-                            {
-                              color: changeColorForDates(
-                                item.record?.lastWorked!
-                              ),
-                            },
-                          ]}
-                        >
-                          {countDaysFromNow(item.record?.lastWorked!)}
-                        </Text>
-                        <Text> dni</Text>
-                      </Text>
-                    </>
-                  )}
-                  {item?.preacher && (
-                    <>
-                      <Text style={styles.text}>
-                        <Text>Pobrany: </Text>
+                        <Text>Data pobrania: </Text>
                         <Text style={styles.textBold}>
-                          {item.record?.taken}
+                          {new Date(item.takenDate)?.toLocaleDateString()}
                         </Text>
                       </Text>
                       <Text style={styles.text}>
                         <Text>Głosiciel: </Text>
                         <Text style={styles.textBold}>
-                          {item?.preacher.name}
+                          {item?.preacher?.name}
                         </Text>
                       </Text>
-                      <Text style={styles.text}>
-                        <Text>{item?.preacher.name} ma ten teren </Text>
-                        <Text
-                          style={[
-                            styles.textBold,
-                            { color: changeColorForDates(item.record?.taken!) },
-                          ]}
-                        >
-                          {countDaysFromNow(item.record?.taken!)}
-                        </Text>
-                        <Text> dni</Text>
-                      </Text>
-                    </>
-                  )}
+                
 
                   <Divider />
                 </View>
