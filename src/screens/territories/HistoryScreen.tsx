@@ -157,6 +157,9 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             />
           </>
         )}
+        { !state.territory?.isPhysicalCard && <Text style={[styles.text, styles.textBold, { color: '#9999CC' }]}>
+                    <Text>Teren nie ma karty fizycznej </Text>
+                </Text> }
         {state.territory?.preacher && (
           <>
             <Text style={styles.text}>

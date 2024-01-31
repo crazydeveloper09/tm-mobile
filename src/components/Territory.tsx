@@ -29,7 +29,7 @@ const Territory: React.FC<TerritoryProps> = ({ territory }) => {
             break;
     }
     return (
-        <View style={[styles.container, { backgroundColor: backgroundColor }]}>
+        <View style={[styles.container, { backgroundColor: backgroundColor }, !territory.isPhysicalCard && { borderWidth: 3, borderColor: '#9999CC' }]}>
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>Karta terenu nr {territory.number}</Text>
                 <View style={styles.iconContainer}>
@@ -72,6 +72,9 @@ const Territory: React.FC<TerritoryProps> = ({ territory }) => {
                     <Text> dni</Text>
                 </Text>
                 <Badge value="Wolny" containerStyle={{ position: 'absolute', top: 50, right: 5 }} badgeStyle={styles.freeBadge} />
+                { !territory.isPhysicalCard && <Text style={[styles.text, styles.textBold, { color: '#9999CC' }]}>
+                    <Text>Teren nie ma karty fizycznej </Text>
+                </Text> }
             </> }
             { territory?.preacher && <>
                 <Text style={styles.text}>
