@@ -53,7 +53,8 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
 
 
     useEffect(() => {
-        loadTerritoryHistory(territoryID)
+      setTerritoryID(route.params.id)
+        loadTerritoryHistory(territoryID);
         navigation.setOptions({
             headerRight: () => <View style={styles.headerRight}>
                 <TouchableOpacity onPress={() => navigation.navigate('EditTerritory', { id: territoryID })}>
@@ -65,11 +66,13 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
                 
             </View>
         })
-    }, [territoryID])
+    }, [territoryID, route.params.id])
 
     if(state.isLoading){
         return <Loading />
     }
+
+    console.log(route.params.id, territoryID)
 
     let backgroundColor;
     switch(state.territory?.kind){
@@ -91,9 +94,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
         <View style={styles.titleContainer}>
           <TouchableOpacity
             onPress={() =>
-              setTerritoryID(
-                state.allTerritories[state!.currentIndex - 1]!._id!
-              )
+              navigation.navigate('TerritoryHistory', {id: state.allTerritories[state!.currentIndex - 1]!._id!})
             }
             disabled={state.currentIndex! - 1 === -1}
           >
@@ -104,9 +105,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
 
           <TouchableOpacity
             onPress={() =>
-              setTerritoryID(
-                state.allTerritories[state!.currentIndex + 1]!._id!
-              )
+              navigation.navigate('TerritoryHistory', {id: state.allTerritories[state!.currentIndex + 1]!._id!})
             }
             disabled={state.currentIndex! + 1 >= state.allTerritories?.length!}
           >
@@ -233,7 +232,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             <Divider />
             <Text style={styles.historyTitle}>Historia</Text>
             <FlatList 
-              data={Object.keys(serviceYears).reverse()}
+              data={state.territory?.history && Object.keys(groupBy<ICheckout>(state.territory?.history!, 'serviceYear')).reverse()}
               scrollEnabled={false}
               renderItem={(serviceYear) => <View>
                   <Text style={styles.serviceYearTitle}>Rok służbowy {serviceYear.item}</Text>
