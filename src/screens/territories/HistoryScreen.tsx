@@ -8,7 +8,9 @@ import { changeColorForDates, countDaysFromNow } from '../../helpers/dates';
 import MapView, { Marker } from 'react-native-maps';
 import { Divider } from '@rneui/themed';
 import { NavigationProp } from '@react-navigation/native';
-import { ITerritory } from '../../contexts/interfaces';
+import { ICheckout, ITerritory } from '../../contexts/interfaces';
+import { groupBy } from '../../helpers/arrays';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface TerritoriesHistoryScreenProps {
     navigation: NavigationProp<any>
@@ -83,8 +85,9 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
       default:
           break;
   }
+  const serviceYears = groupBy<ICheckout>(state.territory?.history!, 'serviceYear')
     return (
-      <View style={[styles.container, { backgroundColor }]}>
+      <ScrollView style={[styles.container, { backgroundColor }]}>
         <View style={styles.titleContainer}>
           <TouchableOpacity
             onPress={() =>
@@ -229,58 +232,70 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
           <>
             <Divider />
             <Text style={styles.historyTitle}>Historia</Text>
-            <FlatList
-              data={state.territory?.history.reverse()}
-              renderItem={({ item }) => (
-                <View style={{ marginTop: 15 }}>
-                  { !item.passedBackDate || !item.takenDate ? <View style={{ flexDirection: "row", flex: 1, justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Text style={styles.recordDate}>
-                    {new Date(item?.date).toLocaleDateString()}
-                  </Text>
-                  <TouchableOpacity onPress={toggleInfo}>
-                    <FontAwesome name='info-circle' size={25} />
-                  </TouchableOpacity>
-                  
-                  </View> :  <Text style={styles.recordDate}>
-                    {new Date(item?.date).toLocaleDateString()}
-                  </Text> }
-        
+            <FlatList 
+              data={Object.keys(serviceYears).reverse()}
+              scrollEnabled={false}
+              renderItem={(serviceYear) => <View>
+                  <Text style={styles.serviceYearTitle}>Rok służbowy {serviceYear.item}</Text>
+                  <Divider color='black' />
+                  <FlatList
+                  data={serviceYears[serviceYear.item].reverse()}
                  
+                  scrollEnabled={false}
+                  renderItem={({ item }) => (
+                    <View style={{ marginTop: 15 }}>
+                      { !item.passedBackDate || !item.takenDate ? <View style={{ flexDirection: "row", flex: 1, justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Text style={styles.recordDate}>
+                        {new Date(item?.date).toLocaleDateString()}
+                      </Text>
+                      <TouchableOpacity onPress={toggleInfo}>
+                        <FontAwesome name='info-circle' size={25} />
+                      </TouchableOpacity>
+                      
+                      </View> :  <Text style={styles.recordDate}>
+                        {new Date(item?.date).toLocaleDateString()}
+                      </Text> }
+            
+                    
 
-                  <Dialog
-                    isVisible={infoOpen}
-                    onBackdropPress={toggleInfo}
-                  >
-                    <Dialog.Title title="Ważna informacja !!" titleStyle={{ color: 'white' }} />
-                    <Text style={{ color: 'white' }}>Niedawno zmieniłem strukturę rekodu historii. W związku z tym, jeśli chcesz, żeby poprawnie się wszystko wyświetlało zachęcam do edycji tego rekordu w aplikacji internetowej. Wszelkie szczegóły są tam podane.</Text>
-                  </Dialog>
-                  <Text style={styles.text}>
-                        <Text>Data opracowania: </Text>
-                        <Text style={styles.textBold}>
-                          {new Date(item.passedBackDate)?.toLocaleDateString()}
-                        </Text>
-                      </Text>
+                      <Dialog
+                        isVisible={infoOpen}
+                        onBackdropPress={toggleInfo}
+                      >
+                        <Dialog.Title title="Ważna informacja !!" titleStyle={{ color: 'white' }} />
+                        <Text style={{ color: 'white' }}>Niedawno zmieniłem strukturę rekodu historii. W związku z tym, jeśli chcesz, żeby poprawnie się wszystko wyświetlało zachęcam do edycji tego rekordu w aplikacji internetowej. Wszelkie szczegóły są tam podane.</Text>
+                      </Dialog>
                       <Text style={styles.text}>
-                        <Text>Data pobrania: </Text>
-                        <Text style={styles.textBold}>
-                          {new Date(item.takenDate)?.toLocaleDateString()}
-                        </Text>
-                      </Text>
-                      <Text style={styles.text}>
-                        <Text>Głosiciel: </Text>
-                        <Text style={styles.textBold}>
-                          {item?.preacher?.name}
-                        </Text>
-                      </Text>
-                
+                            <Text>Data opracowania: </Text>
+                            <Text style={styles.textBold}>
+                              {new Date(item.passedBackDate)?.toLocaleDateString()}
+                            </Text>
+                          </Text>
+                          <Text style={styles.text}>
+                            <Text>Data pobrania: </Text>
+                            <Text style={styles.textBold}>
+                              {new Date(item.takenDate)?.toLocaleDateString()}
+                            </Text>
+                          </Text>
+                          <Text style={styles.text}>
+                            <Text>Głosiciel: </Text>
+                            <Text style={styles.textBold}>
+                              {item?.preacher?.name}
+                            </Text>
+                          </Text>
+                    
 
-                  <Divider />
-                </View>
-              )}
+                      <Divider />
+                    </View>
+                  )}
+                />
+              </View>}
+
             />
+            
           </>
         )}
-      </View>
+      </ScrollView>
     );
 }
 
@@ -302,8 +317,13 @@ const styles = StyleSheet.create({
     },
     historyTitle: {
         fontFamily: 'MontserratSemiBold',
-        fontSize: 19,
+        fontSize: 21,
         marginVertical: 20
+    },
+    serviceYearTitle: {
+      fontFamily: 'MontserratSemiBold',
+        fontSize: 19,
+        marginVertical: 10
     },
     headerRight: {
         flexDirection: 'row',

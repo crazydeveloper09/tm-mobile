@@ -71,5 +71,6 @@ export interface ICheckout {
     record: ITerritory;
     preacher: IPreacher;
     passedBackDate: Date;
-    takenDate: Date
+    takenDate: Date;
+    serviceYear: number;
 }
