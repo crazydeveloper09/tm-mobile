@@ -7,6 +7,7 @@ import { IActivity } from "../../contexts/interfaces";
 import Activity from "../../components/Activity";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { ScrollView } from "react-native-gesture-handler";
+import { columnsNum } from "../../helpers/devices";
 
 const CongregationActivityScreen: React.FC = () => {
     const [applicationType, setApplicationType] = useState('Aplikacja mobilna');
@@ -39,6 +40,7 @@ const CongregationActivityScreen: React.FC = () => {
                 renderItem={({item}) => <Activity activity={item} />}
                 contentContainerStyle={{ padding: 15 }}
                 scrollEnabled={false}
+                numColumns={columnsNum}
             />
         </ScrollView>
     )
