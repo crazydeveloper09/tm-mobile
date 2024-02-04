@@ -1,4 +1,4 @@
-import { CheckBox, Input } from '@rneui/base';
+import { CheckBox, Input, Switch } from '@rneui/base';
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -265,9 +265,11 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 value={description}
                 onChangeText={setDescription}
             />
-            <Text>
+            <Text style={styles.labelStyle}>
                 Czy jest fizyczna karta terenu?
             </Text>
+
+            
             <CheckBox
                 checked={physicalCard}
                 onPress={() => setPhysicalCard(!physicalCard)}
