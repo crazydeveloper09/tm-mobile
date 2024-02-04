@@ -27,7 +27,7 @@ const CongregationActivityScreen: React.FC = () => {
     return (
         <ScrollView style={styles.container}>
             <FlatList 
-                data={Object.keys(groupedActivities as object)}
+                data={state.activities && Object.keys(groupedActivities as object)}
                 renderItem={({item}) => <TouchableOpacity onPress={() => setApplicationType(item)}>
                     { item === applicationType? <Text style={[styles.textActive, { color: settingsContext.state.mainColor, borderBottomColor: settingsContext.state.mainColor }]}>{item}</Text> : <Text style={styles.text}>{item}</Text>}
                 </TouchableOpacity>}
@@ -36,7 +36,7 @@ const CongregationActivityScreen: React.FC = () => {
                 centerContent={true}
             />
             <FlatList 
-                data={groupedActivities[applicationType]}
+                data={state.activities && groupedActivities[applicationType]}
                 renderItem={({item}) => <Activity activity={item} />}
                 contentContainerStyle={{ padding: 15 }}
                 scrollEnabled={false}
