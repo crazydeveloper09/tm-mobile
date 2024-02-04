@@ -6,6 +6,7 @@ import CongregationEditScreen from "../screens/congregations/EditScreen";
 import MinistryGroupNewScreen from "../screens/ministryGroups/NewScreen";
 import MinistryGroupEditScreen from "../screens/ministryGroups/EditScreen";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
+import CongregationActivityScreen from "../screens/congregations/ActivityScreen";
 
 const Stack = createStackNavigator()
 
@@ -21,7 +22,12 @@ const CongregationsNavigator = () => {
                 name="CongInfo" 
                 component={CongregationsInfoScreen} 
                 options={{ headerTitle: 'Zbór' }}
-            />  
+            />
+            <Stack.Screen 
+                name="CongActivity" 
+                component={CongregationActivityScreen} 
+                options={{ headerTitle: 'Kto i kiedy się logował?' }}
+            />   
             <Stack.Screen 
                 name="EditCong" 
                 component={CongregationEditScreen} 

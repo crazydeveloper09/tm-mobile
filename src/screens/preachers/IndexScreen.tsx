@@ -43,6 +43,10 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
         return <Loading />
     }
 
+    navigation.setOptions({
+        headerTitle: `Głosiciele: ${state.preachers?.totalDocs}`,
+    })
+
     console.log(state.preachers?.totalPages!)
     return (
         <ScrollView style={styles.container}>

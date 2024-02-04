@@ -24,6 +24,9 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
 
 
     useEffect(() => {
+        
+        loadTerritories(page, limit);
+        congregationContext.loadCongregationInfo()
         navigation.setOptions({
             headerRight: () => <View style={styles.headerRight}>
                 <TouchableOpacity onPress={() => navigation.navigate('AddTerritory')}>
@@ -35,8 +38,6 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
                 
             </View>
         })
-        loadTerritories(page, limit);
-        congregationContext.loadCongregationInfo()
         const unsubscribe = navigation.addListener('focus', () => {
             loadTerritories(page, limit);
             congregationContext.loadCongregationInfo()
@@ -48,6 +49,10 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
     if(state.isLoading && congregationContext.state.isLoading){
         return <Loading />
     }
+
+    navigation.setOptions({
+        headerTitle: `Tereny: ${state.territories?.totalDocs}`,
+    })
 
     return (
         <ScrollView style={styles.container}>

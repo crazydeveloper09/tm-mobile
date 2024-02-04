@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import { NavigationProp } from '@react-navigation/native';
 import MapView from 'react-native-maps';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import MinistryGroups from '../../components/MinistryGroups';
 import Loading from '../../components/Loading';
 
@@ -19,9 +19,17 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
         loadCongregationInfo();
         navigation.setOptions({
             headerTitle: state.congregation?.username || 'Zbór',
-            headerRight: () => <TouchableOpacity style={styles.headerRight} onPress={() => navigation.navigate('EditCong')}>
-                <FontAwesome name='pencil' size={23} color={'white'} />
-            </TouchableOpacity>
+            headerRight: () =>
+            <View style={styles.headerRight}>
+                <TouchableOpacity onPress={() => navigation.navigate('EditCong')}>
+                    <FontAwesome name='pencil' size={23} color={'white'} />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => navigation.navigate('CongActivity')}>
+                    <FontAwesome5 name='shield-alt' size={23} color={'white'} />
+                </TouchableOpacity>
+                
+            </View> 
         })
         const unsubscribe = navigation.addListener('focus', () => {
             loadCongregationInfo();

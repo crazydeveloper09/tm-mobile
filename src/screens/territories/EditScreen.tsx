@@ -9,6 +9,7 @@ import territories from '../../api/territories';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IPreacher, ITerritory } from '../../contexts/interfaces';
 import ButtonC from '../../components/Button';
+import { Context as SettingsContext } from '../../contexts/SettingsContext';
 
 export interface ITerritoryForm {
     number: number;
@@ -36,7 +37,6 @@ interface TerritoriesEditScreenProps {
 const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) => {
     const [territoryID, setTerritoryID] = useState('');
     const [physicalCard, setPhysicalCard] = useState(false);
-    const [noPhysicalCard, setNoPhysicalCard] = useState(false);
     const [number, setNumber] = useState('');
     const [city, setCity] = useState('');
     const [street, setStreet] = useState('');
@@ -61,6 +61,7 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
     const [takenOpen, setTakenOpen] = useState(false)
     const [taken, setTaken] = useState(new Date())
     const {editTerritory, loadTerritoryHistory, state, turnOffLoading, turnOnLoading} = useContext(TerritoriesContext);
+    const settings = useContext(SettingsContext)
 
     const loadPreachers = async () => {
         const token = await AsyncStorage.getItem('token')
@@ -99,11 +100,9 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
             setPreacherValue(response.data.territory.preacher?._id ? response.data.territory.preacher._id : '');
             setTaken(new Date(response.data.territory.taken!))
             setDescription(response.data.territory.description!)
-            if(response.data.territory.isPhysicalCard){
-                setPhysicalCard(true)
-            } else {
-                setNoPhysicalCard(true)
-            }
+            
+            setPhysicalCard(response.data.territory.isPhysicalCard)
+            
             turnOffLoading()
         })
         .catch((err) => console.log(err))
@@ -112,6 +111,7 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
         loadPreachers()
         setTerritoryID(route.params.id)
         loadTerritory(territoryID);
+        settings.loadColor()
     }, [route.params.id, territoryID])
 
     if(state.isLoading){
@@ -269,26 +269,14 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 Czy jest fizyczna karta terenu?
             </Text>
 
-            
-            <CheckBox
-                checked={physicalCard}
-                onPress={() => setPhysicalCard(!physicalCard)}
-                title={'Tak'}
-                iconType="material-community"
-                checkedIcon="checkbox-marked"
-                uncheckedIcon="checkbox-blank-outline"
-                checkedColor="#28a745"
-            />
+            <Switch 
+                value={physicalCard}
+                onValueChange={(value) => setPhysicalCard(value)}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
 
-            <CheckBox
-                checked={noPhysicalCard}
-                onPress={() => setNoPhysicalCard(!noPhysicalCard)}
-                title={'Nie'}
-                iconType="material-community"
-                checkedIcon="checkbox-marked"
-                uncheckedIcon="checkbox-blank-outline"
-                checkedColor="#28a745"
+                color={settings.state.mainColor}
             />
+            
 
             <ButtonC 
                 title='Edytuj teren' 

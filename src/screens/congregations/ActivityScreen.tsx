@@ -1,0 +1,63 @@
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { Context as CongregationContext } from "../../contexts/AuthContext";
+import Loading from "../../components/Loading";
+import { groupBy } from "../../helpers/arrays";
+import { IActivity } from "../../contexts/interfaces";
+import Activity from "../../components/Activity";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { ScrollView } from "react-native-gesture-handler";
+
+const CongregationActivityScreen: React.FC = () => {
+    const [applicationType, setApplicationType] = useState('Aplikacja mobilna');
+    const {state, loadCongregationActivities} = useContext(CongregationContext);
+    const settingsContext = useContext(SettingsContext)
+
+    useEffect(() => {
+        loadCongregationActivities(state.congregation?._id);
+        settingsContext.loadColor()
+    }, [state.congregation?._id])
+
+    if(state.isLoading){
+        return <Loading />
+    }
+
+    const groupedActivities = state.activities && groupBy<IActivity>(state.activities, 'applicationType')
+    return (
+        <ScrollView style={styles.container}>
+            <FlatList 
+                data={Object.keys(groupedActivities as object)}
+                renderItem={({item}) => <TouchableOpacity onPress={() => setApplicationType(item)}>
+                    { item === applicationType? <Text style={[styles.textActive, { color: settingsContext.state.mainColor, borderBottomColor: settingsContext.state.mainColor }]}>{item}</Text> : <Text style={styles.text}>{item}</Text>}
+                </TouchableOpacity>}
+                contentContainerStyle={{flexGrow: 1, justifyContent: 'center', gap: 10, backgroundColor: 'white', padding: 10}}
+                horizontal
+                centerContent={true}
+            />
+            <FlatList 
+                data={groupedActivities[applicationType]}
+                renderItem={({item}) => <Activity activity={item} />}
+                contentContainerStyle={{ padding: 15 }}
+                scrollEnabled={false}
+            />
+        </ScrollView>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#ece9e9',
+        flex: 1,
+    },
+    text: {
+        fontSize: 18,
+        fontFamily: 'PoppinsRegular'
+    },
+    textActive: {
+        fontSize: 18,
+        fontFamily: 'PoppinsSemiBold',
+        borderBottomWidth: 2
+    }
+});
+
+export default CongregationActivityScreen;

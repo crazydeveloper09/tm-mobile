@@ -38,23 +38,23 @@ export interface ICongregation {
 
 export interface ITerritory {
     _id: string;
-    city: string,
-    street: string,
-    lastWorked: string,
-    number: number,
-    beginNumber: number,
-    endNumber: number,
-    kind: string,
-    preacher: IPreacher,
-    congregation: ICongregation,
-    history: ICheckout[],
-    type: string,
-    taken: string,
-    description: string,
-    isPhysicalCard: boolean,
-    longitude: number,
-    latitude: number,
-    location: string,
+    city: string;
+    street: string;
+    lastWorked: string;
+    number: number;
+    beginNumber: number;
+    endNumber: number;
+    kind: string;
+    preacher: IPreacher;
+    congregation: ICongregation;
+    history: ICheckout[];
+    type: string;
+    taken: string;
+    description: string;
+    isPhysicalCard: boolean;
+    longitude: number;
+    latitude: number;
+    location: string;
 }
 
 export interface IMinistryGroup {
@@ -73,4 +73,13 @@ export interface ICheckout {
     passedBackDate: Date;
     takenDate: Date;
     serviceYear: number;
+}
+
+export interface IActivity {
+    ipAddress: string;
+    platform: string;
+    userAgent: string;
+    applicationType: string;
+    date: Date;
+    congregation: ICongregation
 }

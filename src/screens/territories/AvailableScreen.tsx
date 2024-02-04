@@ -25,14 +25,14 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
     const [limit, setLimit] = useState(20)
 
     useEffect(() => {
+        
+        loadAvailableTerritories(page, limit);
+        congregationContext.loadCongregationInfo()
         navigation.setOptions({
-            headerTitle: 'Wolne tereny',
             headerRight: () => <TouchableOpacity style={styles.headerRight} onPress={() => navigation.navigate('Tereny', { screen: 'SearchTerritories', params: { type: 'available' } })}>
                 <FontAwesome name='search' size={23} color={'white'} />
             </TouchableOpacity>
         })
-        loadAvailableTerritories(page, limit);
-        congregationContext.loadCongregationInfo()
         const unsubscribe = navigation.addListener('focus', () => {
             loadAvailableTerritories(page, limit);
             congregationContext.loadCongregationInfo()
@@ -44,7 +44,9 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
     if(state.isLoading && congregationContext.state.isLoading){
         return <Loading />
     }
-
+    navigation.setOptions({
+        headerTitle: `Wolne tereny: ${state.territories?.totalDocs}`,
+    })
     return (
         <ScrollView style={styles.container}>
             <MapView region={{
