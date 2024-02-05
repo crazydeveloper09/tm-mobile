@@ -9,6 +9,7 @@ import Territory from "../../components/Territory";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import Loading from "../../components/Loading";
 import Pagination from "../../components/Pagination";
+import { columnsNum } from "../../helpers/devices";
 
 interface TerritoriesSearchScreenProps {
     route: {
@@ -155,9 +156,11 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
             Rezultaty wyszukiwania: {state.territories?.totalDocs}
           </Text>
           <FlatList
+            keyExtractor={((territory) => territory._id)}
             data={state.territories?.docs}
             renderItem={({ item }) => <Territory territory={item} />}
             scrollEnabled={false}
+            numColumns={columnsNum}
           />
           <Pagination activePage={page} totalPages={state.territories?.totalPages!} updateState={setPage} />
         </View>

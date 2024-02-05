@@ -7,6 +7,8 @@ import { Entypo, FontAwesome } from "@expo/vector-icons";
 import Territory from "../../components/Territory";
 import { ITerritory } from "../../contexts/interfaces";
 import { NavigationProp } from "@react-navigation/native";
+import { columnsNum } from "../../helpers/devices";
+import { countDaysFromNow } from "../../helpers/dates";
 
 interface PreacherTerritoriesScreenProps {
     navigation: NavigationProp<any>
@@ -28,7 +30,7 @@ const PreacherTerritoriesScreen: React.FC<PreacherTerritoriesScreenProps> = ({ n
         try {
           const result = await Share.share({
             message:
-                `Witaj \n Twoje tereny to: \n ${territories.map((territory) => `• Teren nr ${territory.number} - ${territory.city}, ${territory?.street} ${territory?.beginNumber ? territory?.beginNumber : ''} ${territory.endNumber ? '- ' + territory?.endNumber: ''} \n`)}`,
+                `Witaj \n Twoje tereny to: \n ${territories.map((territory) => `• Teren nr ${territory.number} - ${territory.city}, ${territory?.street} ${territory?.beginNumber ? territory?.beginNumber : ''} ${territory.endNumber ? '- ' + territory?.endNumber: ''} ${territory.description || territory?.description !== ''  ? '(' + territory?.description + ')' : ''} ${countDaysFromNow(territory.taken) >= 120 ? '(do oddania)' : ''} \n`)}`,
           });
           if (result.action === Share.sharedAction) {
             if (result.activityType) {
@@ -73,9 +75,11 @@ const PreacherTerritoriesScreen: React.FC<PreacherTerritoriesScreenProps> = ({ n
                     Rezultaty wyszukiwania: {state.territories?.totalDocs}
                 </Text>
                 <FlatList
+                    keyExtractor={((territory) => territory._id)}
                     data={state.territories?.docs}
                     renderItem={({ item }) => <Territory territory={item} />}
                     scrollEnabled={false}
+                    numColumns={columnsNum}
                 />
                 
                 </View>

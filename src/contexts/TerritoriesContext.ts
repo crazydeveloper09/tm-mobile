@@ -23,7 +23,9 @@ interface ITerritoryContext {
     addTerritory: Function,
     editTerritory: Function,
     deleteTerritory: Function,
-    searchTerritory: Function
+    searchTerritory: Function,
+    turnOnLoading: Function,
+    turnOffLoading: Function,
 }
 
 const TerritoryReducer = (state: ITerritoryState, action: { type: string, payload: any }) => {
@@ -33,7 +35,7 @@ const TerritoryReducer = (state: ITerritoryState, action: { type: string, payloa
         case 'turn_off_loading':
             return { ...state, isLoading: false }
         case 'load_data':
-            return { ...state, isLoading: false, territories: action.payload }
+            return { ...state, isLoading: false, territories: action.payload, errMessage: '' }
         case 'load_territory':
             return { 
                 ...state, 
@@ -178,4 +180,16 @@ const deleteTerritory = (dispatch: Function) => {
     }
 }
 
-export const { Context, Provider } = createDataContext<ITerritoryState, ITerritoryContext>(TerritoryReducer, {loadTerritories, loadTerritoryHistory, searchTerritory, loadAvailableTerritories, addTerritory, editTerritory, deleteTerritory}, { isLoading: false})
+const turnOnLoading = (dispatch: Function) => {
+    return () => {
+        dispatch({ type: 'turn_on_loading' })
+    }
+}
+
+const turnOffLoading = (dispatch: Function) => {
+    return () => {
+        dispatch({ type: 'turn_off_loading' })
+    }
+}
+
+export const { Context, Provider } = createDataContext<ITerritoryState, ITerritoryContext>(TerritoryReducer, {loadTerritories, loadTerritoryHistory, searchTerritory, loadAvailableTerritories, addTerritory, editTerritory, deleteTerritory, turnOffLoading, turnOnLoading}, { isLoading: false})

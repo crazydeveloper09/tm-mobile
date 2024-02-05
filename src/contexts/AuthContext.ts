@@ -3,7 +3,7 @@ import tmApi from "../api/territories";
 import { AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { navigate } from "../RootNavigation";
-import { ICongregation } from "./interfaces";
+import { IActivity, ICongregation } from "./interfaces";
 
 export interface IAuth {
   token: string;
@@ -12,6 +12,7 @@ export interface IAuth {
   userID?: string;
   isLoading?: boolean,
   congregation?: ICongregation
+  activities?: IActivity[]
 }
 
 export interface IAuthContext {
@@ -21,6 +22,7 @@ export interface IAuthContext {
   verifyUser: Function;
   tryLocalSignIn: Function;
   loadCongregationInfo: Function;
+  loadCongregationActivities: Function;
   editCongregation: Function;
 }
 
@@ -43,6 +45,8 @@ const authReducer = (state: IAuth, action: { type: string; payload: any }) => {
         return {...state, token: '', userID: '', successMessage: 'Wylogowano z Territory Manager'}
     case 'add_cong_info': 
       return {...state, isLoading: false, congregation: action.payload}
+    case 'add_cong_activities': 
+      return {...state, isLoading: false, activities: action.payload}
     case 'turn_on_loading': 
       return {...state, isLoading: true}
     case 'turn_off_loading': 
@@ -117,6 +121,23 @@ const loadCongregationInfo = (dispatch: Function) => {
   }
 }
 
+const loadCongregationActivities = (dispatch: Function) => {
+  return async (congregationID: string) => {
+    try {
+      dispatch({ type: 'turn_on_loading' })
+      const token = await AsyncStorage.getItem('token');
+      const response = await tmApi.get(`/congregations/${congregationID}/activities`, {
+        headers: {
+          'Authorization': `bearer ${token}`
+        }
+      })
+      dispatch({ type: 'add_cong_activities', payload: response.data })
+    } catch(err) {
+      dispatch({ type: 'add_error', payload: (err as AxiosError).message })
+    }
+  }
+}
+
 const editCongregation = (dispatch: Function) => {
   return async (username: string, territoryServantEmail: string, ministryOverseerEmail: string, mainCity: string, congregationID: string) => {
     try {
@@ -137,6 +158,6 @@ const editCongregation = (dispatch: Function) => {
 
 export const { Context, Provider } = createDataContext<IAuth, IAuthContext>(
   authReducer,
-  { signIn, signOut, verifyUser, tryLocalSignIn, loadCongregationInfo, editCongregation },
+  { signIn, signOut, verifyUser, tryLocalSignIn, loadCongregationInfo, editCongregation, loadCongregationActivities },
   { token: "", errMessage: "", successMessage: "" }
 );

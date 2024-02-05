@@ -37,7 +37,7 @@ const Pagination: React.FC<PaginationProps> = ({ activePage, totalPages, updateS
             </TouchableOpacity>
           )
         }
-        contentContainerStyle={{ justifyContent: "center", gap: 15 }}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', gap: 15 }}
         horizontal
       />
     </View>

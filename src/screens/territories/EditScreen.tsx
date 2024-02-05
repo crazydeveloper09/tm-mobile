@@ -1,4 +1,4 @@
-import { CheckBox, Input } from '@rneui/base';
+import { CheckBox, Input, Switch } from '@rneui/base';
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -9,6 +9,7 @@ import territories from '../../api/territories';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IPreacher, ITerritory } from '../../contexts/interfaces';
 import ButtonC from '../../components/Button';
+import { Context as SettingsContext } from '../../contexts/SettingsContext';
 
 export interface ITerritoryForm {
     number: number;
@@ -34,9 +35,8 @@ interface TerritoriesEditScreenProps {
 }
 
 const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) => {
-    const [territoryID, setTerritoryID] = useState(route.params.id);
+    const [territoryID, setTerritoryID] = useState('');
     const [physicalCard, setPhysicalCard] = useState(false);
-    const [noPhysicalCard, setNoPhysicalCard] = useState(false);
     const [number, setNumber] = useState('');
     const [city, setCity] = useState('');
     const [street, setStreet] = useState('');
@@ -60,7 +60,8 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
     const [lastWorked, setLastWorked] = useState(new Date())
     const [takenOpen, setTakenOpen] = useState(false)
     const [taken, setTaken] = useState(new Date())
-    const {editTerritory, loadTerritoryHistory, state} = useContext(TerritoriesContext);
+    const {editTerritory, loadTerritoryHistory, state, turnOffLoading, turnOnLoading} = useContext(TerritoriesContext);
+    const settings = useContext(SettingsContext)
 
     const loadPreachers = async () => {
         const token = await AsyncStorage.getItem('token')
@@ -80,6 +81,7 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
     }
 
     const loadTerritory = async (id: string) => {
+        turnOnLoading()
         const token = await AsyncStorage.getItem('token')
         territories.get<{territory: ITerritory}>(`/territories/${id}`, {
             headers: {
@@ -87,7 +89,7 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
             }
         })
         .then((response) => {
-            setNumber(response.data.territory.number!.toString()!)
+            setNumber(response.data.territory?.number!.toString()!)
             setEndNumber(response.data.territory.endNumber?.toString()!)
             setBeginNumber(response.data.territory.beginNumber?.toString()!)
             setCity(response.data.territory.city!)
@@ -98,19 +100,23 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
             setPreacherValue(response.data.territory.preacher?._id ? response.data.territory.preacher._id : '');
             setTaken(new Date(response.data.territory.taken!))
             setDescription(response.data.territory.description!)
-            if(response.data.territory.isPhysicalCard){
-                setPhysicalCard(true)
-            } else {
-                setNoPhysicalCard(true)
-            }
+            
+            setPhysicalCard(response.data.territory.isPhysicalCard)
+            
+            turnOffLoading()
         })
         .catch((err) => console.log(err))
     }
     useEffect(() => {
         loadPreachers()
+        setTerritoryID(route.params.id)
         loadTerritory(territoryID);
-    }, [territoryID])
+        settings.loadColor()
+    }, [route.params.id, territoryID])
 
+    if(state.isLoading){
+        return <Loading />
+    }
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center'}}>
@@ -259,28 +265,18 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 value={description}
                 onChangeText={setDescription}
             />
-            <Text>
+            <Text style={styles.labelStyle}>
                 Czy jest fizyczna karta terenu?
             </Text>
-            <CheckBox
-                checked={physicalCard}
-                onPress={() => setPhysicalCard(!physicalCard)}
-                title={'Tak'}
-                iconType="material-community"
-                checkedIcon="checkbox-marked"
-                uncheckedIcon="checkbox-blank-outline"
-                checkedColor="#28a745"
-            />
 
-            <CheckBox
-                checked={noPhysicalCard}
-                onPress={() => setNoPhysicalCard(!noPhysicalCard)}
-                title={'Nie'}
-                iconType="material-community"
-                checkedIcon="checkbox-marked"
-                uncheckedIcon="checkbox-blank-outline"
-                checkedColor="#28a745"
+            <Switch 
+                value={physicalCard}
+                onValueChange={(value) => setPhysicalCard(value)}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
+
+                color={settings.state.mainColor}
             />
+            
 
             <ButtonC 
                 title='Edytuj teren' 

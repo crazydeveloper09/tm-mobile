@@ -1,7 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Context as TerritoryContext } from '../../contexts/TerritoriesContext';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import Territory from '../../components/Territory';
@@ -10,6 +10,7 @@ import MapView, { Marker } from 'react-native-maps';
 import Pagination from '../../components/Pagination';
 import TerritoriesNavigator from '../../navigators/TerritoriesNavigator';
 import { navigate } from '../../RootNavigation';
+import { columnsNum } from '../../helpers/devices';
 
 interface TerritoriesAvailableScreenProps {
     navigation: NavigationProp<any>
@@ -24,26 +25,28 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
     const [limit, setLimit] = useState(20)
 
     useEffect(() => {
+        
+        loadAvailableTerritories(page, limit);
+        congregationContext.loadCongregationInfo()
         navigation.setOptions({
-            headerTitle: 'Wolne tereny',
             headerRight: () => <TouchableOpacity style={styles.headerRight} onPress={() => navigation.navigate('Tereny', { screen: 'SearchTerritories', params: { type: 'available' } })}>
                 <FontAwesome name='search' size={23} color={'white'} />
             </TouchableOpacity>
         })
-        loadAvailableTerritories(page, limit);
-        congregationContext.loadCongregationInfo()
         const unsubscribe = navigation.addListener('focus', () => {
             loadAvailableTerritories(page, limit);
             congregationContext.loadCongregationInfo()
         });
     
         return unsubscribe;
-    }, [navigation, page])
+    }, [navigation, page, limit])
     
     if(state.isLoading && congregationContext.state.isLoading){
         return <Loading />
     }
-
+    navigation.setOptions({
+        headerTitle: `Wolne tereny: ${state.territories?.totalDocs}`,
+    })
     return (
         <ScrollView style={styles.container}>
             <MapView region={{
@@ -56,9 +59,11 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
                 
             </MapView>
             <FlatList 
+                keyExtractor={((territory) => territory._id)}
                 data={state.territories?.docs}
                 renderItem={({ item }) => <Territory territory={item} />}
                 scrollEnabled={false}
+                numColumns={columnsNum}
             />
             <Pagination activePage={state.territories?.page!} totalPages={state.territories?.totalPages!} updateState={setPage}/>
         </ScrollView>

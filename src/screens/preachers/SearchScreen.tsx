@@ -7,6 +7,7 @@ import Loading from "../../components/Loading";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import Preacher from "../../components/Preacher";
 import Pagination from "../../components/Pagination";
+import { columnsNum } from "../../helpers/devices";
 
 const PreachersSearchScreen: React.FC = () => {
   const [param, setParam] = useState("");
@@ -48,9 +49,11 @@ const PreachersSearchScreen: React.FC = () => {
             Rezultaty wyszukiwania: {state.searchResults?.length}
           </Text>
           <FlatList
+            keyExtractor={((preacher) => preacher._id)}
             data={state.searchResults}
             renderItem={({ item }) => <Preacher preacher={item} />}
             scrollEnabled={false}
+            numColumns={columnsNum}
           />
     
         </View>

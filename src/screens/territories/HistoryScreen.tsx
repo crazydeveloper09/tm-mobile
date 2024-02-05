@@ -3,12 +3,14 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Share, Alert } from
 import { Context as TerritoriesContext } from '../../contexts/TerritoriesContext';
 import Loading from '../../components/Loading';
 import { FontAwesome } from '@expo/vector-icons';
-import { Badge } from '@rneui/base';
+import { Badge, Dialog } from '@rneui/base';
 import { changeColorForDates, countDaysFromNow } from '../../helpers/dates';
 import MapView, { Marker } from 'react-native-maps';
 import { Divider } from '@rneui/themed';
 import { NavigationProp } from '@react-navigation/native';
-import { ITerritory } from '../../contexts/interfaces';
+import { ICheckout, ITerritory } from '../../contexts/interfaces';
+import { groupBy } from '../../helpers/arrays';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface TerritoriesHistoryScreenProps {
     navigation: NavigationProp<any>
@@ -22,6 +24,11 @@ interface TerritoriesHistoryScreenProps {
 const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ navigation, route }) => {
     const [territoryID, setTerritoryID] = useState(route.params.id);
     const {state, loadTerritoryHistory} = useContext(TerritoriesContext)
+    const [infoOpen, setInfoOpen] = useState(false);
+
+    const toggleInfo = () => {
+      setInfoOpen(!infoOpen);
+    };
 
     const onShare = async (territory: ITerritory) => {
         console.log(territory)
@@ -46,7 +53,8 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
 
 
     useEffect(() => {
-        loadTerritoryHistory(territoryID)
+      setTerritoryID(route.params.id)
+        loadTerritoryHistory(territoryID);
         navigation.setOptions({
             headerRight: () => <View style={styles.headerRight}>
                 <TouchableOpacity onPress={() => navigation.navigate('EditTerritory', { id: territoryID })}>
@@ -58,55 +66,50 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
                 
             </View>
         })
-    }, [territoryID])
-
-    console.log('territoryID', territoryID)
-    console.log('route', route.params.id)
+    }, [territoryID, route.params.id])
 
     if(state.isLoading){
         return <Loading />
     }
 
+    console.log(route.params.id, territoryID)
+
     let backgroundColor;
     switch(state.territory?.kind){
-        case 'city':
-            backgroundColor = '#f6edd9'
-            break;
-        case 'market':
-            backgroundColor = '#e1f1ff'
-            break;
-        case 'village':
-            backgroundColor = 'white'
-            break;
-        default:
-            break;
-    }
-
+      case 'city':
+          backgroundColor = '#f6edd9'
+          break;
+      case 'market':
+          backgroundColor = 'white'
+          break;
+      case 'village':
+          backgroundColor = '#e1f1ff'
+          break;
+      default:
+          break;
+  }
+  const serviceYears = groupBy<ICheckout>(state.territory?.history!, 'serviceYear')
     return (
-      <View style={[styles.container, { backgroundColor }]}>
+      <ScrollView style={[styles.container, { backgroundColor }]}>
         <View style={styles.titleContainer}>
           <TouchableOpacity
             onPress={() =>
-              setTerritoryID(
-                state.allTerritories[state!.currentIndex - 1]!._id!
-              )
+              navigation.navigate('TerritoryHistory', {id: state.allTerritories[state!.currentIndex - 1]!._id!})
             }
             disabled={state.currentIndex! - 1 === -1}
           >
-            <FontAwesome name="angle-left" size={25} />
+            <FontAwesome name="angle-left" size={30} />
           </TouchableOpacity>
 
           <Text style={styles.title}>Teren nr {state.territory?.number}</Text>
 
           <TouchableOpacity
             onPress={() =>
-              setTerritoryID(
-                state.allTerritories[state!.currentIndex + 1]!._id!
-              )
+              navigation.navigate('TerritoryHistory', {id: state.allTerritories[state!.currentIndex + 1]!._id!})
             }
             disabled={state.currentIndex! + 1 >= state.allTerritories?.length!}
           >
-            <FontAwesome name="angle-right" size={25} />
+            <FontAwesome name="angle-right" size={30} />
           </TouchableOpacity>
         </View>
         <Text style={styles.text}>
@@ -156,6 +159,9 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             />
           </>
         )}
+        { !state.territory?.isPhysicalCard && <Text style={[styles.text, styles.textBold, { color: '#9999CC' }]}>
+                    <Text>Teren nie ma karty fizycznej </Text>
+                </Text> }
         {state.territory?.preacher && (
           <>
             <Text style={styles.text}>
@@ -225,75 +231,70 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
           <>
             <Divider />
             <Text style={styles.historyTitle}>Historia</Text>
-            <FlatList
-              data={state.territory?.history.reverse()}
-              renderItem={({ item }) => (
-                <View style={{ marginTop: 15 }}>
-                  <Text style={styles.recordDate}>
-                    {new Date(item?.date).toLocaleDateString()}
-                  </Text>
-                  {item.record?.type === "free" && (
-                    <>
-                      <Text style={styles.text}>
-                        <Text>Ostatnio opracowane: </Text>
-                        <Text style={styles.textBold}>
-                          {item.record?.lastWorked}
-                        </Text>
+            <FlatList 
+              data={state.territory?.history && Object.keys(groupBy<ICheckout>(state.territory?.history!, 'serviceYear')).reverse()}
+              scrollEnabled={false}
+              renderItem={(serviceYear) => <View>
+                  <Text style={styles.serviceYearTitle}>Rok służbowy {serviceYear.item}</Text>
+                  <Divider color='black' />
+                  <FlatList
+                  data={serviceYears[serviceYear.item].reverse()}
+                 
+                  scrollEnabled={false}
+                  renderItem={({ item }) => (
+                    <View style={{ marginTop: 15 }}>
+                      { !item.passedBackDate || !item.takenDate ? <View style={{ flexDirection: "row", flex: 1, justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Text style={styles.recordDate}>
+                        {new Date(item?.date).toLocaleDateString()}
                       </Text>
-                      <Text style={styles.text}>
-                        <Text>Teren nie był opracowywany od </Text>
-                        <Text
-                          style={[
-                            styles.textBold,
-                            {
-                              color: changeColorForDates(
-                                item.record?.lastWorked!
-                              ),
-                            },
-                          ]}
-                        >
-                          {countDaysFromNow(item.record?.lastWorked!)}
-                        </Text>
-                        <Text> dni</Text>
-                      </Text>
-                    </>
-                  )}
-                  {item?.preacher && (
-                    <>
-                      <Text style={styles.text}>
-                        <Text>Pobrany: </Text>
-                        <Text style={styles.textBold}>
-                          {item.record?.taken}
-                        </Text>
-                      </Text>
-                      <Text style={styles.text}>
-                        <Text>Głosiciel: </Text>
-                        <Text style={styles.textBold}>
-                          {item?.preacher.name}
-                        </Text>
-                      </Text>
-                      <Text style={styles.text}>
-                        <Text>{item?.preacher.name} ma ten teren </Text>
-                        <Text
-                          style={[
-                            styles.textBold,
-                            { color: changeColorForDates(item.record?.taken!) },
-                          ]}
-                        >
-                          {countDaysFromNow(item.record?.taken!)}
-                        </Text>
-                        <Text> dni</Text>
-                      </Text>
-                    </>
-                  )}
+                      <TouchableOpacity onPress={toggleInfo}>
+                        <FontAwesome name='info-circle' size={25} />
+                      </TouchableOpacity>
+                      
+                      </View> :  <Text style={styles.recordDate}>
+                        {new Date(item?.date).toLocaleDateString()}
+                      </Text> }
+            
+                    
 
-                  <Divider />
-                </View>
-              )}
+                      <Dialog
+                        isVisible={infoOpen}
+                        onBackdropPress={toggleInfo}
+                      >
+                        <Dialog.Title title="Ważna informacja !!" titleStyle={{ color: 'white' }} />
+                        <Text style={{ color: 'white' }}>Niedawno zmieniłem strukturę rekodu historii. W związku z tym, jeśli chcesz, żeby poprawnie się wszystko wyświetlało zachęcam do edycji tego rekordu w aplikacji internetowej. Wszelkie szczegóły są tam podane.</Text>
+                      </Dialog>
+                      <Text style={styles.text}>
+                            <Text>Data opracowania: </Text>
+                            <Text style={styles.textBold}>
+                              {new Date(item.passedBackDate)?.toLocaleDateString()}
+                            </Text>
+                          </Text>
+                          <Text style={styles.text}>
+                            <Text>Data pobrania: </Text>
+                            <Text style={styles.textBold}>
+                              {new Date(item.takenDate)?.toLocaleDateString()}
+                            </Text>
+                          </Text>
+                          <Text style={styles.text}>
+                            <Text>Głosiciel: </Text>
+                            <Text style={styles.textBold}>
+                              {item?.preacher?.name}
+                            </Text>
+                          </Text>
+                    
+
+                      <Divider />
+                    </View>
+                  )}
+                />
+              </View>}
+
             />
+            
           </>
         )}
-      </View>
+      </ScrollView>
     );
 }
 
@@ -315,8 +316,13 @@ const styles = StyleSheet.create({
     },
     historyTitle: {
         fontFamily: 'MontserratSemiBold',
-        fontSize: 19,
+        fontSize: 21,
         marginVertical: 20
+    },
+    serviceYearTitle: {
+      fontFamily: 'MontserratSemiBold',
+        fontSize: 19,
+        marginVertical: 10
     },
     headerRight: {
         flexDirection: 'row',

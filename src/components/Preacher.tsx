@@ -4,6 +4,7 @@ import { IPreacher } from "../contexts/interfaces";
 import { FontAwesome } from "@expo/vector-icons";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
+import { isTablet } from "../helpers/devices";
 
 interface PreacherProps {
     preacher: IPreacher;
@@ -44,7 +45,9 @@ const styles = StyleSheet.create({
         marginTop: 15,
         borderColor: '#9999cc',
         borderWidth: 1,
-        borderRadius: 10
+        borderRadius: 10,
+        width: isTablet ? '49%' : 'auto',
+        marginRight: isTablet ? 15 : 0
     },
     titleContainer: {
         flexDirection: 'row',

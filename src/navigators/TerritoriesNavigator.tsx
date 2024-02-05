@@ -42,7 +42,7 @@ const TerritoriesNavigator = () => {
             <Stack.Screen 
                 name="EditTerritory" 
                 component={TerritoriesEditScreen} 
-                options={{ headerTitle: 'Edytuj teren' }}
+                options={{ headerTitle: 'Edytuj teren'}}
             />
             <Stack.Screen 
                 name="SearchTerritories" 
