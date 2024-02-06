@@ -41,7 +41,7 @@
         "projectId": "0c1566a8-d70c-4d6b-bec3-43e399b735d9"
       }
     },
-    "runtimeVersion": "1.0.4",
+    "runtimeVersion": "1.3.1",
     "plugins": [
       [
         "expo-local-authentication",
