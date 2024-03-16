@@ -5,7 +5,7 @@ import Loading from '../../components/Loading';
 import { FontAwesome } from '@expo/vector-icons';
 import { Badge, Dialog } from '@rneui/base';
 import { changeColorForDates, countDaysFromNow } from '../../helpers/dates';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Divider } from '@rneui/themed';
 import { NavigationProp } from '@react-navigation/native';
 import { ICheckout, ITerritory } from '../../contexts/interfaces';
@@ -212,6 +212,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             />
           )}
         <MapView
+          provider={PROVIDER_GOOGLE}
           region={{
             latitude: state.territory?.latitude!,
             longitude: state.territory?.longitude!,

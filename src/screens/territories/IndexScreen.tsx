@@ -6,7 +6,7 @@ import { Context as TerritoryContext } from '../../contexts/TerritoriesContext';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import Territory from '../../components/Territory';
 import Loading from '../../components/Loading';
-import MapView, { MapMarker, Marker } from 'react-native-maps';
+import MapView, { MapMarker, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Pagination from '../../components/Pagination';
 import { columnsNum, isTablet } from '../../helpers/devices';
 
@@ -56,7 +56,7 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
 
     return (
         <ScrollView style={styles.container}>
-            <MapView region={{
+            <MapView provider={PROVIDER_GOOGLE} region={{
                 latitude: congregationContext.state.congregation?.mainCityLatitude!,
                 longitude: congregationContext.state.congregation?.mainCityLongitude!,
                 longitudeDelta: 0.03,

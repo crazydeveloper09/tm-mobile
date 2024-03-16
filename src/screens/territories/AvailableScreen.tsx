@@ -11,6 +11,7 @@ import Pagination from '../../components/Pagination';
 import TerritoriesNavigator from '../../navigators/TerritoriesNavigator';
 import { navigate } from '../../RootNavigation';
 import { columnsNum } from '../../helpers/devices';
+import { PROVIDER_GOOGLE } from 'react-native-maps';
 
 interface TerritoriesAvailableScreenProps {
     navigation: NavigationProp<any>
@@ -49,7 +50,7 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
     })
     return (
         <ScrollView style={styles.container}>
-            <MapView region={{
+            <MapView provider={PROVIDER_GOOGLE} region={{
                 latitude: congregationContext.state.congregation?.mainCityLatitude!,
                 longitude: congregationContext.state.congregation?.mainCityLongitude!,
                 longitudeDelta: 0.03,

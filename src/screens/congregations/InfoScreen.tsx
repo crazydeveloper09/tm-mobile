@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import { NavigationProp } from '@react-navigation/native';
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import MinistryGroups from '../../components/MinistryGroups';
 import Loading from '../../components/Loading';
@@ -71,7 +71,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
             </View>
             <MinistryGroups congregationID={state.congregation?._id!} />
             <Text style={styles.header}>Mapka</Text>
-            <MapView initialRegion={{
+            <MapView provider={PROVIDER_GOOGLE} initialRegion={{
                 latitude: state.congregation?.mainCityLatitude!,
                 longitude: state.congregation?.mainCityLongitude!,
                 longitudeDelta: 0.04,
