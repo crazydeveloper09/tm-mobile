@@ -23,7 +23,9 @@
         },
         "channel": "preview"
       },
-      "production": {}
+      "production": {
+        "channel": "staging"
+      }
     },
     "submit": {
       "production": {}
