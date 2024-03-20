@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import CongregationsLoginScreen from "../screens/congregations/LoginScreen";
 import CongregationsTwoFactorScreen from "../screens/congregations/TwoFactorScreen";
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Stack = createStackNavigator()
@@ -21,6 +21,9 @@ const AuthNavigator = () => {
             headerTintColor: 'white',
             
         }}>
+            <StatusBar 
+              backgroundColor={state.mainColor}
+            />
             <Stack.Screen 
                 name="Log in" 
                 component={CongregationsLoginScreen} 

@@ -16,6 +16,9 @@ const SettingsNavigator = () => {
     
     return (
         <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: state?.mainColor }, headerTitleStyle: headerStyles.title, headerTintColor: 'white'}}>
+            <StatusBar 
+              backgroundColor={state.mainColor}
+            />
             <Stack.Screen 
                 name="Settings" 
                 component={SettingsScreen} 

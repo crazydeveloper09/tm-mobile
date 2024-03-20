@@ -8,6 +8,7 @@ import { StyleSheet } from "react-native";
 import TerritoriesHistoryScreen from "../screens/territories/HistoryScreen";
 import TerritoryDeleteConfirmScreen from "../screens/territories/DeleteConfirmScreen";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
+import { StatusBar } from "expo-status-bar";
 
 const Stack = createStackNavigator()
 
@@ -24,6 +25,9 @@ const TerritoriesNavigator = () => {
             headerTitleStyle: headerStyles.title,
             headerTintColor: 'white'
         }}>
+            <StatusBar 
+                backgroundColor={state.mainColor}
+            />
             <Stack.Screen 
                 name="TerritoriesList" 
                 component={TerritoriesIndexScreen} 

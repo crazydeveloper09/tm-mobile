@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useContext, useEffect } from "react";
-import { Platform, StyleSheet, Text } from "react-native";
+import { Platform, StatusBar, StyleSheet, Text } from "react-native";
 import TerritoriesAvailableScreen from "../screens/territories/AvailableScreen";
 import { FontAwesome } from "@expo/vector-icons";
 import TerritoriesNavigator from "./TerritoriesNavigator";
@@ -30,6 +30,9 @@ const MainNavigator = () => {
             tabBarActiveBackgroundColor: state.mainColor,
             tabBarShowLabel: isTablet
           }}>
+            <StatusBar 
+              backgroundColor={state.mainColor}
+            />
             <Tab.Screen 
               name="Home"
               component={TerritoriesAvailableScreen}
