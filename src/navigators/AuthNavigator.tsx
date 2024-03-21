@@ -12,6 +12,7 @@ const AuthNavigator = () => {
     const {state, loadColor} = useContext(SettingsContext);
     useEffect(() => {
       loadColor()
+      StatusBar.setBackgroundColor(state.mainColor)
     }, [state.mainColor])
 
     return (
@@ -21,9 +22,6 @@ const AuthNavigator = () => {
             headerTintColor: 'white',
             
         }}>
-            <StatusBar 
-              backgroundColor={state.mainColor}
-            />
             <Stack.Screen 
                 name="Log in" 
                 component={CongregationsLoginScreen} 

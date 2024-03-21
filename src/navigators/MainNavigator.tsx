@@ -19,6 +19,7 @@ const MainNavigator = () => {
     const {state, loadColor} = useContext(SettingsContext);
     useEffect(() => {
       loadColor()
+      StatusBar.setBackgroundColor(state.mainColor)
     }, [state.mainColor])
 
     return (
@@ -30,9 +31,6 @@ const MainNavigator = () => {
             tabBarActiveBackgroundColor: state.mainColor,
             tabBarShowLabel: isTablet
           }}>
-            <StatusBar 
-              backgroundColor={state.mainColor}
-            />
             <Tab.Screen 
               name="Home"
               component={TerritoriesAvailableScreen}

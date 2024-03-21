@@ -15,12 +15,10 @@ const CongregationsNavigator = () => {
     const {state, loadColor} = useContext(SettingsContext);
     useEffect(() => {
       loadColor()
+      StatusBar.setBackgroundColor(state.mainColor)
     }, [state.mainColor])
     return (
         <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: state?.mainColor }, headerTitleStyle: headerStyles.title , headerTintColor: 'white'}}>
-            <StatusBar 
-              backgroundColor={state.mainColor}
-            />
             <Stack.Screen 
                 name="CongInfo" 
                 component={CongregationsInfoScreen} 

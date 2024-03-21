@@ -4,7 +4,7 @@ import PreachersIndexScreen from "../screens/preachers/IndexScreen";
 import PreachersNewScreen from "../screens/preachers/NewScreen";
 import PreachersEditScreen from "../screens/preachers/EditScreen";
 import PreachersSearchScreen from "../screens/preachers/SearchScreen";
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import PreacherDeleteConfirmScreen from "../screens/preachers/DeleteConfirmScreen";
 import PreacherTerritoriesScreen from "../screens/preachers/PreacherTerritoriesScreen";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
@@ -16,6 +16,7 @@ const PreachersNavigator = () => {
     const {state, loadColor} = useContext(SettingsContext);
     useEffect(() => {
       loadColor()
+      StatusBar.setBackgroundColor(state.mainColor)
     }, [state.mainColor])
     
     return (

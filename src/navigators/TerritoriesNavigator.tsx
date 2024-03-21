@@ -4,11 +4,11 @@ import TerritoriesIndexScreen from "../screens/territories/IndexScreen";
 import TerritoriesNewScreen from "../screens/territories/NewScreen";
 import TerritoriesEditScreen from "../screens/territories/EditScreen";
 import TerritoriesSearchScreen from "../screens/territories/SearchScreen";
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import TerritoriesHistoryScreen from "../screens/territories/HistoryScreen";
 import TerritoryDeleteConfirmScreen from "../screens/territories/DeleteConfirmScreen";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
-import { StatusBar } from "expo-status-bar";
+
 
 const Stack = createStackNavigator()
 
@@ -17,6 +17,7 @@ const TerritoriesNavigator = () => {
     const {state, loadColor} = useContext(SettingsContext);
     useEffect(() => {
       loadColor()
+      StatusBar.setBackgroundColor(state.mainColor)
     }, [state.mainColor])
 
     return (
@@ -25,9 +26,7 @@ const TerritoriesNavigator = () => {
             headerTitleStyle: headerStyles.title,
             headerTintColor: 'white'
         }}>
-            <StatusBar 
-                backgroundColor={state.mainColor}
-            />
+            
             <Stack.Screen 
                 name="TerritoriesList" 
                 component={TerritoriesIndexScreen} 

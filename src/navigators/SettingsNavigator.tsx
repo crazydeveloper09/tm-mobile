@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 import SettingsScreen from "../screens/SettingsScreen";
 import PoliciesScreen from "../screens/PoliciesScreen";
@@ -12,13 +12,11 @@ const SettingsNavigator = () => {
     const {state, loadColor} = useContext(SettingsContext);
     useEffect(() => {
       loadColor()
+      StatusBar.setBackgroundColor(state.mainColor)
     }, [state.mainColor])
     
     return (
         <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: state?.mainColor }, headerTitleStyle: headerStyles.title, headerTintColor: 'white'}}>
-            <StatusBar 
-              backgroundColor={state.mainColor}
-            />
             <Stack.Screen 
                 name="Settings" 
                 component={SettingsScreen} 
