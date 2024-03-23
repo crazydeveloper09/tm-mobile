@@ -26,8 +26,8 @@ const App = () => {
     'PoppinsSemiBold': require('./assets/fonts/Poppins/Poppins-SemiBold.ttf'),
     'PoppinsRegular': require('./assets/fonts/Poppins/Poppins-Regular.ttf')
   });
-
-  async function onFetchUpdateAsync() {
+  // Uncomment when Expo updates will be working correctly on Samsung
+  /* async function onFetchUpdateAsync() {
     try {
       const update = await Updates.checkForUpdateAsync();
 
@@ -43,7 +43,7 @@ const App = () => {
 
   useEffect(() => {
     onFetchUpdateAsync()
-  }, [])
+  }, []) */
 
   if(!fontsLoaded) {
     return null;
