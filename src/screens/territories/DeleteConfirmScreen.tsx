@@ -1,7 +1,7 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { NavigationProp } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import Loading from "../../components/Loading";
 import ButtonC from "../../components/Button";
 import { Context as TerritoriesContext } from "../../contexts/TerritoriesContext";
@@ -26,6 +26,11 @@ const TerritoryDeleteConfirmScreen: React.FC<TerritoryDeleteConfirmScreenProps> 
 
     if(state.isLoading) {
         return <Loading />
+    }
+
+    
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
     }
 
     return (

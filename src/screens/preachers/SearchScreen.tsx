@@ -1,6 +1,6 @@
 import { Input } from "@rneui/themed";
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
+import { View, Text, StyleSheet, ScrollView, FlatList, Alert } from "react-native";
 import ButtonC from "../../components/Button";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import Loading from "../../components/Loading";
@@ -13,6 +13,11 @@ const PreachersSearchScreen: React.FC = () => {
   const [param, setParam] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const { searchPreacher, state } = useContext(PreachersContext);
+
+  
+  if(state.errMessage){
+    Alert.alert("Server error", state.errMessage)
+  }
 
   return (
     <ScrollView style={styles.container}>

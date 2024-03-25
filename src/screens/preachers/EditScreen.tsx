@@ -1,6 +1,6 @@
 import { NavigationProp } from '@react-navigation/native';
 import React, { useEffect, useContext, useState } from 'react';
-import { View, StyleSheet} from 'react-native';
+import { View, StyleSheet, Alert} from 'react-native';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import ButtonC from '../../components/Button';
 import { Input } from '@rneui/themed';
@@ -27,6 +27,11 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
 
     if(state.isLoading){
         return <Loading />
+    }
+
+    
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
     }
 
 

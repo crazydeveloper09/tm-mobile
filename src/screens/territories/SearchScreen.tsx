@@ -1,6 +1,6 @@
 import { Input } from "@rneui/themed";
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
+import { View, Text, StyleSheet, ScrollView, FlatList, Alert } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import ButtonC from "../../components/Button";
 import { Context as TerritoriesContext } from "../../contexts/TerritoriesContext";
@@ -50,6 +50,10 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
   useEffect(() => {
     searchTerritory(mainValue, paramValue, page, limit, typeValue);
   }, [page])
+
+  if(state.errMessage){
+    Alert.alert("Server error", state.errMessage)
+  }
 
   return (
     <ScrollView style={styles.container}>

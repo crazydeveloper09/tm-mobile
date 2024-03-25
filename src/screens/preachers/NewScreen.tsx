@@ -1,12 +1,17 @@
 import { Input } from '@rneui/themed';
 import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import ButtonC from '../../components/Button';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 
 const PreachersNewScreen: React.FC = () => {
     const [name, setName] = useState('');
     const {addPreacher, state} = useContext(PreachersContext)
+
+    
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
+    }
 
     return (
         <View style={styles.container}>

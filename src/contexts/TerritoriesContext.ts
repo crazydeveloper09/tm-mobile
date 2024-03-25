@@ -31,7 +31,7 @@ interface ITerritoryContext {
 const TerritoryReducer = (state: ITerritoryState, action: { type: string, payload: any }) => {
     switch(action.type) {
         case 'turn_on_loading':
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true, errMessage: '' }
         case 'turn_off_loading':
             return { ...state, isLoading: false }
         case 'load_data':
@@ -42,7 +42,8 @@ const TerritoryReducer = (state: ITerritoryState, action: { type: string, payloa
                 isLoading: false, 
                 territory: action.payload.territory, 
                 currentIndex: action.payload.currentIndex, 
-                allTerritories: action.payload.territories
+                allTerritories: action.payload.territories,
+                errMessage: ''
             }
         case 'add_error': 
             return { ...state, errMessage: action.payload }

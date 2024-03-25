@@ -28,17 +28,17 @@ interface IPreacherContext {
 const preacherReducer = (state: IPreacherState, action: { type: string, payload: any }) => {
     switch(action.type) {
         case 'turn_on_loading':
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true, errMessage: '' }
         case 'turn_off_loading':
             return { ...state, isLoading: false }
         case 'load_data':
-            return { ...state, isLoading: false, preachers: action.payload }
+            return { ...state, isLoading: false, preachers: action.payload, errMessage: '' }
         case 'load_all':
-            return { ...state, isLoading: false, allPreachers: action.payload }
+            return { ...state, isLoading: false, allPreachers: action.payload, errMessage: '' }
         case 'load_preacher':
-            return { ...state, isLoading: false, preacher: action.payload }
+            return { ...state, isLoading: false, preacher: action.payload, errMessage: '' }
         case 'search': {
-            return { ...state, isLoading: false, searchResults: action.payload }
+            return { ...state, isLoading: false, searchResults: action.payload, errMessage: '' }
         }
         case 'add_error': 
             return { ...state, errMessage: action.payload }

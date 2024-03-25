@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from "react-native";
 import { Context as CongregationContext } from "../../contexts/AuthContext";
 import Loading from "../../components/Loading";
 import { groupBy } from "../../helpers/arrays";
@@ -21,6 +21,10 @@ const CongregationActivityScreen: React.FC = () => {
 
     if(state.isLoading){
         return <Loading />
+    }
+
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
     }
 
     const groupedActivities = state.activities && groupBy<IActivity>(state.activities, 'applicationType')

@@ -13,6 +13,7 @@ import { navigate } from '../../RootNavigation';
 import { columnsNum } from '../../helpers/devices';
 import { PROVIDER_GOOGLE } from 'react-native-maps';
 
+
 interface TerritoriesAvailableScreenProps {
     navigation: NavigationProp<any>
 }
@@ -44,6 +45,10 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
     
     if(state.isLoading && congregationContext.state.isLoading){
         return <Loading />
+    }
+
+    if(state.errMessage || congregationContext.state.errMessage){
+        Alert.alert("Server error", state.errMessage || congregationContext.state.errMessage)
     }
     navigation.setOptions({
         headerTitle: `Wolne tereny: ${state.territories?.totalDocs}`,

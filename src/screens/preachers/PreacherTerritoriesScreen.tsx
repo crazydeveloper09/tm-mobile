@@ -54,6 +54,11 @@ const PreacherTerritoriesScreen: React.FC<PreacherTerritoriesScreenProps> = ({ n
         return <Loading />
     }
 
+    
+    if(state.errMessage){
+      Alert.alert("Server error", state.errMessage)
+    }
+
     navigation.setOptions({
         headerRight: () => <View style={styles.headerRight}>
              <TouchableOpacity onPress={() => onShare(state.territories?.docs!)}>

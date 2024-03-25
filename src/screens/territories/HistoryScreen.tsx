@@ -72,6 +72,10 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
         return <Loading />
     }
 
+    if(state.errMessage){
+      Alert.alert("Server error", state.errMessage)
+  }
+
     console.log(route.params.id, territoryID)
 
     let backgroundColor;

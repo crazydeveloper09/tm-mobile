@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { Context as AuthContext } from "../../contexts/AuthContext";
 import Loading from "../../components/Loading";
 import { Input } from "@rneui/themed";
@@ -22,6 +22,10 @@ const CongregationEditScreen: React.FC = () => {
 
     if(state.isLoading) {
         return <Loading />
+    }
+
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
     }
     return (
         <View style={styles.container}>

@@ -44,11 +44,11 @@ const authReducer = (state: IAuth, action: { type: string; payload: any }) => {
     case 'signout': 
         return {...state, token: '', userID: '', successMessage: 'Wylogowano z Territory Manager'}
     case 'add_cong_info': 
-      return {...state, isLoading: false, congregation: action.payload}
+      return {...state, isLoading: false, congregation: action.payload, errMessage: ''}
     case 'add_cong_activities': 
-      return {...state, isLoading: false, activities: action.payload}
+      return {...state, isLoading: false, activities: action.payload, errMessage: ''}
     case 'turn_on_loading': 
-      return {...state, isLoading: true}
+      return {...state, isLoading: true, errMessage: ''}
     case 'turn_off_loading': 
       return {...state, isLoading: false}
     case 'debug':

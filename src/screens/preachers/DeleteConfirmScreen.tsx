@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { NavigationProp } from "@react-navigation/native";
 import Loading from "../../components/Loading";
@@ -25,6 +25,11 @@ const PreacherDeleteConfirmScreen: React.FC<PreacherDeleteConfirmScreenProps> = 
 
     if(state.isLoading) {
         return <Loading />
+    }
+
+    
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
     }
 
     return (

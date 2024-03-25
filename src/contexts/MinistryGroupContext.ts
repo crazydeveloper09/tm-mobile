@@ -22,9 +22,9 @@ interface IMinistryGroupContext {
 const ministryGroupReducer = (state: IMinistryGroupState, action: { type: string, payload: any }) => {
     switch(action.type) {
         case 'turn_on_loading':
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true, errMessage: '' }
         case 'load_data':
-            return { ...state, isLoading: false, ministryGroups: action.payload }
+            return { ...state, isLoading: false, ministryGroups: action.payload, errMessage: '' }
         case 'add_error': 
             return { ...state, errMessage: action.payload }
         default:

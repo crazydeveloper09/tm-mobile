@@ -74,7 +74,10 @@ const TerritoriesNewScreen: React.FC = () => {
         loadPreachers()
     }, [])
 
-        
+    
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
+    }    
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', marginBottom: 40}}>

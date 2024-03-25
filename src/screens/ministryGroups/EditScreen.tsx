@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as MinistryGroupContext } from "../../contexts/MinistryGroupContext";
 import { Input } from "@rneui/themed";
@@ -63,6 +63,10 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
 
     if(preachers.state.isLoading && ministryGroup.state.isLoading){
         return <Loading />
+    }
+
+    if(preachers.state.errMessage || ministryGroup.state.errMessage){
+        Alert.alert("Server error", preachers.state.errMessage || ministryGroup.state.errMessage)
     }
 
     return (

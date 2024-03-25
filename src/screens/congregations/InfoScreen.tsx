@@ -1,6 +1,6 @@
 import { Button } from '@rneui/themed';
 import React, { useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import { NavigationProp } from '@react-navigation/native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
@@ -40,6 +40,10 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
 
     if(state.isLoading) {
         return <Loading />
+    }
+
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
     }
 
     navigation.setOptions({

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import Preacher from '../../components/Preacher';
 import { FontAwesome } from '@expo/vector-icons';
@@ -41,6 +41,10 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
 
     if(state.isLoading){
         return <Loading />
+    }
+
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
     }
 
     navigation.setOptions({
