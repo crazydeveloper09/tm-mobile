@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { changeColorForDates, countDaysFromNow } from "../helpers/dates";
 import { isTablet } from "../helpers/devices";
 import TerritoryAssignment from "./TerritoryAssignment";
+import DescriptionAndValue from "./common/DescriptionAndValue";
 
 
 interface TerritoryProps {
@@ -86,33 +87,19 @@ const Territory: React.FC<TerritoryProps> = ({ territory, preachers }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <Text style={styles.text}>
-        <Text>Miejscowość: </Text>
-        <Text style={styles.textBold}>{territory.city}</Text>
-      </Text>
+      <DescriptionAndValue description="Miejscowość" value={territory.city} />
       
 
       {territory.street && (
-        <Text style={styles.text}>
-          <Text>Ulica: </Text>
-          <Text style={styles.textBold}>
-            {territory.street} {territory.beginNumber && territory.beginNumber}{" "}
-            {territory.endNumber && `- ${territory.endNumber}`}{" "}
-          </Text>
-        </Text>
+        <DescriptionAndValue description="Ulica" value={`${territory.street} ${territory.beginNumber && territory.beginNumber}{" "}
+        ${territory.endNumber && '-' + territory.endNumber} `} />
       )}
       {territory.description && (
-        <Text style={styles.text}>
-          <Text>Opis: </Text>
-          <Text style={styles.textBold}>{territory.description}</Text>
-        </Text>
+          <DescriptionAndValue description="Opis" value={territory.description} />
       )}
       {territory?.type === "free" && (
         <>
-          <Text style={styles.text}>
-            <Text>Ostatnio opracowane: </Text>
-            <Text style={styles.textBold}>{territory?.lastWorked}</Text>
-          </Text>
+          <DescriptionAndValue description="Ostatnio opracowane" value={territory?.lastWorked} />
           <Text style={styles.text}>
             <Text>Teren nie był opracowywany od </Text>
             <Text
@@ -139,14 +126,8 @@ const Territory: React.FC<TerritoryProps> = ({ territory, preachers }) => {
       )}
       {territory?.preacher && (
         <>
-          <Text style={styles.text}>
-            <Text>Pobrany: </Text>
-            <Text style={styles.textBold}>{territory?.taken}</Text>
-          </Text>
-          <Text style={styles.text}>
-            <Text>Głosiciel: </Text>
-            <Text style={styles.textBold}>{territory?.preacher.name}</Text>
-          </Text>
+          <DescriptionAndValue description="Pobrany" value={territory?.taken} />
+          <DescriptionAndValue description="Głosiciel" value={territory?.preacher.name} />
           <Text style={styles.text}>
             <Text>{territory?.preacher.name} ma ten teren </Text>
             <Text
