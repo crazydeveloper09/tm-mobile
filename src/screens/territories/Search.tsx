@@ -46,9 +46,11 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
   const [limit, setLimit] = useState(20);
 
   const { searchTerritory, state } = useContext(TerritoriesContext);
+  const preacherContext = useContext(PreachersContext)
 
   useEffect(() => {
     searchTerritory(mainValue, paramValue, page, limit, typeValue);
+    preacherContext.loadAllPreachers();
   }, [page])
 
   if(state.errMessage){
@@ -147,7 +149,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
           <FontAwesome name="search" size={45} sty />
           <Text style={styles.noParamText}>Wybierz parametry, by wyszukać</Text>
         </View>
-      ) : state.isLoading ? (
+      ) : state.isLoading && preacherContext.state.isLoading ? (
         <Loading />
       ) : state.territories?.docs?.length === 0 ? (
         <View style={styles.noParamContainer}>
@@ -162,7 +164,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
           <FlatList
             keyExtractor={((territory) => territory._id)}
             data={state.territories?.docs}
-            renderItem={({ item }) => <Territory territory={item} />}
+            renderItem={({ item }) => <Territory territory={item} preachers={preacherContext.state.allPreachers} />}
             scrollEnabled={false}
             numColumns={columnsNum}
           />
