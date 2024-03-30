@@ -1,13 +1,13 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useContext, useEffect } from "react";
 import { Platform, StatusBar, StyleSheet, Text } from "react-native";
-import TerritoriesAvailableScreen from "../screens/territories/AvailableScreen";
+import TerritoriesAvailableScreen from "../screens/territories/Available";
 import { FontAwesome } from "@expo/vector-icons";
 import TerritoriesNavigator from "./TerritoriesNavigator";
 import PreachersNavigator from "./PreachersNavigator";
-import CongregationsInfoScreen from "../screens/congregations/InfoScreen";
+import CongregationsInfoScreen from "../screens/congregations/Info";
 import CongregationsNavigator from "./CongregationNavigator";
-import SettingsScreen from "../screens/SettingsScreen";
+import SettingsScreen from "../screens/Settings";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 import SettingsNavigator from "./SettingsNavigator";
 import { isTablet } from "../helpers/devices";

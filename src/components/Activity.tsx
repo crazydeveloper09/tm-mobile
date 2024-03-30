@@ -16,9 +16,13 @@ const Activity: React.FC<ActivityProps> = ({ activity }) => {
                 <Text>Data i czas: </Text>
                 <Text style={styles.textBold}>{new Date(activity.date).toLocaleString()}</Text>
             </Text>
-            <Text style={styles.text}>
+            { activity.applicationType === "Aplikacja internetowa" && <Text style={styles.text}>
                 <Text>Platforma: </Text>
                 <Text style={styles.textBold}>{activity?.platform}</Text>
+            </Text>}
+            <Text style={styles.text}>
+                <Text>Adres IP: </Text>
+                <Text style={styles.textBold}>{activity?.ipAddress}</Text>
             </Text>
             <Text style={styles.text}>
                 <Text>Informacje o użytkowniku: </Text>

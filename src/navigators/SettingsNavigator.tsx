@@ -2,8 +2,8 @@ import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar, StyleSheet } from "react-native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
-import SettingsScreen from "../screens/SettingsScreen";
-import PoliciesScreen from "../screens/PoliciesScreen";
+import SettingsScreen from "../screens/Settings";
+import PoliciesScreen from "../screens/Policies";
 
 const Stack = createStackNavigator()
 

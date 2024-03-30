@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import TerritoriesIndexScreen from "../screens/territories/IndexScreen";
-import TerritoriesNewScreen from "../screens/territories/NewScreen";
-import TerritoriesEditScreen from "../screens/territories/EditScreen";
-import TerritoriesSearchScreen from "../screens/territories/SearchScreen";
+import TerritoriesIndexScreen from "../screens/territories/Index";
+import TerritoriesNewScreen from "../screens/territories/New";
+import TerritoriesEditScreen from "../screens/territories/Edit";
+import TerritoriesSearchScreen from "../screens/territories/Search";
 import { StatusBar, StyleSheet } from "react-native";
-import TerritoriesHistoryScreen from "../screens/territories/HistoryScreen";
-import TerritoryDeleteConfirmScreen from "../screens/territories/DeleteConfirmScreen";
+import TerritoriesHistoryScreen from "../screens/territories/History";
+import TerritoryDeleteConfirmScreen from "../screens/territories/DeleteConfirm";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 

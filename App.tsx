@@ -10,6 +10,7 @@ import { navigationRef } from './src/RootNavigation';
 import SwitchNavigator from './src/navigators/SwitchNavigator';
 import { Provider as SettingsProvider } from './src/contexts/SettingsContext';
 import * as Updates from 'expo-updates';
+import FlashMessage from 'react-native-flash-message';
 
 setStatusBarStyle('light')
 
@@ -62,7 +63,7 @@ const App = () => {
           </TerritoryProvider>
         </PreacherProvider>
       </SettingsProvider>
-      
+      <FlashMessage position={'bottom'} />
     </AuthProvider>
     
   )

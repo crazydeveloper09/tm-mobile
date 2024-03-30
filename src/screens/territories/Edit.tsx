@@ -51,34 +51,9 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
         { label: "Tereny wiejskie", value: "village" },
         { label: "tereny handlowe", value: "market" },
     ]);
-    const [preacherValue, setPreacherValue] = useState("");
-    const [preacherOpen, setPreacherOpen] = useState(false);
-    const [preacherItems, setPreacherItems] = useState([
-        { label: "Wolny teren", value: "" },
-    ]);
-    const [lastWorkedOpen, setLastWorkedOpen] = useState(false)
-    const [lastWorked, setLastWorked] = useState(new Date())
-    const [takenOpen, setTakenOpen] = useState(false)
-    const [taken, setTaken] = useState(new Date())
     const {editTerritory, loadTerritoryHistory, state, turnOffLoading, turnOnLoading} = useContext(TerritoriesContext);
     const settings = useContext(SettingsContext)
 
-    const loadPreachers = async () => {
-        const token = await AsyncStorage.getItem('token')
-        territories.get<IPreacher[]>('/preachers/all', {
-            headers: {
-                'Authorization': `bearer ${token}`
-            }
-        })
-        .then((response) => {
-            const selectItems = response.data.map((preacher) => {
-                return { label: preacher.name, value: preacher._id } as never
-            })
-            selectItems.unshift({ label: "Wolny teren", value: "" } as never)
-            setPreacherItems(selectItems)
-        })
-        .catch((err) => console.log(err))
-    }
 
     const loadTerritory = async (id: string) => {
         turnOnLoading()
@@ -96,9 +71,6 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
             setStreet(response.data.territory.street!);
             setKindValue(response.data.territory.kind!);
             setLocation(response.data.territory.location!);
-            setLastWorked(new Date(response.data.territory.lastWorked!));
-            setPreacherValue(response.data.territory.preacher?._id ? response.data.territory.preacher._id : '');
-            setTaken(new Date(response.data.territory.taken!))
             setDescription(response.data.territory.description!)
             
             setPhysicalCard(response.data.territory.isPhysicalCard)
@@ -108,7 +80,6 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
         .catch((err) => console.log(err))
     }
     useEffect(() => {
-        loadPreachers()
         setTerritoryID(route.params.id)
         loadTerritory(territoryID);
         settings.loadColor()
@@ -197,62 +168,6 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
             />
 
 
-            <TouchableOpacity onPress={() => setLastWorkedOpen(true)} style={{...styles.inputContainer, padding: 15}}>
-                <Text>
-                    Ostatnio opracowane - aktualna data: {lastWorked.toLocaleDateString()}
-                </Text> 
-            </TouchableOpacity>
-            <DateTimePickerModal
-                isVisible={lastWorkedOpen}
-                 date={lastWorked} 
-                 onConfirm={(date) => {
-                     setLastWorked(date)
-                     setLastWorkedOpen(false)
-                     }
-                 } 
-                 onCancel={() => setLastWorkedOpen(false)}
-                 isDarkModeEnabled={false}
-                display='inline'
-                locale='pl'
-
-            />
-
-            <DropDownPicker
-                open={preacherOpen}
-                value={preacherValue}
-                items={preacherItems}
-                setOpen={setPreacherOpen}
-                setValue={setPreacherValue}
-                searchable={true}
-                flatListProps={{ scrollEnabled: false }}
-                containerStyle={{
-                    marginVertical: 15,
-                    width: '100%'
-                }}
-            />
-
-            <TouchableOpacity onPress={() => setTakenOpen(true)} style={{...styles.inputContainer, padding: 15}}>
-                <Text>
-                 Pobrany - aktualna data: {taken.toLocaleDateString()} 
-                </Text>
-            </TouchableOpacity>
-            <DateTimePickerModal 
-                isVisible={takenOpen}
-                mode='date'
-                date={taken} 
-                onConfirm={(date) => {
-                    setTaken(date)
-                    setTakenOpen(false)
-                    }
-                } 
-                onCancel={() => setTakenOpen(false)}
-                isDarkModeEnabled={false}
-                display='inline'
-                pickerStyleIOS={{
-                    borderColor: 'black'
-                }}
-                locale='pl'
-            />
 
             <Input
                 label='Opis'
@@ -281,7 +196,7 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
             <ButtonC 
                 title='Edytuj teren' 
                 isLoading={state.isLoading}
-                onPress={() => editTerritory(territoryID, { number, kind: kindValue, city, street, beginNumber, endNumber, location, lastWorked: new Date(lastWorked), preacher: preacherValue, taken: new Date(taken), description, isPhysicalCard: physicalCard})} 
+                onPress={() => editTerritory(territoryID, { number, kind: kindValue, city, street, beginNumber, endNumber, location, description, isPhysicalCard: physicalCard})} 
             />
         </ScrollView>
     )

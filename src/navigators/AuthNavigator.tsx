@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import CongregationsLoginScreen from "../screens/congregations/LoginScreen";
-import CongregationsTwoFactorScreen from "../screens/congregations/TwoFactorScreen";
+import CongregationsLoginScreen from "../screens/congregations/Login";
+import CongregationsTwoFactorScreen from "../screens/congregations/TwoFactor";
 import { StatusBar, StyleSheet } from "react-native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 

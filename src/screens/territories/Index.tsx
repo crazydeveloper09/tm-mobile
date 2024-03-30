@@ -4,9 +4,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ScrollView, Platform, Dimensions, Alert } from 'react-native';
 import { Context as TerritoryContext } from '../../contexts/TerritoriesContext';
 import { Context as AuthContext } from '../../contexts/AuthContext';
+import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import Territory from '../../components/Territory';
 import Loading from '../../components/Loading';
-import MapView, { MapMarker, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { MapMarker, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import Pagination from '../../components/Pagination';
 import { columnsNum, isTablet } from '../../helpers/devices';
 
@@ -19,6 +20,7 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
 
     const { state, loadTerritories } = useContext(TerritoryContext)
     const congregationContext = useContext(AuthContext)
+    const preachersContext = useContext(PreachersContext)
     const [page, setPage] = useState(1)
     const [limit, setLimit] = useState(20)
 
@@ -27,6 +29,7 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
         
         loadTerritories(page, limit);
         congregationContext.loadCongregationInfo()
+        preachersContext.loadAllPreachers();
         navigation.setOptions({
             headerRight: () => <View style={styles.headerRight}>
                 <TouchableOpacity onPress={() => navigation.navigate('AddTerritory')}>
@@ -41,17 +44,18 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
         const unsubscribe = navigation.addListener('focus', () => {
             loadTerritories(page, limit);
             congregationContext.loadCongregationInfo()
+            preachersContext.loadAllPreachers();
         });
     
         return unsubscribe;
     }, [navigation, page])
     
-    if(state.isLoading && congregationContext.state.isLoading){
+    if(state.isLoading && congregationContext.state.isLoading && preachersContext.state.isLoading){
         return <Loading />
     }
 
-    if(state.errMessage || congregationContext.state.errMessage){
-        Alert.alert("Server error", state.errMessage || congregationContext.state.errMessage)
+    if(state.errMessage || congregationContext.state.errMessage || preachersContext.state.errMessage){
+        Alert.alert("Server error", state.errMessage || congregationContext.state.errMessage || preachersContext.state.errMessage)
     }
 
     navigation.setOptions({
@@ -60,7 +64,7 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
 
     return (
         <ScrollView style={styles.container}>
-            <MapView provider={PROVIDER_GOOGLE} region={{
+            <MapView provider={Platform.OS === "ios" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE} region={{
                 latitude: congregationContext.state.congregation?.mainCityLatitude!,
                 longitude: congregationContext.state.congregation?.mainCityLongitude!,
                 longitudeDelta: 0.03,
@@ -72,7 +76,7 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
             <FlatList 
                 keyExtractor={((territory) => territory._id)}
                 data={state.territories?.docs}
-                renderItem={({ item }) => <Territory territory={item} />}
+                renderItem={({ item }) => <Territory territory={item} preachers={preachersContext.state.allPreachers!} />}
                 scrollEnabled={false}
                 contentContainerStyle={ isTablet && { gap: 10 }}
                 numColumns={columnsNum}

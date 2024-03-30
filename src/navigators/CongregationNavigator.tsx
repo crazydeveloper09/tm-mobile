@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar, StyleSheet } from "react-native";
-import CongregationsInfoScreen from "../screens/congregations/InfoScreen";
-import CongregationEditScreen from "../screens/congregations/EditScreen";
-import MinistryGroupNewScreen from "../screens/ministryGroups/NewScreen";
-import MinistryGroupEditScreen from "../screens/ministryGroups/EditScreen";
+import CongregationsInfoScreen from "../screens/congregations/Info";
+import CongregationEditScreen from "../screens/congregations/Edit";
+import MinistryGroupNewScreen from "../screens/ministryGroups/New";
+import MinistryGroupEditScreen from "../screens/ministryGroups/Edit";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
-import CongregationActivityScreen from "../screens/congregations/ActivityScreen";
+import CongregationActivityScreen from "../screens/congregations/Activity";
 
 const Stack = createStackNavigator()
 

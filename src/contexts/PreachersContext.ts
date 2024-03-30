@@ -4,6 +4,7 @@ import { IPreacher, PaginateResult } from "./interfaces"
 import territories from "../api/territories"
 import { AxiosError } from "axios"
 import { navigate } from "../RootNavigation"
+import { showMessage } from "react-native-flash-message"
 
 interface IPreacherState {
     isLoading?: boolean;
@@ -121,6 +122,10 @@ const addPreacher = (dispatch: Function) => {
             });
             navigate('PreachersList');
             dispatch({ type: 'turn_off_loading' })
+            showMessage({
+                message: `Poprawnie dodano głosiciela: ${name} `,
+                type: 'success',
+            })
         } catch(err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
@@ -139,6 +144,10 @@ const editPreacher = (dispatch: Function) => {
             });
             navigate('PreachersList');
             dispatch({ type: 'turn_off_loading' })
+            showMessage({
+                message: `Poprawnie edytowano głosiciela: ${name} `,
+                type: 'success',
+            })
         } catch(err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
@@ -178,6 +187,10 @@ const deletePreacher = (dispatch: Function) => {
 
             navigate('PreachersList');
             dispatch({ type: 'turn_off_loading' })
+            showMessage({
+                message: `Poprawnie usunięto głosiciela`,
+                type: 'success',
+            })
         } catch(err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }

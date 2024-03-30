@@ -4,6 +4,7 @@ import { AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { navigate } from "../RootNavigation";
 import { IActivity, ICongregation } from "./interfaces";
+import { showMessage } from "react-native-flash-message";
 
 export interface IAuth {
   token: string;
@@ -44,7 +45,7 @@ const authReducer = (state: IAuth, action: { type: string; payload: any }) => {
     case 'signout': 
         return {...state, token: '', userID: '', successMessage: 'Wylogowano z Territory Manager'}
     case 'add_cong_info': 
-      return {...state, isLoading: false, congregation: action.payload, errMessage: ''}
+      return {...state, isLoading: false, congregation: action.payload, errMessage: '', successMessage: state.successMessage}
     case 'add_cong_activities': 
       return {...state, isLoading: false, activities: action.payload, errMessage: ''}
     case 'turn_on_loading': 
@@ -101,6 +102,10 @@ const tryLocalSignIn = (dispatch: Function) => {
   return async () => {
     const token = await AsyncStorage.getItem('token')
     dispatch({ type: 'signin', payload: { token: token, successMessage: 'Automatycznie zalogowano do aplikacji' } })
+    showMessage({
+      message: 'Automatycznie zalogowano do aplikacji',
+      type: 'success'
+    })
   }
 }
 
@@ -150,6 +155,10 @@ const editCongregation = (dispatch: Function) => {
         });
         navigate('CongInfo');
         dispatch({ type: 'turn_off_loading' })
+        showMessage({
+          message: `Poprawnie edytowano informacje zborowe`,
+          type: 'success',
+      })
     } catch(err) {
         dispatch({ type: 'add_error', payload: (err as AxiosError).message })
     }

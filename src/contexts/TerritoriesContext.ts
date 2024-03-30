@@ -4,7 +4,8 @@ import { ITerritory, PaginateResult } from "./interfaces"
 import territories from "../api/territories"
 import { AxiosError } from "axios"
 import { navigate } from "../RootNavigation"
-import { ITerritoryForm } from "../screens/territories/NewScreen"
+import { ITerritoryForm } from "../screens/territories/New"
+import { showMessage } from "react-native-flash-message"
 
 interface ITerritoryState {
     isLoading?: boolean,
@@ -26,6 +27,8 @@ interface ITerritoryContext {
     searchTerritory: Function,
     turnOnLoading: Function,
     turnOffLoading: Function,
+    assignTerritory: Function,
+    makeTerritoryFreeAgain: Function,
 }
 
 const TerritoryReducer = (state: ITerritoryState, action: { type: string, payload: any }) => {
@@ -137,6 +140,56 @@ const addTerritory = (dispatch: Function) => {
 
             navigate('TerritoriesList');
             dispatch({ type: 'turn_off_loading' })
+            showMessage({
+                message: `Poprawnie dodano teren nr ${body.number}`,
+                type: 'success',
+            })
+        } catch(err) {
+            dispatch({ type: 'add_error', payload: (err as AxiosError).message })
+        }
+    }
+}
+
+const assignTerritory = (dispatch: Function) => {
+    return async (territoryID: string, preacherID: string) => {
+        try {
+            dispatch({ type: 'turn_on_loading' })
+            const token = await AsyncStorage.getItem('token');
+            const response = await territories.post(`/territories/${territoryID}/assign`, {preacher: preacherID}, {
+                headers: {
+                    'Authorization': `bearer ${token}`
+                }
+            });
+
+            dispatch({ type: 'turn_off_loading' })
+            navigate('Tereny', { screen: 'TerritoryHistory', params: { id: territoryID } });
+            showMessage({
+                message: `Poprawnie przydzielono teren`,
+                type: 'success',
+            })
+        } catch(err) {
+            dispatch({ type: 'add_error', payload: (err as AxiosError).message })
+        }
+    }
+}
+
+const makeTerritoryFreeAgain = (dispatch: Function) => {
+    return async (territoryID: string, lastWorkedDate: string) => {
+        try {
+            dispatch({ type: 'turn_on_loading' })
+            const token = await AsyncStorage.getItem('token');
+            const response = await territories.post(`/territories/${territoryID}/makeFree`, {lastWorked: lastWorkedDate}, {
+                headers: {
+                    'Authorization': `bearer ${token}`
+                }
+            });
+
+            dispatch({ type: 'turn_off_loading' })
+            navigate('TerritoryHistory', { id: territoryID });
+            showMessage({
+                message: `Poprawnie zdano teren`,
+                type: 'success',
+            })
         } catch(err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
@@ -156,6 +209,10 @@ const editTerritory = (dispatch: Function) => {
 
             dispatch({ type: 'turn_off_loading' })
             navigate('TerritoryHistory', { id: territoryID });
+            showMessage({
+                message: `Poprawnie edytowano teren nr ${body.number}`,
+                type: 'success',
+            })
         } catch(err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
@@ -175,6 +232,10 @@ const deleteTerritory = (dispatch: Function) => {
 
             navigate('TerritoriesList');
             dispatch({ type: 'turn_off_loading' })
+            showMessage({
+                message: `Poprawnie usunięto teren`,
+                type: 'success',
+            })
         } catch(err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
@@ -193,4 +254,4 @@ const turnOffLoading = (dispatch: Function) => {
     }
 }
 
-export const { Context, Provider } = createDataContext<ITerritoryState, ITerritoryContext>(TerritoryReducer, {loadTerritories, loadTerritoryHistory, searchTerritory, loadAvailableTerritories, addTerritory, editTerritory, deleteTerritory, turnOffLoading, turnOnLoading}, { isLoading: false})
+export const { Context, Provider } = createDataContext<ITerritoryState, ITerritoryContext>(TerritoryReducer, {loadTerritories, loadTerritoryHistory, searchTerritory, loadAvailableTerritories, assignTerritory, makeTerritoryFreeAgain, addTerritory, editTerritory, deleteTerritory, turnOffLoading, turnOnLoading}, { isLoading: false})

@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import PreachersIndexScreen from "../screens/preachers/IndexScreen";
-import PreachersNewScreen from "../screens/preachers/NewScreen";
-import PreachersEditScreen from "../screens/preachers/EditScreen";
-import PreachersSearchScreen from "../screens/preachers/SearchScreen";
+import PreachersIndexScreen from "../screens/preachers/Index";
+import PreachersNewScreen from "../screens/preachers/New";
+import PreachersEditScreen from "../screens/preachers/Edit";
+import PreachersSearchScreen from "../screens/preachers/Search";
 import { StatusBar, StyleSheet } from "react-native";
-import PreacherDeleteConfirmScreen from "../screens/preachers/DeleteConfirmScreen";
-import PreacherTerritoriesScreen from "../screens/preachers/PreacherTerritoriesScreen";
+import PreacherDeleteConfirmScreen from "../screens/preachers/DeleteConfirm";
+import PreacherTerritoriesScreen from "../screens/preachers/PreacherTerritories";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Stack = createStackNavigator()

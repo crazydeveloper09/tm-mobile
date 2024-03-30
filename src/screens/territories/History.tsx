@@ -1,16 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Share, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Share, Alert, Platform, RefreshControl } from 'react-native';
 import { Context as TerritoriesContext } from '../../contexts/TerritoriesContext';
+import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import Loading from '../../components/Loading';
 import { FontAwesome } from '@expo/vector-icons';
 import { Badge, Dialog } from '@rneui/base';
 import { changeColorForDates, countDaysFromNow } from '../../helpers/dates';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Divider } from '@rneui/themed';
 import { NavigationProp } from '@react-navigation/native';
 import { ICheckout, ITerritory } from '../../contexts/interfaces';
 import { groupBy } from '../../helpers/arrays';
 import { ScrollView } from 'react-native-gesture-handler';
+import TerritoryAssignment from '../../components/TerritoryAssignment';
+import DescriptionAndValue from '../../components/common/DescriptionAndValue';
 
 interface TerritoriesHistoryScreenProps {
     navigation: NavigationProp<any>
@@ -23,7 +26,8 @@ interface TerritoriesHistoryScreenProps {
 
 const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ navigation, route }) => {
     const [territoryID, setTerritoryID] = useState(route.params.id);
-    const {state, loadTerritoryHistory} = useContext(TerritoriesContext)
+    const {state, loadTerritoryHistory, makeTerritoryFreeAgain, assignTerritory} = useContext(TerritoriesContext);
+    const preachersContext = useContext(PreachersContext)
     const [infoOpen, setInfoOpen] = useState(false);
 
     const toggleInfo = () => {
@@ -51,10 +55,20 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
         }
       };
 
+      const [refreshing, setRefreshing] = React.useState(false);
+
+      const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 2000);
+      }, []);
+
 
     useEffect(() => {
       setTerritoryID(route.params.id)
         loadTerritoryHistory(territoryID);
+        preachersContext.loadAllPreachers();
         navigation.setOptions({
             headerRight: () => <View style={styles.headerRight}>
                 <TouchableOpacity onPress={() => navigation.navigate('EditTerritory', { id: territoryID })}>
@@ -66,35 +80,49 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
                 
             </View>
         })
-    }, [territoryID, route.params.id])
+        const unsubscribe = navigation.addListener('focus', () => {
+          loadTerritoryHistory(territoryID)
+          preachersContext.loadAllPreachers();
+        });
 
-    if(state.isLoading){
+        
+  
+      return unsubscribe;
+    }, [territoryID, route.params.id, navigation, refreshing])
+
+    if(state.isLoading && preachersContext.state.isLoading){
         return <Loading />
     }
 
-    if(state.errMessage){
-      Alert.alert("Server error", state.errMessage)
+    if(state.errMessage || preachersContext.state.errMessage){
+      Alert.alert("Server error", state.errMessage || preachersContext.state.errMessage)
   }
+
+
 
     console.log(route.params.id, territoryID)
 
     let backgroundColor;
+    let territoryKindText;
     switch(state.territory?.kind){
       case 'city':
-          backgroundColor = '#f6edd9'
+          backgroundColor = '#f6edd9';
+          territoryKindText = 'Teren miejski';
           break;
       case 'market':
-          backgroundColor = 'white'
+          backgroundColor = 'white';
+          territoryKindText = 'Teren handlowo-usługowy';
           break;
       case 'village':
           backgroundColor = '#e1f1ff'
+          territoryKindText = 'Teren wiejski';
           break;
       default:
           break;
   }
   const serviceYears = groupBy<ICheckout>(state.territory?.history!, 'serviceYear')
     return (
-      <ScrollView style={[styles.container, { backgroundColor }]}>
+      <ScrollView style={[styles.container, { backgroundColor }]} refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> }>
         <View style={styles.titleContainer}>
           <TouchableOpacity
             onPress={() =>
@@ -104,8 +132,11 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
           >
             <FontAwesome name="angle-left" size={30} />
           </TouchableOpacity>
-
-          <Text style={styles.title}>Teren nr {state.territory?.number}</Text>
+          <View>
+            <Text style={styles.title}>Teren nr {state.territory?.number}</Text>
+            <Text style={styles.territoryKind}>{territoryKindText}</Text>
+          </View>
+          
 
           <TouchableOpacity
             onPress={() =>
@@ -116,34 +147,15 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             <FontAwesome name="angle-right" size={30} />
           </TouchableOpacity>
         </View>
-        <Text style={styles.text}>
-          <Text>Miejscowość: </Text>
-          <Text style={styles.textBold}>{state.territory?.city}</Text>
-        </Text>
-        <Text style={styles.text}>
-          <Text>Rodzaj: </Text>
-          <Text style={styles.textBold}>{state.territory?.kind}</Text>
-        </Text>
-        <Text style={styles.text}>
-          <Text>Ulica: </Text>
-          <Text style={styles.textBold}>
-            {state.territory?.street}{" "}
-            {state.territory?.beginNumber && state.territory?.beginNumber}{" "}
-            {state.territory?.endNumber && `- ${state.territory?.endNumber}`}{" "}
-          </Text>
-        </Text>
+        <DescriptionAndValue description='Miejscowość' value={state.territory?.city!} />
+        
+        <DescriptionAndValue description="Ulica" value={`${state.territory?.street} ${state.territory?.beginNumber ? state.territory.beginNumber : ''} ${state.territory?.endNumber ? '-' + state.territory.endNumber: ''} `} />
         {state.territory?.description && (
-          <Text style={styles.text}>
-            <Text>Opis: </Text>
-            <Text style={styles.textBold}>{state.territory?.description}</Text>
-          </Text>
+          <DescriptionAndValue description='Opis' value={state.territory?.description!} />
         )}
         {state.territory?.type === "free" && (
           <>
-            <Text style={styles.text}>
-              <Text>Ostatnio opracowane: </Text>
-              <Text style={styles.textBold}>{state.territory?.lastWorked}</Text>
-            </Text>
+            <DescriptionAndValue description='Ostatnio opracowane' value={state.territory?.lastWorked!} />
             <Text style={styles.text}>
               <Text>Teren nie był opracowywany od </Text>
               <Text
@@ -168,16 +180,8 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
                 </Text> }
         {state.territory?.preacher && (
           <>
-            <Text style={styles.text}>
-              <Text>Pobrany: </Text>
-              <Text style={styles.textBold}>{state.territory?.taken}</Text>
-            </Text>
-            <Text style={styles.text}>
-              <Text>Głosiciel: </Text>
-              <Text style={styles.textBold}>
-                {state.territory?.preacher.name}
-              </Text>
-            </Text>
+            <DescriptionAndValue description='Pobrany' value={state.territory?.taken!} />
+            <DescriptionAndValue description='Głosiciel' value={state.territory?.preacher.name!} />
             <Text style={styles.text}>
               <Text>{state.territory?.preacher.name} ma ten teren </Text>
               <Text
@@ -215,8 +219,9 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
               containerStyle={{ position: "absolute", top: 75, right: 5 }}
             />
           )}
+          <TerritoryAssignment territory={state.territory!} preachers={preachersContext.state.allPreachers} refresh={onRefresh} />
         <MapView
-          provider={PROVIDER_GOOGLE}
+          provider={Platform.OS === "ios" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE}
           region={{
             latitude: state.territory?.latitude!,
             longitude: state.territory?.longitude!,
@@ -269,26 +274,18 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
                         <Dialog.Title title="Ważna informacja !!" titleStyle={{ color: 'white' }} />
                         <Text style={{ color: 'white' }}>Niedawno zmieniłem strukturę rekodu historii. W związku z tym, jeśli chcesz, żeby poprawnie się wszystko wyświetlało zachęcam do edycji tego rekordu w aplikacji internetowej. Wszelkie szczegóły są tam podane.</Text>
                       </Dialog>
-                      <Text style={styles.text}>
-                            <Text>Data opracowania: </Text>
-                            <Text style={styles.textBold}>
-                              {new Date(item.passedBackDate)?.toLocaleDateString()}
-                            </Text>
-                          </Text>
-                          <Text style={styles.text}>
-                            <Text>Data pobrania: </Text>
-                            <Text style={styles.textBold}>
-                              {new Date(item.takenDate)?.toLocaleDateString()}
-                            </Text>
-                          </Text>
-                          <Text style={styles.text}>
-                            <Text>Głosiciel: </Text>
-                            <Text style={styles.textBold}>
-                              {item?.preacher?.name}
-                            </Text>
-                          </Text>
-                    
-
+                      <DescriptionAndValue 
+                        description='Data opracowania' 
+                        value={new Date(item.passedBackDate)?.toLocaleDateString()} 
+                      />
+                      <DescriptionAndValue 
+                        description='Data pobrania' 
+                        value={new Date(item.takenDate)?.toLocaleDateString()} 
+                      />
+                      <DescriptionAndValue 
+                        description='Głosiciel' 
+                        value={item?.preacher?.name}
+                      />
                       <Divider />
                     </View>
                   )}
@@ -312,12 +309,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        alignItems: 'baseline',
+        alignItems: 'center',
         marginBottom: 25
     },
     title: {
         fontFamily: 'MontserratSemiBold',
-        fontSize: 20
+        fontSize: 20,
+        textAlign: 'center',
+    },
+    territoryKind: {
+      fontFamily: "MontserratRegular",
+      textAlign: 'center',
     },
     historyTitle: {
         fontFamily: 'MontserratSemiBold',

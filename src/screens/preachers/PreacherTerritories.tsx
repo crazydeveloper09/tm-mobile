@@ -82,7 +82,7 @@ const PreacherTerritoriesScreen: React.FC<PreacherTerritoriesScreenProps> = ({ n
                 <FlatList
                     keyExtractor={((territory) => territory._id)}
                     data={state.territories?.docs}
-                    renderItem={({ item }) => <Territory territory={item} />}
+                    renderItem={({ item }) => <Territory territory={item} preachers={[]} />}
                     scrollEnabled={false}
                     numColumns={columnsNum}
                 />
