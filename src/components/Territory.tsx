@@ -91,8 +91,7 @@ const Territory: React.FC<TerritoryProps> = ({ territory, preachers }) => {
       
 
       {territory.street && (
-        <DescriptionAndValue description="Ulica" value={`${territory.street} ${territory.beginNumber && territory.beginNumber}{" "}
-        ${territory.endNumber && '-' + territory.endNumber} `} />
+        <DescriptionAndValue description="Ulica" value={`${territory.street} ${territory.beginNumber ? territory.beginNumber : ''} ${territory.endNumber ? '-' + territory.endNumber : ''} `} />
       )}
       {territory.description && (
           <DescriptionAndValue description="Opis" value={territory.description} />
