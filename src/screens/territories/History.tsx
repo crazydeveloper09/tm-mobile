@@ -220,7 +220,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             />
           )}
           <TerritoryAssignment territory={state.territory!} preachers={preachersContext.state.allPreachers} refresh={onRefresh} />
-        <MapView
+        {state.territory && <MapView
           provider={Platform.OS === "ios" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE}
           region={{
             latitude: state.territory?.latitude!,
@@ -236,7 +236,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
               longitude: state.territory?.longitude!,
             }}
           />
-        </MapView>
+        </MapView>}
         {state.territory?.history.length !== 0 && (
           <>
             <Divider />

@@ -7,12 +7,11 @@ import { Context as AuthContext } from '../../contexts/AuthContext';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import Territory from '../../components/Territory';
 import Loading from '../../components/Loading';
-import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import Pagination from '../../components/Pagination';
 import TerritoriesNavigator from '../../navigators/TerritoriesNavigator';
 import { navigate } from '../../RootNavigation';
 import { columnsNum } from '../../helpers/devices';
-import { PROVIDER_GOOGLE } from 'react-native-maps';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 
 
@@ -60,15 +59,19 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
     })
     return (
         <ScrollView style={styles.container}>
-            <MapView provider={Platform.OS === "ios" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE} region={{
-                latitude: congregationContext.state.congregation?.mainCityLatitude!,
-                longitude: congregationContext.state.congregation?.mainCityLongitude!,
-                longitudeDelta: 0.03,
-                latitudeDelta: 0.03
-            }} style={styles.map}>
+            { congregationContext.state.congregation && <MapView 
+                provider={Platform.OS === "ios" || Platform.OS === "web" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE} 
+                region={{
+                    latitude: congregationContext.state.congregation?.mainCityLatitude!,
+                    longitude: congregationContext.state.congregation?.mainCityLongitude!,
+                    longitudeDelta: 0.03,
+                    latitudeDelta: 0.03
+                }}  
+                style={styles.map}>
                 { state.territories?.docs?.map((item) => item.location && <Marker coordinate={{longitude: item.longitude, latitude: item.latitude}} title={`Teren nr ${item.number} - ${item.kind}`} key={item._id}/>)}
                 
-            </MapView>
+            </MapView>}
+            
 
             {state.territories?.docs?.length === 0 ? (
                 <View style={styles.noParamContainer}>

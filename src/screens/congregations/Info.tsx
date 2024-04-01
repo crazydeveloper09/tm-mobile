@@ -75,12 +75,18 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
             </View>
             <MinistryGroups congregationID={state.congregation?._id!} />
             <Text style={styles.header}>Mapka</Text>
-            <MapView provider={Platform.OS === "ios" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE} initialRegion={{
-                latitude: state.congregation?.mainCityLatitude!,
-                longitude: state.congregation?.mainCityLongitude!,
-                longitudeDelta: 0.04,
-                latitudeDelta: 0.04
-            }} style={styles.map} />
+            { state.congregation && <MapView 
+                provider={Platform.OS === "ios" || Platform.OS === "web" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE} 
+                region={{
+                    latitude: state.congregation?.mainCityLatitude!,
+                    longitude: state.congregation?.mainCityLongitude!,
+                    longitudeDelta: 0.03,
+                    latitudeDelta: 0.03
+                }}  
+                style={styles.map}>
+                
+                
+            </MapView>}
            
         </ScrollView>
     )
