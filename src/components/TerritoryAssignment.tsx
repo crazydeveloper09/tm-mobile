@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { IPreacher, ITerritory } from "../contexts/interfaces";
 import { Context as TerritoriesContext } from "../contexts/TerritoriesContext";
-import { ListItem } from "@rneui/base";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
+import { ListItem, Switch } from "@rneui/base";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { StyleSheet, Text } from "react-native";
 import ButtonC from "./Button";
@@ -17,18 +18,23 @@ interface TerritoryAssignmentProps {
 const TerritoryAssignment:React.FC<TerritoryAssignmentProps> = ({ territory, preachers, refresh }) => {
 
     const [expanded, setExpanded] = useState(false);
+    const [isChosenDate, setIsChosenDate] = useState(false);
     const [lastWorkedOpen, setLastWorkedOpen] = useState(false)
       const [lastWorked, setLastWorked] = useState(new Date(territory?.lastWorked || Date.now()))
+      const [takenOpen, setTakenOpen] = useState(false)
+      const [taken, setTaken] = useState(new Date(territory?.taken || Date.now()))
     const [preacherValue, setPreacherValue] = useState("");
       const [preacherOpen, setPreacherOpen] = useState(false);
       const [preacherItems, setPreacherItems] = useState([]);
       const { state, assignTerritory, makeTerritoryFreeAgain } = useContext(TerritoriesContext)
+      const settings = useContext(SettingsContext)
 
       useEffect(() => {
         const selectItems = preachers?.map((preacher) => {
             return { label: preacher.name, value: preacher._id } as never
         })
         setPreacherItems(selectItems!)
+        settings.loadColor()
       }, [])
  
     return territory?.preacher ? (
@@ -113,11 +119,45 @@ const TerritoryAssignment:React.FC<TerritoryAssignmentProps> = ({ territory, pre
                     width: '100%'
                 }}
             />
+
+            <Text style={styles.labelStyle}>
+              Własna data przydzielenia
+            </Text>
+
+            <Switch 
+                value={isChosenDate}
+                onValueChange={(value) => setIsChosenDate(value)}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
+
+                color={settings.state.mainColor}
+            />
+
+            {isChosenDate && <>
+              <TouchableOpacity onPress={() => setTakenOpen(true)} style={{...styles.inputContainer, padding: 15, marginVertical: 15}}>
+                <Text>
+                    Pobrany - aktualna data: {taken.toLocaleDateString()}
+                </Text> 
+            </TouchableOpacity>
+            <DateTimePickerModal
+                isVisible={takenOpen}
+                 date={taken} 
+                 onConfirm={(date) => {
+                     setTaken(date)
+                     setTakenOpen(false)
+                     }
+                 } 
+                 onCancel={() => setTakenOpen(false)}
+                 isDarkModeEnabled={false}
+                display='inline'
+                locale='pl'
+
+            />
+            </>}
             {preacherValue !== "" && <ButtonC 
                                           title="Przydziel teren" 
                                           isLoading={state.isLoading} 
                                           onPress={() => {
-                                            assignTerritory(territory._id, preacherValue);
+                                            assignTerritory(territory._id, preacherValue, taken, isChosenDate);
                                             refresh && refresh()
                                             }} 
                                       />}
@@ -133,6 +173,11 @@ const styles = StyleSheet.create({
         padding: 5,
         borderColor: 'black',
     },
+    labelStyle: {
+      fontFamily: 'MontserratSemiBold',
+      marginBottom: 6,
+      color: 'black'
+  },
 })
 
 export default TerritoryAssignment;

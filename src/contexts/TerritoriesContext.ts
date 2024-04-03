@@ -151,11 +151,11 @@ const addTerritory = (dispatch: Function) => {
 }
 
 const assignTerritory = (dispatch: Function) => {
-    return async (territoryID: string, preacherID: string) => {
+    return async (territoryID: string, preacherID: string, takenDate: string, isChosenDate: boolean) => {
         try {
             dispatch({ type: 'turn_on_loading' })
             const token = await AsyncStorage.getItem('token');
-            const response = await territories.post(`/territories/${territoryID}/assign`, {preacher: preacherID}, {
+            const response = await territories.post(`/territories/${territoryID}/assign?isDateChosen=${isChosenDate}`, {preacher: preacherID, taken: takenDate}, {
                 headers: {
                     'Authorization': `bearer ${token}`
                 }
