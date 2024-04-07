@@ -14,7 +14,6 @@ const CongregationsNavigator = () => {
 
     const {state, loadColor} = useContext(SettingsContext);
     useEffect(() => {
-      loadColor()
       StatusBar.setBackgroundColor(state.mainColor)
     }, [state.mainColor])
     return (

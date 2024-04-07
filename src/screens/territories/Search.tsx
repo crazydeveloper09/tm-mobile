@@ -10,8 +10,10 @@ import { Entypo, FontAwesome } from "@expo/vector-icons";
 import Loading from "../../components/Loading";
 import Pagination from "../../components/Pagination";
 import { columnsNum } from "../../helpers/devices";
+import { NavigationProp } from "@react-navigation/native";
 
 interface TerritoriesSearchScreenProps {
+    navigation: NavigationProp<any>
     route: {
         params: {
             type: string
@@ -19,7 +21,7 @@ interface TerritoriesSearchScreenProps {
     }
 }
 
-const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route }) => {
+const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navigation, route }) => {
   const [mainOpen, setMainOpen] = useState(false);
   const [mainValue, setMainValue] = useState(null);
   const [mainItems, setMainItems] = useState([
@@ -49,8 +51,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
   const preacherContext = useContext(PreachersContext)
 
   useEffect(() => {
-    searchTerritory(mainValue, paramValue, page, limit, typeValue);
-    preacherContext.loadAllPreachers();
+    searchTerritory(mainValue, paramValue, page, limit, typeValue)
   }, [page])
 
   if(state.errMessage){
@@ -149,7 +150,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
           <FontAwesome name="search" size={45} sty />
           <Text style={styles.noParamText}>Wybierz parametry, by wyszukać</Text>
         </View>
-      ) : state.isLoading && preacherContext.state.isLoading ? (
+      ) : state.isLoading ? (
         <Loading />
       ) : state.territories?.docs?.length === 0 ? (
         <View style={styles.noParamContainer}>

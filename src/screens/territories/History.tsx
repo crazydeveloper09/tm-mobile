@@ -68,7 +68,6 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
     useEffect(() => {
       setTerritoryID(route.params.id)
         loadTerritoryHistory(territoryID);
-        preachersContext.loadAllPreachers();
         navigation.setOptions({
             headerRight: () => <View style={styles.headerRight}>
                 <TouchableOpacity onPress={() => navigation.navigate('EditTerritory', { id: territoryID })}>
@@ -82,7 +81,6 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
         })
         const unsubscribe = navigation.addListener('focus', () => {
           loadTerritoryHistory(territoryID)
-          preachersContext.loadAllPreachers();
         });
 
         
@@ -130,7 +128,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             }
             disabled={state.currentIndex! - 1 === -1}
           >
-            <FontAwesome name="angle-left" size={30} />
+            <FontAwesome name="angle-left" size={35} />
           </TouchableOpacity>
           <View>
             <Text style={styles.title}>Teren nr {state.territory?.number}</Text>
@@ -144,7 +142,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             }
             disabled={state.currentIndex! + 1 >= state.allTerritories?.length!}
           >
-            <FontAwesome name="angle-right" size={30} />
+            <FontAwesome name="angle-right" size={35} />
           </TouchableOpacity>
         </View>
         <DescriptionAndValue description='Miejscowość' value={state.territory?.city!} />

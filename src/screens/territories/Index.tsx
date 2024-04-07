@@ -28,8 +28,6 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
     useEffect(() => {
         
         loadTerritories(page, limit);
-        congregationContext.loadCongregationInfo()
-        preachersContext.loadAllPreachers();
         navigation.setOptions({
             headerRight: () => <View style={styles.headerRight}>
                 <TouchableOpacity onPress={() => navigation.navigate('AddTerritory')}>
@@ -43,19 +41,17 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
         })
         const unsubscribe = navigation.addListener('focus', () => {
             loadTerritories(page, limit);
-            congregationContext.loadCongregationInfo()
-            preachersContext.loadAllPreachers();
         });
     
         return unsubscribe;
     }, [navigation, page])
     
-    if(state.isLoading && congregationContext.state.isLoading && preachersContext.state.isLoading){
+    if(state.isLoading){
         return <Loading />
     }
 
-    if(state.errMessage || congregationContext.state.errMessage || preachersContext.state.errMessage){
-        Alert.alert("Server error", state.errMessage || congregationContext.state.errMessage || preachersContext.state.errMessage)
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
     }
 
     navigation.setOptions({

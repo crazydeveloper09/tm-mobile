@@ -16,12 +16,11 @@ const TerritoriesNavigator = () => {
 
     const {state, loadColor} = useContext(SettingsContext);
     useEffect(() => {
-      loadColor()
       StatusBar.setBackgroundColor(state.mainColor)
     }, [state.mainColor])
 
     return (
-        <Stack.Navigator screenOptions={{
+        <Stack.Navigator initialRouteName='Territories List' screenOptions={{
             headerStyle: { backgroundColor: state?.mainColor },
             headerTitleStyle: headerStyles.title,
             headerTintColor: 'white'

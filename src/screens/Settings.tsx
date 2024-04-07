@@ -19,7 +19,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
         loadColor()
     }, [])
 
-    const availableColors = ['#28a745', '#0078E0', '#707070', '#B68A2B', '#786868', '#4B4B95']
+    const availableColors = ['#28a745', '#0078E0', '#707070', '#4B4B95','#A6037A','#8A038C','#0378A6','#F25050','#688C4F','#733D38','#00565B','#A6634B']
 
     return (
         <View style={styles.container}>
@@ -30,8 +30,8 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
 
                 </TouchableOpacity>}
                 numColumns={2}
-                contentContainerStyle={{ gap: 15, marginTop: 15 }}
-                scrollEnabled={false}
+                contentContainerStyle={{ gap: 15, marginTop: 15, paddingBottom: 25 }}
+                
             />
 
             <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
@@ -55,14 +55,15 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "#ece9e9",
         padding: 15,
-        flex: 1
+        flex: 1,
+        justifyContent: 'center'
     },
     title: {
         fontSize: 20,
         fontFamily: 'PoppinsSemiBold'
     },
     color: {
-        width: '49%',
+        width: '48%',
         height: 100,
         marginRight: 10,
         borderRadius: 10

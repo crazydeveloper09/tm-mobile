@@ -47,7 +47,7 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
         return unsubscribe;
     }, [navigation, page, limit])
     
-    if(state.isLoading && congregationContext.state.isLoading && preachersContext.state.isLoading){
+    if(state.isLoading || congregationContext.state.isLoading || preachersContext.state.isLoading){
         return <Loading />
     }
 

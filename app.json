@@ -2,7 +2,7 @@
   "expo": {
     "name": "Territory Manager",
     "slug": "territorymanager_mobile",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "orientation": "portrait",
     "icon": "./assets/tm_icon.png",
     "userInterfaceStyle": "light",
@@ -26,7 +26,7 @@
         "backgroundColor": "#28a745"
       },
       "package": "com.territorymanager_mobile.territorymanager_mobile",
-      "versionCode": 27,
+      "versionCode": 28,
       "jsEngine": "hermes",
       "permissions": [
         "android.permission.USE_BIOMETRIC",
