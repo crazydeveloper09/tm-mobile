@@ -25,7 +25,6 @@ interface TerritoriesHistoryScreenProps {
 }
 
 const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ navigation, route }) => {
-    const [territoryID, setTerritoryID] = useState(route.params.id);
     const {state, loadTerritoryHistory, makeTerritoryFreeAgain, assignTerritory} = useContext(TerritoriesContext);
     const preachersContext = useContext(PreachersContext)
     const [infoOpen, setInfoOpen] = useState(false);
@@ -66,39 +65,35 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
 
 
     useEffect(() => {
-      setTerritoryID(route.params.id)
-        loadTerritoryHistory(territoryID);
+     
+        loadTerritoryHistory(route.params.id);
         navigation.setOptions({
             headerRight: () => <View style={styles.headerRight}>
-                <TouchableOpacity onPress={() => navigation.navigate('EditTerritory', { id: territoryID })}>
+                <TouchableOpacity onPress={() => navigation.navigate('EditTerritory', { id: route.params.id })}>
                     <FontAwesome name='pencil' size={23} color={'white'} />
                 </TouchableOpacity>
-                <TouchableOpacity  onPress={() => navigation.navigate('DeleteConfirmTerritory', {id: territoryID})}>
+                <TouchableOpacity  onPress={() => navigation.navigate('DeleteConfirmTerritory', {id: route.params.id})}>
                     <FontAwesome name='trash' size={23} color={'white'} />
                 </TouchableOpacity>
                 
             </View>
         })
         const unsubscribe = navigation.addListener('focus', () => {
-          loadTerritoryHistory(territoryID)
+          loadTerritoryHistory(route.params.id)
         });
 
         
   
       return unsubscribe;
-    }, [territoryID, route.params.id, navigation, refreshing])
+    }, [route.params.id, navigation, refreshing])
 
-    if(state.isLoading && preachersContext.state.isLoading){
+    if(state.isLoading){
         return <Loading />
     }
 
-    if(state.errMessage || preachersContext.state.errMessage){
-      Alert.alert("Server error", state.errMessage || preachersContext.state.errMessage)
+    if(state.errMessage){
+      Alert.alert("Server error", state.errMessage)
   }
-
-
-
-    console.log(route.params.id, territoryID)
 
     let backgroundColor;
     let territoryKindText;

@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Platform, StatusBar, StyleSheet, Text } from "react-native";
 import TerritoriesAvailableScreen from "../screens/territories/Available";
 import { FontAwesome } from "@expo/vector-icons";
@@ -11,55 +11,55 @@ import SettingsScreen from "../screens/Settings";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 import SettingsNavigator from "./SettingsNavigator";
 import { isTablet } from "../helpers/devices";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import HomeNavigator from "./HomeNavigator";
+import { PaperProvider, useTheme } from "react-native-paper";
 
-const Tab = createBottomTabNavigator()
+const Tab = createMaterialBottomTabNavigator()
 
 const MainNavigator = () => {
-
+    const [secondaryContainerColor, setSecondaryContainerColor] = useState<string>('#28a74540');
     const {state, loadColor} = useContext(SettingsContext);
+   
     useEffect(() => {
       loadColor()
       StatusBar.setBackgroundColor(state.mainColor)
+      setSecondaryContainerColor(`${state.mainColor}50`)
     }, [state.mainColor])
-
+    const theme = useTheme();
+    theme.colors.secondaryContainer = secondaryContainerColor;
+  
     return (
-        <Tab.Navigator screenOptions={{
-            headerStyle: { backgroundColor: state?.mainColor },
-            headerTitleStyle: headerStyles.title,
-            tabBarActiveTintColor: 'white',
-            tabBarInactiveTintColor: '#B3A8A8',
-            tabBarActiveBackgroundColor: state.mainColor,
-            tabBarShowLabel: isTablet
-          }}>
+      <PaperProvider>
+        <Tab.Navigator shifting={true} barStyle={{ backgroundColor: `${state.mainColor}15` }}>
             <Tab.Screen 
               name="Home"
-              component={TerritoriesAvailableScreen}
+              component={HomeNavigator}
               options={{
-                tabBarIcon: ({color, size}) => <FontAwesome name='home' color={color} size={size} />,
+                tabBarIcon: ({color}) => <FontAwesome name='home' color={color} size={26} />,
               }}
             />
             <Tab.Screen 
               name="Tereny"
               component={TerritoriesNavigator}
               options={{
-                headerShown: false,
-                tabBarIcon: ({color, size}) => <FontAwesome name='map-marker' color={color} size={size} />,
+                tabBarIcon: ({color}) => <FontAwesome name='map-marker' color={color} size={26} />,
               }}
             />
             <Tab.Screen 
               name="Głosiciele"
               component={PreachersNavigator}
               options={{
-                tabBarIcon: ({color, size}) => <FontAwesome name='user' color={color} size={size} />,
-                headerShown: false,
+                tabBarIcon: ({color}) => <FontAwesome name='user' color={color} size={26} />,
+        
               }}
             />
             <Tab.Screen 
               name="Zbór"
               component={CongregationsNavigator}
               options={{
-                tabBarIcon: ({color, size}) => <FontAwesome name='users' color={color} size={size} />,
-                headerShown: false,
+                tabBarIcon: ({color}) => <FontAwesome name='users' color={color} size={26} />,
+        
       
               }}
             />
@@ -67,20 +67,14 @@ const MainNavigator = () => {
               name="Ustawienia"
               component={SettingsNavigator}
               options={{
-                tabBarIcon: ({color, size}) => <FontAwesome name='gear' color={color} size={size} />,
-                headerShown: false
+                tabBarIcon: ({color}) => <FontAwesome name='gear' color={color} size={26} />,
+              
               }}
             />
           </Tab.Navigator>
+      </PaperProvider>
+        
     )
 }
-
-const headerStyles = StyleSheet.create({
-    title: { 
-      color: 'white',
-      fontFamily: 'MontserratSemiBold', 
-      fontSize: 20 
-    }
-  })
 
 export default MainNavigator;
