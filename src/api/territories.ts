@@ -1,3 +1,3 @@
 import axios from "axios";
 
-export default axios.create({ baseURL: 'https://lovely-robe-hen.cyclic.app/' })
+export default axios.create({ baseURL: 'https://territorymanager-api.glitch.me/' })
