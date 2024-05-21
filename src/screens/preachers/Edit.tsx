@@ -1,6 +1,6 @@
 import { NavigationProp } from '@react-navigation/native';
 import React, { useEffect, useContext, useState } from 'react';
-import { View, StyleSheet} from 'react-native';
+import { View, StyleSheet, Alert} from 'react-native';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import ButtonC from '../../components/Button';
 import { Input } from '@rneui/themed';
@@ -29,6 +29,11 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
         return <Loading />
     }
 
+    
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
+    }
+
 
     return (
         <View style={styles.container}>
@@ -36,6 +41,8 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
                 label="Edytuj imię i nazwisko głosiciela"
                 placeholder='Wpisz imię i nazwisko'
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={name}
                 onChangeText={setName}
             />
@@ -56,7 +63,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 6,
         padding: 5,
+        borderColor: 'black',
     },
+    labelStyle: {
+        fontFamily: 'MontserratSemiBold',
+        marginBottom: 6,
+        color: 'black'
+    },
+    containerInput: {
+        paddingHorizontal: 0,
+        paddingVertical: 0,
+    }
 })
 
 export default PreachersEditScreen;

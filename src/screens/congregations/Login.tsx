@@ -23,6 +23,8 @@ const CongregationsLoginScreen: React.FC = () => {
                 label="Nazwa zboru"
                 placeholder='Wpisz nazwę zboru'
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={username}
                 onChangeText={setUsername}
                 autoCapitalize='none'
@@ -32,6 +34,8 @@ const CongregationsLoginScreen: React.FC = () => {
                 label="Hasło"
                 placeholder='Wpisz hasło'
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -42,6 +46,7 @@ const CongregationsLoginScreen: React.FC = () => {
             <ButtonC 
                 title={'Zaloguj się'}
                 onPress={() => signIn({ username, password })}
+                isLoading={state.isLoading}
             />
         </View>
     )
@@ -64,6 +69,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 6,
         padding: 5,
+        borderColor: 'black',
+    },
+    labelStyle: {
+        fontFamily: 'MontserratSemiBold',
+        marginBottom: 6,
+        color: 'black'
+    },
+    containerInput: {
+        paddingHorizontal: 0,
+        paddingVertical: 0,
     },
     button: {
         backgroundColor: '#28a745'

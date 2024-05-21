@@ -4,6 +4,7 @@ import { IMinistryGroup, PaginateResult } from "./interfaces"
 import territories from "../api/territories"
 import { AxiosError } from "axios"
 import { navigate } from "../RootNavigation"
+import { showMessage } from "react-native-flash-message"
 
 interface IMinistryGroupState {
     isLoading?: boolean,
@@ -22,9 +23,9 @@ interface IMinistryGroupContext {
 const ministryGroupReducer = (state: IMinistryGroupState, action: { type: string, payload: any }) => {
     switch(action.type) {
         case 'turn_on_loading':
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true, errMessage: '' }
         case 'load_data':
-            return { ...state, isLoading: false, ministryGroups: action.payload }
+            return { ...state, isLoading: false, ministryGroups: action.payload, errMessage: '' }
         case 'add_error': 
             return { ...state, errMessage: action.payload }
         default:
@@ -64,6 +65,10 @@ const addMinistryGroup = (dispatch: Function) => {
             });
             dispatch({ type: 'turn_off_loading' })
             navigate('CongInfo')
+            showMessage({
+                message: `Poprawnie dodano grupę służby: ${name}`,
+                type: 'success',
+            })
         } catch (err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
@@ -85,7 +90,10 @@ const editMinistryGroup = (dispatch: Function) => {
             });
             navigate('CongInfo')
             dispatch({ type: 'turn_off_loading' })
-            
+            showMessage({
+                message: `Poprawnie edytowano grupę służby: ${name}`,
+                type: 'success',
+            })
         } catch (err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
@@ -107,6 +115,10 @@ const deleteMinistryGroup = (dispatch: Function) => {
             });
             dispatch({ type: 'turn_off_loading' })
             navigate('CongInfo')
+            showMessage({
+                message: `Poprawnie usunięto grupę służby`,
+                type: 'success',
+            })
         } catch (err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }

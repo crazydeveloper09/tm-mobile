@@ -4,6 +4,7 @@ import { IPreacher, PaginateResult } from "./interfaces"
 import territories from "../api/territories"
 import { AxiosError } from "axios"
 import { navigate } from "../RootNavigation"
+import { showMessage } from "react-native-flash-message"
 
 interface IPreacherState {
     isLoading?: boolean;
@@ -28,17 +29,17 @@ interface IPreacherContext {
 const preacherReducer = (state: IPreacherState, action: { type: string, payload: any }) => {
     switch(action.type) {
         case 'turn_on_loading':
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true, errMessage: '' }
         case 'turn_off_loading':
             return { ...state, isLoading: false }
         case 'load_data':
-            return { ...state, isLoading: false, preachers: action.payload }
+            return { ...state, isLoading: false, preachers: action.payload, errMessage: '' }
         case 'load_all':
-            return { ...state, isLoading: false, allPreachers: action.payload }
+            return { ...state, isLoading: false, allPreachers: action.payload, errMessage: '' }
         case 'load_preacher':
-            return { ...state, isLoading: false, preacher: action.payload }
+            return { ...state, isLoading: false, preacher: action.payload, errMessage: '' }
         case 'search': {
-            return { ...state, isLoading: false, searchResults: action.payload }
+            return { ...state, isLoading: false, searchResults: action.payload, errMessage: '' }
         }
         case 'add_error': 
             return { ...state, errMessage: action.payload }
@@ -80,6 +81,7 @@ const loadAllPreachers = (dispatch: Function) => {
             console.log('request done')
             dispatch({ type: 'load_all', payload: response.data })
         } catch (err) {
+            console.log(err)
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
         
@@ -120,6 +122,10 @@ const addPreacher = (dispatch: Function) => {
             });
             navigate('PreachersList');
             dispatch({ type: 'turn_off_loading' })
+            showMessage({
+                message: `Poprawnie dodano głosiciela: ${name} `,
+                type: 'success',
+            })
         } catch(err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
@@ -138,6 +144,10 @@ const editPreacher = (dispatch: Function) => {
             });
             navigate('PreachersList');
             dispatch({ type: 'turn_off_loading' })
+            showMessage({
+                message: `Poprawnie edytowano głosiciela: ${name} `,
+                type: 'success',
+            })
         } catch(err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
@@ -177,6 +187,10 @@ const deletePreacher = (dispatch: Function) => {
 
             navigate('PreachersList');
             dispatch({ type: 'turn_off_loading' })
+            showMessage({
+                message: `Poprawnie usunięto głosiciela`,
+                type: 'success',
+            })
         } catch(err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }

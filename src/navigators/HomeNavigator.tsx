@@ -1,39 +1,32 @@
 import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import CongregationsLoginScreen from "../screens/congregations/Login";
-import CongregationsTwoFactorScreen from "../screens/congregations/TwoFactor";
 import { StatusBar, StyleSheet } from "react-native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
+import TerritoriesAvailableScreen from "../screens/territories/Available";
+
 
 const Stack = createStackNavigator()
 
-const AuthNavigator = () => {
-    
+const HomeNavigator = () => {
+
     const {state, loadColor} = useContext(SettingsContext);
     useEffect(() => {
-      loadColor()
       StatusBar.setBackgroundColor(state.mainColor)
     }, [state.mainColor])
 
     return (
-        <Stack.Navigator screenOptions={{
-            headerStyle: { backgroundColor: state?.mainColor } ,
+        <Stack.Navigator initialRouteName='TerritoriesAvailable' screenOptions={{
+            headerStyle: { backgroundColor: state?.mainColor },
             headerTitleStyle: headerStyles.title,
-            headerTintColor: 'white',
-            
+            headerTintColor: 'white'
         }}>
+            
             <Stack.Screen 
-                name="Log in" 
-                component={CongregationsLoginScreen} 
-                options={{ 
-                    headerTitle: 'Logowanie', 
-                }}
+                name="TerritoriesAvailable" 
+                component={TerritoriesAvailableScreen} 
+                options={{ headerTitle: 'Wolne tereny' }}
             />  
-            <Stack.Screen 
-                name="TwoFactor" 
-                component={CongregationsTwoFactorScreen} 
-                options={{ headerTitle: 'Dwustopniowa weryfikacja' }}
-            />  
+
             
         </Stack.Navigator>
     )
@@ -50,4 +43,4 @@ const headerStyles = StyleSheet.create({
     }
   })
 
-export default AuthNavigator;
+export default HomeNavigator;

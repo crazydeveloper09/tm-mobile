@@ -1,13 +1,15 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ScrollView, Platform, Dimensions, Alert } from 'react-native';
 import { Context as TerritoryContext } from '../../contexts/TerritoriesContext';
 import { Context as AuthContext } from '../../contexts/AuthContext';
+import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import Territory from '../../components/Territory';
 import Loading from '../../components/Loading';
-import MapView, { MapMarker, Marker } from 'react-native-maps';
+import MapView, { MapMarker, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import Pagination from '../../components/Pagination';
+import { columnsNum, isTablet } from '../../helpers/devices';
 
 interface TerritoriesIndexScreenProps {
     navigation: NavigationProp<any>
@@ -18,10 +20,14 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
 
     const { state, loadTerritories } = useContext(TerritoryContext)
     const congregationContext = useContext(AuthContext)
+    const preachersContext = useContext(PreachersContext)
     const [page, setPage] = useState(1)
     const [limit, setLimit] = useState(20)
 
+
     useEffect(() => {
+        
+        loadTerritories(page, limit);
         navigation.setOptions({
             headerRight: () => <View style={styles.headerRight}>
                 <TouchableOpacity onPress={() => navigation.navigate('AddTerritory')}>
@@ -33,35 +39,46 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
                 
             </View>
         })
-        loadTerritories(page, limit);
-        congregationContext.loadCongregationInfo()
         const unsubscribe = navigation.addListener('focus', () => {
             loadTerritories(page, limit);
-            congregationContext.loadCongregationInfo()
         });
     
         return unsubscribe;
     }, [navigation, page])
     
-    if(state.isLoading && congregationContext.state.isLoading){
+    if(state.isLoading){
         return <Loading />
     }
 
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
+    }
+
+    navigation.setOptions({
+        headerTitle: `Tereny: ${state.territories?.totalDocs}`,
+    })
+
     return (
         <ScrollView style={styles.container}>
-            <MapView region={{
-                latitude: congregationContext.state.congregation?.mainCityLatitude!,
-                longitude: congregationContext.state.congregation?.mainCityLongitude!,
-                longitudeDelta: 0.03,
-                latitudeDelta: 0.03
-            }} style={styles.map}>
-                { state.territories?.docs.map((item) => item.location && <Marker coordinate={{longitude: item.longitude, latitude: item.latitude}} title={`Teren nr ${item.number} - ${item.kind}`} key={item._id}/>)}
+            { congregationContext.state.congregation && <MapView 
+                provider={Platform.OS === "ios" || Platform.OS === "web" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE} 
+                region={{
+                    latitude: congregationContext.state.congregation?.mainCityLatitude!,
+                    longitude: congregationContext.state.congregation?.mainCityLongitude!,
+                    longitudeDelta: 0.03,
+                    latitudeDelta: 0.03
+                }}  
+                style={styles.map}>
+                { state.territories?.docs?.map((item) => item.location && <Marker coordinate={{longitude: item.longitude, latitude: item.latitude}} title={`Teren nr ${item.number} - ${item.kind}`} key={item._id}/>)}
                 
-            </MapView>
+            </MapView>}
             <FlatList 
+                keyExtractor={((territory) => territory._id)}
                 data={state.territories?.docs}
-                renderItem={({ item }) => <Territory territory={item} />}
+                renderItem={({ item }) => <Territory territory={item} preachers={preachersContext.state.allPreachers!} />}
                 scrollEnabled={false}
+                contentContainerStyle={ isTablet && { gap: 10 }}
+                numColumns={columnsNum}
             />
 
             <Pagination activePage={state.territories?.page!} totalPages={state.territories?.totalPages!} updateState={setPage} />

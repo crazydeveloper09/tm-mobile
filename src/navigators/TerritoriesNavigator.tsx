@@ -1,13 +1,14 @@
 import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import TerritoriesIndexScreen from "../screens/territories/IndexScreen";
-import TerritoriesNewScreen from "../screens/territories/NewScreen";
-import TerritoriesEditScreen from "../screens/territories/EditScreen";
-import TerritoriesSearchScreen from "../screens/territories/SearchScreen";
-import { StyleSheet } from "react-native";
-import TerritoriesHistoryScreen from "../screens/territories/HistoryScreen";
-import TerritoryDeleteConfirmScreen from "../screens/territories/DeleteConfirmScreen";
+import TerritoriesIndexScreen from "../screens/territories/Index";
+import TerritoriesNewScreen from "../screens/territories/New";
+import TerritoriesEditScreen from "../screens/territories/Edit";
+import TerritoriesSearchScreen from "../screens/territories/Search";
+import { StatusBar, StyleSheet } from "react-native";
+import TerritoriesHistoryScreen from "../screens/territories/History";
+import TerritoryDeleteConfirmScreen from "../screens/territories/DeleteConfirm";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
+
 
 const Stack = createStackNavigator()
 
@@ -15,15 +16,16 @@ const TerritoriesNavigator = () => {
 
     const {state, loadColor} = useContext(SettingsContext);
     useEffect(() => {
-      loadColor()
+      StatusBar.setBackgroundColor(state.mainColor)
     }, [state.mainColor])
 
     return (
-        <Stack.Navigator screenOptions={{
+        <Stack.Navigator initialRouteName='Territories List' screenOptions={{
             headerStyle: { backgroundColor: state?.mainColor },
             headerTitleStyle: headerStyles.title,
             headerTintColor: 'white'
         }}>
+            
             <Stack.Screen 
                 name="TerritoriesList" 
                 component={TerritoriesIndexScreen} 
@@ -42,7 +44,7 @@ const TerritoriesNavigator = () => {
             <Stack.Screen 
                 name="EditTerritory" 
                 component={TerritoriesEditScreen} 
-                options={{ headerTitle: 'Edytuj teren' }}
+                options={{ headerTitle: 'Edytuj teren'}}
             />
             <Stack.Screen 
                 name="SearchTerritories" 

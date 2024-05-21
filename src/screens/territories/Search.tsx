@@ -1,6 +1,6 @@
 import { Input } from "@rneui/themed";
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
+import { View, Text, StyleSheet, ScrollView, FlatList, Alert } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import ButtonC from "../../components/Button";
 import { Context as TerritoriesContext } from "../../contexts/TerritoriesContext";
@@ -9,8 +9,11 @@ import Territory from "../../components/Territory";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import Loading from "../../components/Loading";
 import Pagination from "../../components/Pagination";
+import { columnsNum } from "../../helpers/devices";
+import { NavigationProp } from "@react-navigation/native";
 
 interface TerritoriesSearchScreenProps {
+    navigation: NavigationProp<any>
     route: {
         params: {
             type: string
@@ -18,7 +21,7 @@ interface TerritoriesSearchScreenProps {
     }
 }
 
-const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route }) => {
+const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navigation, route }) => {
   const [mainOpen, setMainOpen] = useState(false);
   const [mainValue, setMainValue] = useState(null);
   const [mainItems, setMainItems] = useState([
@@ -45,14 +48,20 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
   const [limit, setLimit] = useState(20);
 
   const { searchTerritory, state } = useContext(TerritoriesContext);
+  const preacherContext = useContext(PreachersContext)
 
   useEffect(() => {
-    searchTerritory(mainValue, paramValue, page, limit);
+    searchTerritory(mainValue, paramValue, page, limit, typeValue)
   }, [page])
+
+  if(state.errMessage){
+    Alert.alert("Server error", state.errMessage)
+  }
 
   return (
     <ScrollView style={styles.container}>
       <DropDownPicker
+        placeholder='Wybierz rodzaj wyszukiwania'
         open={mainOpen}
         value={mainValue}
         items={mainItems}
@@ -76,6 +85,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
           value={paramValue}
           onChangeText={setParamValue}
           inputContainerStyle={styles.inputContainer}
+          containerStyle={styles.containerInput}
         />
       )}
 
@@ -85,6 +95,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
           value={paramValue}
           onChangeText={setParamValue}
           inputContainerStyle={styles.inputContainer}
+          containerStyle={styles.containerInput}
         />
       )}
 
@@ -94,11 +105,13 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
           value={paramValue}
           onChangeText={setParamValue}
           inputContainerStyle={styles.inputContainer}
+          containerStyle={styles.containerInput}
         />
       )}
 
       {mainValue === "kind" && !mainOpen && (
         <DropDownPicker
+            placeholder="Wybierz rodzaj terenu"
             open={kindOpen}
             value={paramValue}
             items={kindItems}
@@ -126,6 +139,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
         <ButtonC
             title="Szukaj"
             onPress={() => {
+            setPage(1)
             searchTerritory(mainValue, paramValue, page, limit, typeValue);
             setSubmitted(true);
         }}
@@ -149,9 +163,11 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ route
             Rezultaty wyszukiwania: {state.territories?.totalDocs}
           </Text>
           <FlatList
+            keyExtractor={((territory) => territory._id)}
             data={state.territories?.docs}
-            renderItem={({ item }) => <Territory territory={item} />}
+            renderItem={({ item }) => <Territory territory={item} preachers={preacherContext.state.allPreachers} />}
             scrollEnabled={false}
+            numColumns={columnsNum}
           />
           <Pagination activePage={page} totalPages={state.territories?.totalPages!} updateState={setPage} />
         </View>
@@ -171,8 +187,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     padding: 5,
-
+    borderColor: 'black',
     marginTop: 15
+  },
+
+  containerInput: {
+      paddingHorizontal: 0,
+      paddingVertical: 0,
   },
   noParamContainer: {
     marginTop: 65,

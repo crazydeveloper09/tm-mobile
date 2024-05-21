@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as MinistryGroupContext } from "../../contexts/MinistryGroupContext";
 import { Input } from "@rneui/themed";
@@ -65,12 +65,18 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
         return <Loading />
     }
 
+    if(preachers.state.errMessage || ministryGroup.state.errMessage){
+        Alert.alert("Server error", preachers.state.errMessage || ministryGroup.state.errMessage)
+    }
+
     return (
         <View style={styles.container}>
             <Input 
                 label='Edytuj nazwę grupy'
                 placeholder="Wpisz nazwę grupy"
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={name}
                 onChangeText={setName}
             />
@@ -96,7 +102,7 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
                 searchable={true}
             />}
 
-            <ButtonC title="Edytuj grupę" onPress={() => ministryGroup.editMinistryGroup(route.params.congregationID, ministryGroupID, name, preachersValue, overseerValue)} />
+            <ButtonC title="Edytuj grupę" isLoading={ministryGroup.state.isLoading} onPress={() => ministryGroup.editMinistryGroup(route.params.congregationID, ministryGroupID, name, preachersValue, overseerValue)} />
         </View>
     )
 }
@@ -113,7 +119,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 6,
         padding: 5,
+        borderColor: 'black',
     },
+    labelStyle: {
+        fontFamily: 'MontserratSemiBold',
+        marginBottom: 6,
+        color: 'black'
+    },
+    containerInput: {
+        paddingHorizontal: 0,
+        paddingVertical: 0,
+    }
 })
 
 export default MinistryGroupEditScreen;

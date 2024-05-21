@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import Preacher from '../../components/Preacher';
 import { FontAwesome } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
+import { columnsNum } from '../../helpers/devices';
 
 interface PreachersIndexScreenProps {
     navigation: NavigationProp<any>
@@ -42,13 +43,23 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
         return <Loading />
     }
 
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
+    }
+
+    navigation.setOptions({
+        headerTitle: `Głosiciele: ${state.preachers?.totalDocs}`,
+    })
+
     console.log(state.preachers?.totalPages!)
     return (
         <ScrollView style={styles.container}>
             <FlatList 
+                keyExtractor={((preacher) => preacher._id)}
                 data={state.preachers?.docs}
                 renderItem={({ item }) => <Preacher preacher={item} />}
                 scrollEnabled={false}
+                numColumns={columnsNum}
             />
             <Pagination activePage={state.preachers?.page!} totalPages={state.preachers?.totalPages!} updateState={setPage}/>
         </ScrollView>

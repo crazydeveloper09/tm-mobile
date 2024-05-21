@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { Context as AuthContext } from "../../contexts/AuthContext";
 import Loading from "../../components/Loading";
 import { Input } from "@rneui/themed";
@@ -23,12 +23,18 @@ const CongregationEditScreen: React.FC = () => {
     if(state.isLoading) {
         return <Loading />
     }
+
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
+    }
     return (
         <View style={styles.container}>
             <Input 
                 label="Edytuj nazwę zboru"
                 placeholder='Wpisz nazwę zboru'
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={username}
                 onChangeText={setUsername}
             />
@@ -37,6 +43,8 @@ const CongregationEditScreen: React.FC = () => {
                 label="Edytuj mail sługi terenu"
                 placeholder='Wpisz mail sługi terenu'
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={territoryServantEmail}
                 onChangeText={setTerritoryServantEmail}
             />
@@ -44,6 +52,8 @@ const CongregationEditScreen: React.FC = () => {
                 label="Edytuj mail nadzorcy służby"
                 placeholder='Wpisz mail nadzorcy służby'
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={ministryOverseerEmail}
                 onChangeText={setMinistryOverseerEmail}
             />
@@ -51,11 +61,13 @@ const CongregationEditScreen: React.FC = () => {
                 label="Edytuj główne miasto zboru"
                 placeholder='Wpisz główne miasto zboru'
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
                 value={mainCity}
                 onChangeText={setMainCity}
             />
 
-            <ButtonC title='Edytuj zbór' onPress={() => editCongregation(username, territoryServantEmail, ministryOverseerEmail, mainCity, state.congregation?._id)} />
+            <ButtonC title='Edytuj zbór' isLoading={state.isLoading} onPress={() => editCongregation(username, territoryServantEmail, ministryOverseerEmail, mainCity, state.congregation?._id)} />
         </View>
     )
 }
@@ -72,7 +84,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 6,
         padding: 5,
+        borderColor: 'black',
     },
+    labelStyle: {
+        fontFamily: 'MontserratSemiBold',
+        marginBottom: 6,
+        color: 'black'
+    },
+    containerInput: {
+        paddingHorizontal: 0,
+        paddingVertical: 0,
+    }
 })
 
 export default CongregationEditScreen;

@@ -25,10 +25,13 @@ const CongregationsTwoFactorScreen: React.FC = () => {
                 value={code}
                 onChangeText={setCode}
                 inputContainerStyle={styles.inputContainer}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerInput}
             />
             <ButtonC 
                 title={'Zweryfikuj konto'}
                 onPress={() => verifyUser({ code, userID: state.userID })}
+                isLoading={state.isLoading}
             />
         </View>
     )
@@ -51,6 +54,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 6,
         padding: 5,
+        borderColor: 'black',
+    },
+    labelStyle: {
+        fontFamily: 'MontserratSemiBold',
+        marginBottom: 6,
+        color: 'black'
+    },
+    containerInput: {
+        paddingHorizontal: 0,
+        paddingVertical: 0,
     },
     errMessage: {
         color: 'red',

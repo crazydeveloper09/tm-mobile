@@ -1,10 +1,10 @@
 import { Button } from '@rneui/themed';
 import React, { useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Platform } from 'react-native';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import { NavigationProp } from '@react-navigation/native';
-import MapView from 'react-native-maps';
-import { FontAwesome } from '@expo/vector-icons';
+import MapView, { PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import MinistryGroups from '../../components/MinistryGroups';
 import Loading from '../../components/Loading';
 
@@ -19,15 +19,20 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
         loadCongregationInfo();
         navigation.setOptions({
             headerTitle: state.congregation?.username || 'Zbór',
-            headerRight: () => <TouchableOpacity style={styles.headerRight} onPress={() => navigation.navigate('EditCong')}>
-                <FontAwesome name='pencil' size={23} color={'white'} />
-            </TouchableOpacity>
+            headerRight: () =>
+            <View style={styles.headerRight}>
+                <TouchableOpacity onPress={() => navigation.navigate('EditCong')}>
+                    <FontAwesome name='pencil' size={23} color={'white'} />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => navigation.navigate('CongActivity')}>
+                    <FontAwesome5 name='shield-alt' size={23} color={'white'} />
+                </TouchableOpacity>
+                
+            </View> 
         })
         const unsubscribe = navigation.addListener('focus', () => {
             loadCongregationInfo();
-            navigation.setOptions({
-                headerTitle: state.congregation?.username,
-            })
         });
     
         return unsubscribe;
@@ -37,6 +42,13 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
         return <Loading />
     }
 
+    if(state.errMessage){
+        Alert.alert("Server error", state.errMessage)
+    }
+
+    navigation.setOptions({
+        headerTitle: state.congregation?.username,
+    })
 
     return (
         <ScrollView style={styles.container}>
@@ -63,12 +75,18 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
             </View>
             <MinistryGroups congregationID={state.congregation?._id!} />
             <Text style={styles.header}>Mapka</Text>
-            <MapView initialRegion={{
-                latitude: state.congregation?.mainCityLatitude!,
-                longitude: state.congregation?.mainCityLongitude!,
-                longitudeDelta: 0.04,
-                latitudeDelta: 0.04
-            }} style={styles.map} />
+            { state.congregation && <MapView 
+                provider={Platform.OS === "ios" || Platform.OS === "web" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE} 
+                region={{
+                    latitude: state.congregation?.mainCityLatitude!,
+                    longitude: state.congregation?.mainCityLongitude!,
+                    longitudeDelta: 0.03,
+                    latitudeDelta: 0.03
+                }}  
+                style={styles.map}>
+                
+                
+            </MapView>}
            
         </ScrollView>
     )

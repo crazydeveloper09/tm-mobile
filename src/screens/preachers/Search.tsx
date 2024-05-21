@@ -1,17 +1,23 @@
 import { Input } from "@rneui/themed";
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
+import { View, Text, StyleSheet, ScrollView, FlatList, Alert } from "react-native";
 import ButtonC from "../../components/Button";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import Loading from "../../components/Loading";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import Preacher from "../../components/Preacher";
 import Pagination from "../../components/Pagination";
+import { columnsNum } from "../../helpers/devices";
 
 const PreachersSearchScreen: React.FC = () => {
   const [param, setParam] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const { searchPreacher, state } = useContext(PreachersContext);
+
+  
+  if(state.errMessage){
+    Alert.alert("Server error", state.errMessage)
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -20,6 +26,7 @@ const PreachersSearchScreen: React.FC = () => {
         value={param}
         onChangeText={setParam}
         inputContainerStyle={styles.inputContainer}
+        containerStyle={styles.containerInput}
       />
       <ButtonC
         title="Szukaj"
@@ -47,9 +54,11 @@ const PreachersSearchScreen: React.FC = () => {
             Rezultaty wyszukiwania: {state.searchResults?.length}
           </Text>
           <FlatList
+            keyExtractor={((preacher) => preacher._id)}
             data={state.searchResults}
             renderItem={({ item }) => <Preacher preacher={item} />}
             scrollEnabled={false}
+            numColumns={columnsNum}
           />
     
         </View>
@@ -69,6 +78,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     padding: 5,
+    borderColor: 'black',
+  },
+
+  containerInput: {
+      paddingHorizontal: 0,
+      paddingVertical: 0,
   },
   noParamContainer: {
     marginTop: 65,
