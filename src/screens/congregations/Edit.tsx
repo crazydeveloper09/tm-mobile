@@ -4,6 +4,7 @@ import { Context as AuthContext } from "../../contexts/AuthContext";
 import Loading from "../../components/Loading";
 import { Input } from "@rneui/themed";
 import ButtonC from "../../components/Button";
+import MyInput from "../../components/MyInput";
 
 const CongregationEditScreen: React.FC = () => {
     const { editCongregation, state, loadCongregationInfo } = useContext(AuthContext);
@@ -29,40 +30,28 @@ const CongregationEditScreen: React.FC = () => {
     }
     return (
         <View style={styles.container}>
-            <Input 
+            <MyInput 
                 label="Edytuj nazwę zboru"
                 placeholder='Wpisz nazwę zboru'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={username}
                 onChangeText={setUsername}
             />
 
-            <Input 
+            <MyInput 
                 label="Edytuj mail sługi terenu"
                 placeholder='Wpisz mail sługi terenu'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={territoryServantEmail}
                 onChangeText={setTerritoryServantEmail}
             />
-            <Input 
+            <MyInput 
                 label="Edytuj mail nadzorcy służby"
                 placeholder='Wpisz mail nadzorcy służby'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={ministryOverseerEmail}
                 onChangeText={setMinistryOverseerEmail}
             />
-            <Input 
+            <MyInput 
                 label="Edytuj główne miasto zboru"
                 placeholder='Wpisz główne miasto zboru'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={mainCity}
                 onChangeText={setMainCity}
             />
@@ -79,22 +68,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center'
     },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginBottom: 6,
-        color: 'black'
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
-    }
 })
 
 export default CongregationEditScreen;

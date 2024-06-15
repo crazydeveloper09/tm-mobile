@@ -9,6 +9,8 @@ import ButtonC from "../../components/Button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import territories from "../../api/territories";
 import { IPreacher } from "../../contexts/interfaces";
+import { defaultStyles } from "../defaultStyles";
+import MyInput from "../../components/MyInput";
 
 interface MinistryGroupEditScreenProps {
     route: {
@@ -71,12 +73,9 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
 
     return (
         <View style={styles.container}>
-            <Input 
+            <MyInput 
                 label='Edytuj nazwę grupy'
                 placeholder="Wpisz nazwę grupy"
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={name}
                 onChangeText={setName}
             />
@@ -87,6 +86,8 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
                 items={preachersItems}
                 setOpen={setPreachersOpen}
                 setValue={setPreachersValue}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 searchable={true}
                 containerStyle={{
                     marginVertical: 20
@@ -99,6 +100,8 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
                 items={overseerItems}
                 setOpen={setOverseerOpen}
                 setValue={setOverseerValue}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 searchable={true}
             />}
 
@@ -114,22 +117,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center'
     },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginBottom: 6,
-        color: 'black'
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
-    }
 })
 
 export default MinistryGroupEditScreen;

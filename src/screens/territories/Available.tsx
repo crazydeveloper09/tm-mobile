@@ -1,4 +1,4 @@
-import { Entypo, FontAwesome } from '@expo/vector-icons';
+import { Entypo, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList, ScrollView, TouchableOpacity, Alert, Platform } from 'react-native';
@@ -35,7 +35,7 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
         preachersContext.loadAllPreachers();
         navigation.setOptions({
             headerRight: () => <TouchableOpacity style={styles.headerRight} onPress={() => navigation.navigate('Tereny', { screen: 'SearchTerritories', params: { type: 'available' } })}>
-                <FontAwesome name='search' size={23} color={'white'} />
+                <MaterialCommunityIcons name='magnify' size={34} color={'white'} />
             </TouchableOpacity>
         })
         const unsubscribe = navigation.addListener('focus', () => {

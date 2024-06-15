@@ -1,4 +1,4 @@
-import { FontAwesome } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ScrollView, Platform, Dimensions, Alert } from 'react-native';
@@ -31,10 +31,10 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
         navigation.setOptions({
             headerRight: () => <View style={styles.headerRight}>
                 <TouchableOpacity onPress={() => navigation.navigate('AddTerritory')}>
-                    <FontAwesome name='plus' size={23} color={'white'} />
+                    <MaterialCommunityIcons name='plus' size={34} color={'white'} />
                 </TouchableOpacity>
                 <TouchableOpacity  onPress={() => navigation.navigate('SearchTerritories', {type: 'all'})}>
-                    <FontAwesome name='search' size={23} color={'white'} />
+                    <MaterialCommunityIcons name='magnify' size={34} color={'white'} />
                 </TouchableOpacity>
                 
             </View>

@@ -5,6 +5,7 @@ import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import ButtonC from '../../components/Button';
 import { Input } from '@rneui/themed';
 import Loading from '../../components/Loading';
+import MyInput from '../../components/MyInput';
 
 interface PreachersEditScreenProps {
     navigation: NavigationProp<any>;
@@ -37,12 +38,9 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
 
     return (
         <View style={styles.container}>
-            <Input 
+            <MyInput 
                 label="Edytuj imię i nazwisko głosiciela"
                 placeholder='Wpisz imię i nazwisko'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={name}
                 onChangeText={setName}
             />
@@ -58,22 +56,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center'
     },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginBottom: 6,
-        color: 'black'
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
-    }
 })
 
 export default PreachersEditScreen;

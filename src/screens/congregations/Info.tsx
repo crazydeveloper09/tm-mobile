@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Platform }
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import { NavigationProp } from '@react-navigation/native';
 import MapView, { PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MinistryGroups from '../../components/MinistryGroups';
 import Loading from '../../components/Loading';
 
@@ -22,11 +22,11 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
             headerRight: () =>
             <View style={styles.headerRight}>
                 <TouchableOpacity onPress={() => navigation.navigate('EditCong')}>
-                    <FontAwesome name='pencil' size={23} color={'white'} />
+                    <MaterialCommunityIcons name='pencil' size={30} color={'white'} />
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => navigation.navigate('CongActivity')}>
-                    <FontAwesome5 name='shield-alt' size={23} color={'white'} />
+                    <MaterialCommunityIcons name='security' size={30} color={'white'} />
                 </TouchableOpacity>
                 
             </View> 
@@ -69,7 +69,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
             <View style={styles.ministryGroupTitleContainer}>
                 <Text style={styles.header}>Grupy służby</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('AddMinistryGroup', { congregationID: state.congregation?._id })}>
-                    <FontAwesome name='plus' size={22} />
+                    <MaterialCommunityIcons name='plus' size={30} />
                 </TouchableOpacity>
         
             </View>
@@ -96,19 +96,20 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#ece9e9',
         padding: 15,
-        flex: 1
+        flex: 1,
     },
     map: {
         height: 400,
         width: '100%',
-        marginVertical: 15
+        marginTop: 15,
+        marginBottom: 50
     },
     header: {
         fontFamily: 'InterSemiBold',
         fontSize: 21
     },
     congregationInfo: {
-        padding: 10,
+        padding: 13,
         backgroundColor: 'white',
         marginVertical: 10,
         borderColor: '#9999cc',
@@ -125,13 +126,14 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: 'InterRegular',
-        fontSize: 16,
+        fontSize: 18,
         marginBottom: 10,
         textAlign: 'center'
     },
     textBold: {
         fontFamily: 'InterSemiBold',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 15
     },
     headerRight: {
         flexDirection: 'row',

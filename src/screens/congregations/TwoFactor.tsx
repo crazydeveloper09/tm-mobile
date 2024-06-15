@@ -4,6 +4,7 @@ import { Button, Input, Text } from '@rneui/themed';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import ButtonC from '../../components/Button';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import MyInput from '../../components/MyInput';
 
 const CongregationsTwoFactorScreen: React.FC = () => {
     const [code, setCode] = useState<string>();
@@ -19,14 +20,11 @@ const CongregationsTwoFactorScreen: React.FC = () => {
             <Text h3 style={[styles.header, {color: settings.state.mainColor}]}>Dwustopniowa weryfikacja w Territory Manager</Text>
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
-            <Input 
+            <MyInput 
                 label='Kod dostępu'
                 placeholder='Wpisz kod dostępu'
                 value={code}
                 onChangeText={setCode}
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
             />
             <ButtonC 
                 title={'Zweryfikuj konto'}
@@ -48,22 +46,6 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
         fontFamily: 'MontserratSemiBold'
-    },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginBottom: 6,
-        color: 'black'
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
     },
     errMessage: {
         color: 'red',

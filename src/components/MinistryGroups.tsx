@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { TouchableOpacity } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 
@@ -37,12 +37,12 @@ const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
         data={state.ministryGroups}
         renderItem={(ministryGroup) => (
           <View>
-            <Text style={styles.title}>{ministryGroup.item.name}</Text>
+            <Text style={[styles.title, { backgroundColor: settings.state.mainColor }]}>{ministryGroup.item.name}</Text>
             <FlatList
               data={ministryGroup.item.preachers}
               renderItem={(preacher) =>
                 preacher.item?.name === ministryGroup.item.overseer?.name ? (
-                  <Text style={[styles.preacher, { fontWeight: "bold" }]}>
+                  <Text style={[styles.preacher, { fontWeight: "bold", backgroundColor: `${settings.state.mainColor}20` }]}>
                     {preacher.item?.name}
                   </Text>
                 ) : (
@@ -52,10 +52,10 @@ const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
             />
             <View style={styles.iconContainer}>
               <TouchableOpacity onPress={() => navigation.navigate('EditMinistryGroup', { congregationID, ministryGroupID: ministryGroup.item._id })}>
-                <FontAwesome name="pencil" size={22} />
+                <MaterialCommunityIcons name="pencil" size={26} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => deleteMinistryGroup(congregationID, ministryGroup.item._id)}>
-                <FontAwesome name="trash" size={22} />
+                <MaterialCommunityIcons name="trash-can" size={26} />
               </TouchableOpacity>
             </View>
           </View>
@@ -71,16 +71,16 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   title: {
-    padding: 10,
-    backgroundColor: "#9999CC",
+    padding: 13,
     color: "white",
+    fontSize: 16,
     width: 200,
     textAlign: "center",
     fontWeight: "bold",
   },
   preacher: {
     width: 200,
-    padding: 5,
+    padding: 8,
     textAlign: "center",
   },
   iconContainer: {

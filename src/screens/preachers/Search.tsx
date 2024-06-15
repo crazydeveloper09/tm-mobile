@@ -8,6 +8,7 @@ import { Entypo, FontAwesome } from "@expo/vector-icons";
 import Preacher from "../../components/Preacher";
 import Pagination from "../../components/Pagination";
 import { columnsNum } from "../../helpers/devices";
+import MyInput from "../../components/MyInput";
 
 const PreachersSearchScreen: React.FC = () => {
   const [param, setParam] = useState("");
@@ -21,12 +22,10 @@ const PreachersSearchScreen: React.FC = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Input
+      <MyInput
         placeholder="Imię i nazwisko"
         value={param}
         onChangeText={setParam}
-        inputContainerStyle={styles.inputContainer}
-        containerStyle={styles.containerInput}
       />
       <ButtonC
         title="Szukaj"
@@ -72,18 +71,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ece9e9",
     padding: 15,
     flex: 1,
-  },
-  inputContainer: {
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderRadius: 6,
-    padding: 5,
-    borderColor: 'black',
-  },
-
-  containerInput: {
-      paddingHorizontal: 0,
-      paddingVertical: 0,
   },
   noParamContainer: {
     marginTop: 65,

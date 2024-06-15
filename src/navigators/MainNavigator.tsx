@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useContext, useEffect, useState } from "react";
 import { Platform, StatusBar, StyleSheet, Text } from "react-native";
 import TerritoriesAvailableScreen from "../screens/territories/Available";
-import { FontAwesome } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import TerritoriesNavigator from "./TerritoriesNavigator";
 import PreachersNavigator from "./PreachersNavigator";
 import CongregationsInfoScreen from "../screens/congregations/Info";
@@ -36,21 +36,21 @@ const MainNavigator = () => {
               name="Home"
               component={HomeNavigator}
               options={{
-                tabBarIcon: ({color}) => <FontAwesome name='home' color={color} size={26} />,
+                tabBarIcon: ({color}) => <MaterialCommunityIcons name='home' color={color} size={28} />,
               }}
             />
             <Tab.Screen 
               name="Tereny"
               component={TerritoriesNavigator}
               options={{
-                tabBarIcon: ({color}) => <FontAwesome name='map-marker' color={color} size={26} />,
+                tabBarIcon: ({color}) => <MaterialCommunityIcons name='map-marker' color={color} size={28} />,
               }}
             />
             <Tab.Screen 
               name="Głosiciele"
               component={PreachersNavigator}
               options={{
-                tabBarIcon: ({color}) => <FontAwesome name='user' color={color} size={26} />,
+                tabBarIcon: ({color}) => <MaterialCommunityIcons name='account' color={color} size={28} />,
         
               }}
             />
@@ -58,7 +58,7 @@ const MainNavigator = () => {
               name="Zbór"
               component={CongregationsNavigator}
               options={{
-                tabBarIcon: ({color}) => <FontAwesome name='users' color={color} size={26} />,
+                tabBarIcon: ({color}) => <MaterialCommunityIcons name='account-group' color={color} size={28} />,
         
       
               }}
@@ -67,7 +67,7 @@ const MainNavigator = () => {
               name="Ustawienia"
               component={SettingsNavigator}
               options={{
-                tabBarIcon: ({color}) => <FontAwesome name='gear' color={color} size={26} />,
+                tabBarIcon: ({color}) => <MaterialCommunityIcons name='cog' color={color} size={28} />,
               
               }}
             />

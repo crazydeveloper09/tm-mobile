@@ -1,14 +1,19 @@
-import { CheckBox, Input } from '@rneui/base';
+import { CheckBox, Input, Switch } from '@rneui/base';
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DropDownPicker from 'react-native-dropdown-picker';
 import Loading from '../../components/Loading';
 import { Context as TerritoriesContext } from '../../contexts/TerritoriesContext';
+import { Context as SettingsContext } from '../../contexts/SettingsContext';
 import territories from '../../api/territories';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IPreacher } from '../../contexts/interfaces';
 import ButtonC from '../../components/Button';
+import { defaultStyles } from '../defaultStyles';
+import MyInput from '../../components/MyInput';
+import Label from '../../components/Label';
+import ChooseDate from '../../components/ChooseDate';
 
 export interface ITerritoryForm {
     number: number;
@@ -52,6 +57,7 @@ const TerritoriesNewScreen: React.FC = () => {
     const [takenOpen, setTakenOpen] = useState(false)
     const [taken, setTaken] = useState(new Date())
     const {addTerritory, state} = useContext(TerritoriesContext);
+    const settings = useContext(SettingsContext)
 
     const loadPreachers = async () => {
         const token = await AsyncStorage.getItem('token')
@@ -81,17 +87,14 @@ const TerritoriesNewScreen: React.FC = () => {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', marginBottom: 40}}>
-            <Input 
+            <MyInput 
                 label='Numer terenu'
                 placeholder='Wpisz nr terenu'
                 keyboardType='numeric'
                 value={number}
                 onChangeText={setNumber}
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
             />
-            
+            <Label text='Rodzaj terenu' />
             <DropDownPicker
                 placeholder='Wybierz rodzaj terenu'
                 open={kindOpen}
@@ -99,166 +102,110 @@ const TerritoriesNewScreen: React.FC = () => {
                 items={kindItems}
                 setOpen={setKindOpen}
                 setValue={setKindValue}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 flatListProps={{ scrollEnabled: false }}
                 containerStyle={{
-                    marginVertical: 15,
+                    marginBottom: 15,
                     width: '100%'
                 }}
             />
 
-            <Input 
+            <MyInput 
                 label='Miejscowość'
                 placeholder='Wpisz miejscowość'
-                inputContainerStyle={styles.inputContainer}
                 value={city}
                 onChangeText={setCity}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
             />
 
-            <Input 
+            <MyInput 
                 label='Ulica'
                 placeholder='Wpisz ulicę'
-                inputContainerStyle={styles.inputContainer}
                 value={street}
                 onChangeText={setStreet}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
             />
 
             {kindValue === 'city' && <>
-                <Input 
+                <MyInput 
                     label='Numer początkowy'
                     placeholder='Wpisz nr początkowy'
                     keyboardType='numeric'
-                    inputContainerStyle={styles.inputContainer}
                     value={beginNumber}
                     onChangeText={setBeginNumber}
-                    labelStyle={styles.labelStyle}
-                    containerStyle={styles.containerInput}
                 />
-                <Input 
+                <MyInput 
                     label='Numer końcowy'
                     placeholder='Wpisz nr końcowy'
                     keyboardType='numeric'
-                    inputContainerStyle={styles.inputContainer}
                     value={endNumber}
                     onChangeText={setEndNumber}
-                    labelStyle={styles.labelStyle}
-                    containerStyle={styles.containerInput}
                 />
             </>}
 
-            <Input 
+            <MyInput 
                 label='Pełna lokalizacja'
                 placeholder='Wpisz lokalizację'
-                inputContainerStyle={styles.inputContainer}
                 value={location}
                 onChangeText={setLocation}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
             />
 
-
-            <TouchableOpacity onPress={() => setLastWorkedOpen(true)} style={{...styles.inputContainer, padding: 15}}>
-                <Text>
-                    Ostatnio opracowane - aktualna data: {lastWorked.toLocaleDateString()}
-                </Text> 
-            </TouchableOpacity>
-            <DateTimePickerModal
-                isVisible={lastWorkedOpen}
-                 date={lastWorked} 
-                 onConfirm={(date) => {
-                     setLastWorked(date)
-                     setLastWorkedOpen(false)
-                     }
-                 } 
-                 onCancel={() => setLastWorkedOpen(false)}
-                 isDarkModeEnabled={false}
-                display='inline'
-                locale='pl'
-
+            <ChooseDate 
+                label="Ostatnio opracowane"
+                date={lastWorked}
+                dateOpen={lastWorkedOpen}
+                setDate={setLastWorked}
+                setDateOpen={setLastWorkedOpen}
             />
-
+            <Label text='Wybierz głosiciela' />
             <DropDownPicker
                 open={preacherOpen}
                 value={preacherValue}
                 items={preacherItems}
                 setOpen={setPreacherOpen}
                 setValue={setPreacherValue}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 searchable={true}
                 flatListProps={{ scrollEnabled: false }}
                 containerStyle={{
-                    marginVertical: 15,
+                    marginBottom: 15,
                     width: '100%'
                 }}
             />
 
-            <TouchableOpacity onPress={() => setTakenOpen(true)} style={{...styles.inputContainer, padding: 15}}>
-                <Text>
-                 Pobrany - aktualna data: {taken.toLocaleDateString()} 
-                </Text>
-            </TouchableOpacity>
-            <DateTimePickerModal 
-                isVisible={takenOpen}
-                mode='date'
-                date={taken} 
-                onConfirm={(date) => {
-                    setTaken(date)
-                    setTakenOpen(false)
-                    }
-                } 
-                onCancel={() => setTakenOpen(false)}
-                isDarkModeEnabled={false}
-                display='inline'
-                pickerStyleIOS={{
-                    borderColor: 'black'
-                }}
-                locale='pl'
-                style={{
-                    marginBottom: 20
-                }}
+            <ChooseDate 
+                label="Pobrany"
+                date={taken}
+                dateOpen={takenOpen}
+                setDate={setTaken}
+                setDateOpen={setTakenOpen}
             />
 
-            <Input
+
+            <MyInput
                 label='Opis'
                 placeholder='Wpisz opis'
-                inputContainerStyle={styles.inputContainer}
                 multiline={true}
                 numberOfLines={5}
                 value={description}
                 onChangeText={setDescription}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
             />
-            <Text style={styles.labelStyle}>
-                Czy jest fizyczna karta terenu?
-            </Text>
-            <CheckBox
-                checked={physicalCard}
-                onPress={() => setPhysicalCard(!physicalCard)}
-                title={'Tak'}
-                iconType="material-community"
-                checkedIcon="checkbox-marked"
-                uncheckedIcon="checkbox-blank-outline"
-                checkedColor="#28a745"
-            />
+            <Label text='Czy jest fizyczna karta terenu' />
+            <Switch 
+                value={physicalCard}
+                onValueChange={(value) => setPhysicalCard(value)}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
 
-            <CheckBox
-                checked={noPhysicalCard}
-                onPress={() => setNoPhysicalCard(!noPhysicalCard)}
-                title={'Nie'}
-                iconType="material-community"
-                checkedIcon="checkbox-marked"
-                uncheckedIcon="checkbox-blank-outline"
-                checkedColor="#28a745"
+                color={settings.state.mainColor}
             />
-
-            <ButtonC 
-                title='Dodaj teren' 
-                isLoading={state.isLoading}
-                onPress={() => addTerritory({ number, kind: kindValue, city, street, beginNumber, endNumber, location, lastWorked: new Date(lastWorked), preacher: preacherValue, taken: new Date(taken), description, isPhysicalCard: physicalCard})} 
-            />
+            <View style={{ marginBottom: 50 }}>
+                <ButtonC 
+                    title='Dodaj teren' 
+                    isLoading={state.isLoading}
+                    onPress={() => addTerritory({ number, kind: kindValue, city, street, beginNumber, endNumber, location, lastWorked: new Date(lastWorked), preacher: preacherValue, taken: new Date(taken), description, isPhysicalCard: physicalCard})} 
+                />
+            </View>
+            
         </ScrollView>
     )
 }
@@ -269,22 +216,6 @@ const styles = StyleSheet.create({
         padding: 15,
         flex: 1,
     },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginBottom: 6,
-        color: 'black'
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
-    }
 })
 
 export default TerritoriesNewScreen;

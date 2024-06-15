@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import Preacher from '../../components/Preacher';
-import { FontAwesome } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
@@ -22,11 +22,11 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
         navigation.setOptions({
             headerRight: () => <View style={styles.headerRight}>
                 <TouchableOpacity onPress={() => navigation.navigate('AddPreacher')}>
-                    <FontAwesome name='plus' size={23} color={'white'} />
+                    <MaterialCommunityIcons name='plus' size={34} color={'white'} />
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => navigation.navigate('SearchPreacher')}>
-                    <FontAwesome name='search' size={23} color={'white'} />
+                    <MaterialCommunityIcons name='magnify' size={34} color={'white'} />
                 </TouchableOpacity>
                 
             </View>

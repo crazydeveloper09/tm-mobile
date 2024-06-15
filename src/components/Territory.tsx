@@ -2,7 +2,7 @@ import React from "react";
 import { IPreacher, ITerritory } from "../contexts/interfaces";
 import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Badge } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { changeColorForDates, countDaysFromNow } from "../helpers/dates";
@@ -63,7 +63,7 @@ const Territory: React.FC<TerritoryProps> = ({ territory, preachers }) => {
               } as never)
             }
           >
-            <FontAwesome name="calendar" color="black" size={22} />
+            <MaterialCommunityIcons name="history" color="black" size={26} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
@@ -73,7 +73,7 @@ const Territory: React.FC<TerritoryProps> = ({ territory, preachers }) => {
               } as never)
             }
           >
-            <FontAwesome name="pencil" color="black" size={22} />
+            <MaterialCommunityIcons name="pencil" color="black" size={26} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
@@ -83,7 +83,7 @@ const Territory: React.FC<TerritoryProps> = ({ territory, preachers }) => {
               } as never)
             }
           >
-            <FontAwesome name="trash" color="black" size={22} />
+            <MaterialCommunityIcons name="trash-can" color="black" size={26} />
           </TouchableOpacity>
         </View>
       </View>

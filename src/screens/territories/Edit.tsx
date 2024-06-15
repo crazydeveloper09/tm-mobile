@@ -10,6 +10,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IPreacher, ITerritory } from '../../contexts/interfaces';
 import ButtonC from '../../components/Button';
 import { Context as SettingsContext } from '../../contexts/SettingsContext';
+import { defaultStyles } from '../defaultStyles';
+import MyInput from '../../components/MyInput';
+import Label from '../../components/Label';
 
 export interface ITerritoryForm {
     number: number;
@@ -91,15 +94,12 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center'}}>
-            <Input 
+            <MyInput 
                 label='Numer terenu'
                 placeholder='Wpisz nr terenu'
                 keyboardType='numeric'
                 value={number}
                 onChangeText={setNumber}
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
             />
             <DropDownPicker
                 open={kindOpen}
@@ -107,6 +107,8 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 items={kindItems}
                 setOpen={setKindOpen}
                 setValue={setKindValue}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 flatListProps={{ scrollEnabled: false }}
                 containerStyle={{
                     marginVertical: 15,
@@ -114,75 +116,55 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 }}
             />
 
-            <Input 
+            <MyInput 
                 label='Miejscowość'
                 placeholder='Wpisz miejscowość'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={city}
                 onChangeText={setCity}
             />
 
-            <Input 
+            <MyInput 
                 label='Ulica'
                 placeholder='Wpisz ulicę'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={street}
                 onChangeText={setStreet}
             />
 
             {kindValue === 'city' && <>
-                <Input 
+                <MyInput 
                     label='Numer początkowy'
                     placeholder='Wpisz nr początkowy'
                     keyboardType='numeric'
-                    inputContainerStyle={styles.inputContainer}
-                    labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                     value={beginNumber}
                     onChangeText={setBeginNumber}
                 />
-                <Input 
+                <MyInput 
                     label='Numer końcowy'
                     placeholder='Wpisz nr końcowy'
                     keyboardType='numeric'
-                    inputContainerStyle={styles.inputContainer}
-                    labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                     value={endNumber}
                     onChangeText={setEndNumber}
                 />
             </>}
 
-            <Input 
+            <MyInput 
                 label='Pełna lokalizacja'
                 placeholder='Wpisz lokalizację'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={location}
                 onChangeText={setLocation}
             />
 
 
 
-            <Input
+            <MyInput
                 label='Opis'
                 placeholder='Wpisz opis'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 multiline={true}
                 numberOfLines={5}
                 value={description}
                 onChangeText={setDescription}
             />
-            <Text style={styles.labelStyle}>
-                Czy jest fizyczna karta terenu?
-            </Text>
+            <Label text='Czy jest fizyczna karta terenu?' />
 
             <Switch 
                 value={physicalCard}
@@ -192,12 +174,14 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 color={settings.state.mainColor}
             />
             
-
-            <ButtonC 
-                title='Edytuj teren' 
-                isLoading={state.isLoading}
-                onPress={() => editTerritory(territoryID, { number, kind: kindValue, city, street, beginNumber, endNumber, location, description, isPhysicalCard: physicalCard})} 
-            />
+            <View style={{ marginBottom: 50 }}>
+                <ButtonC 
+                    title='Edytuj teren' 
+                    isLoading={state.isLoading}
+                    onPress={() => editTerritory(territoryID, { number, kind: kindValue, city, street, beginNumber, endNumber, location, description, isPhysicalCard: physicalCard})} 
+                />
+            </View>
+            
         </ScrollView>
     )
 }
@@ -208,22 +192,6 @@ const styles = StyleSheet.create({
         padding: 15,
         flex: 1,
     },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginBottom: 6,
-        color: 'black'
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
-    }
 })
 
 export default TerritoriesEditScreen;

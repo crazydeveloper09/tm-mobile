@@ -11,6 +11,9 @@ import Loading from "../../components/Loading";
 import Pagination from "../../components/Pagination";
 import { columnsNum } from "../../helpers/devices";
 import { NavigationProp } from "@react-navigation/native";
+import MyInput from "../../components/MyInput";
+import { defaultStyles } from "../defaultStyles";
+import Label from "../../components/Label";
 
 interface TerritoriesSearchScreenProps {
     navigation: NavigationProp<any>
@@ -60,6 +63,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
 
   return (
     <ScrollView style={styles.container}>
+      <Label text="Wybierz typ wyszukiwania" />
       <DropDownPicker
         placeholder='Wybierz rodzaj wyszukiwania'
         open={mainOpen}
@@ -68,6 +72,8 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
         setOpen={setMainOpen}
         setValue={setMainValue}
         setItems={setMainItems}
+        labelStyle={defaultStyles.dropdown}
+        placeholderStyle={defaultStyles.dropdown}
         flatListProps={{
           scrollEnabled: false,
         }}
@@ -80,32 +86,29 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
       />
 
       {mainValue === "city" && (
-        <Input
+        <MyInput
+          label="Wpisz nazwę miejscowości"
           placeholder="Miejscowość"
           value={paramValue}
           onChangeText={setParamValue}
-          inputContainerStyle={styles.inputContainer}
-          containerStyle={styles.containerInput}
         />
       )}
 
       {mainValue === "street" && (
-        <Input
+        <MyInput
+          label="Wpisz ulicę"
           placeholder="Ulica"
           value={paramValue}
           onChangeText={setParamValue}
-          inputContainerStyle={styles.inputContainer}
-          containerStyle={styles.containerInput}
         />
       )}
 
       {mainValue === "number" && (
-        <Input
+        <MyInput
+          label="Wpisz nr terenu"
           placeholder="Numer terenu"
           value={paramValue}
           onChangeText={setParamValue}
-          inputContainerStyle={styles.inputContainer}
-          containerStyle={styles.containerInput}
         />
       )}
 
@@ -117,6 +120,8 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
             items={kindItems}
             setOpen={setKindOpen}
             setValue={setParamValue}
+            labelStyle={defaultStyles.dropdown}
+            placeholderStyle={defaultStyles.dropdown}
             flatListProps={{ scrollEnabled: false }}
             containerStyle={{
                 marginVertical: 15
@@ -124,17 +129,22 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
         />
       )}
 
-        { !mainOpen && !kindOpen && <DropDownPicker
+        { !mainOpen && !kindOpen && <>
+          <Label text="Wybierz rodzaj wyszukiwania" />
+          <DropDownPicker
             open={typeOpen}
             value={typeValue}
             items={typeItems}
             setOpen={setTypeOpen}
             setValue={setTypeValue}
+            labelStyle={defaultStyles.dropdown}
+            placeholderStyle={defaultStyles.dropdown}
             flatListProps={{ scrollEnabled: false }}
             containerStyle={{
-                marginVertical: 15
+                marginBottom: 15
             }}
-        />}
+          />
+        </> }
 
         <ButtonC
             title="Szukaj"

@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import ButtonC from '../../components/Button';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
+import MyInput from '../../components/MyInput';
 
 const PreachersNewScreen: React.FC = () => {
     const [name, setName] = useState('');
@@ -15,12 +16,9 @@ const PreachersNewScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            <Input 
+            <MyInput 
                 label="Imię i nazwisko głosiciela"
                 placeholder='Wpisz imię i nazwisko'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={name}
                 onChangeText={setName}
             />

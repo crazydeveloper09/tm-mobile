@@ -4,6 +4,7 @@ import { Input, Text, Button } from '@rneui/themed';
 import ButtonC from '../../components/Button';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import MyInput from '../../components/MyInput';
 
 const CongregationsLoginScreen: React.FC = () => {
     const { state, signIn } = useContext(AuthContext);
@@ -19,23 +20,17 @@ const CongregationsLoginScreen: React.FC = () => {
             <Text h3 style={[styles.header, {color: settings.state.mainColor}]}>Zaloguj się do Territory Manager</Text>
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
-            <Input 
+            <MyInput 
                 label="Nazwa zboru"
                 placeholder='Wpisz nazwę zboru'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={username}
                 onChangeText={setUsername}
                 autoCapitalize='none'
                 autoCorrect={false}
             />
-            <Input 
+            <MyInput 
                 label="Hasło"
                 placeholder='Wpisz hasło'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -63,22 +58,6 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
         fontFamily: 'MontserratSemiBold'
-    },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginBottom: 6,
-        color: 'black'
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
     },
     button: {
         backgroundColor: '#28a745'

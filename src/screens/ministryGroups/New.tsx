@@ -9,6 +9,8 @@ import ButtonC from "../../components/Button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import territories from "../../api/territories";
 import { IPreacher } from "../../contexts/interfaces";
+import { defaultStyles } from "../defaultStyles";
+import MyInput from "../../components/MyInput";
 
 interface MinistryGroupNewScreenProps {
     route: {
@@ -62,12 +64,9 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
 
     return (
         <View style={styles.container}>
-            <Input 
+            <MyInput 
                 label='Nazwa grupy'
                 placeholder="Wpisz nazwę grupy"
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={name}
                 onChangeText={setName}
             />
@@ -78,6 +77,8 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                 items={preachersItems}
                 setOpen={setPreachersOpen}
                 setValue={setPreachersValue}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 searchable={true}
                 containerStyle={{
                     marginVertical: 20
@@ -91,6 +92,8 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                 items={overseerItems}
                 setOpen={setOverseerOpen}
                 setValue={setOverseerValue}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 searchable={true}
                 containerStyle={{
                     marginBottom: 20

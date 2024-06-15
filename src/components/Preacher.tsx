@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { IPreacher } from "../contexts/interfaces";
-import { FontAwesome } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 import { isTablet } from "../helpers/devices";
@@ -24,10 +24,10 @@ const Preacher: React.FC<PreacherProps> = ({ preacher }) => {
                 <Text style={styles.title}>{preacher.name}</Text>
                 <View style={styles.iconContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('EditPreacher', {id: preacher._id, preacherName: preacher.name} as unknown as never)}>
-                        <FontAwesome name='pencil' color={'#9999cc'} size={22} />
+                        <MaterialCommunityIcons name='pencil' color={state.mainColor} size={26} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('DeleteConfirmPreacher', {id: preacher._id} as unknown as never)}>
-                        <FontAwesome name='trash' color={'#9999cc'} size={22} />
+                        <MaterialCommunityIcons name='trash-can' color={state.mainColor} size={26} />
                     </TouchableOpacity>
                 </View>
             </View>
