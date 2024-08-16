@@ -14,7 +14,7 @@ interface PreachersIndexScreenProps {
 
 const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation }) => {
 
-    const { state, loadPreachers } = useContext(PreachersContext);
+    const { state, loadPreachers, clearError } = useContext(PreachersContext);
     const [page, setPage] = useState(1)
     const [limit, setLimit] = useState(10)
 
@@ -44,16 +44,12 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
     }
 
     if(state.errMessage){
-        Alert.alert("Server error", state.errMessage)
+        Alert.alert("Server error", state.errMessage, [{ text: "OK", onPress: () => clearError() }])
     }
 
-    navigation.setOptions({
-        headerTitle: `Głosiciele: ${state.preachers?.totalDocs}`,
-    })
-
-    console.log(state.preachers?.totalPages!)
     return (
         <ScrollView style={styles.container}>
+            <Text style={styles.resultsText}>Liczba głosicieli: {state.preachers?.totalDocs}</Text>
             <FlatList 
                 keyExtractor={((preacher) => preacher._id)}
                 data={state.preachers?.docs}
@@ -72,7 +68,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 15,
         marginRight: 15
-    }
+    },
+    resultsText: {
+        fontSize: 21,
+        textAlign: "center",
+        fontFamily: "MontserratRegular",
+        marginVertical: 20
+    },
 })
 
 export default PreachersIndexScreen;

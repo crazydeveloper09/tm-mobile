@@ -12,9 +12,7 @@ const CongregationsLoginScreen: React.FC = () => {
     const [ password, setPassword ] = useState<string>('')
 
     const settings = useContext(SettingsContext);
-    useEffect(() => {
-      settings.loadColor()
-    }, [settings.state.mainColor])
+
     return (
         <View style={styles.container}>
             <Text h3 style={[styles.header, {color: settings.state.mainColor}]}>Zaloguj się do Territory Manager</Text>

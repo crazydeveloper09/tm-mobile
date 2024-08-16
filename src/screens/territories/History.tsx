@@ -25,7 +25,7 @@ interface TerritoriesHistoryScreenProps {
 }
 
 const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ navigation, route }) => {
-    const {state, loadTerritoryHistory, makeTerritoryFreeAgain, assignTerritory} = useContext(TerritoriesContext);
+    const {state, loadTerritoryHistory, clearError} = useContext(TerritoriesContext);
     const preachersContext = useContext(PreachersContext)
     const [infoOpen, setInfoOpen] = useState(false);
 
@@ -67,23 +67,10 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
     useEffect(() => {
      
         loadTerritoryHistory(route.params.id);
-        navigation.setOptions({
-            headerRight: () => <View style={styles.headerRight}>
-                <TouchableOpacity onPress={() => navigation.navigate('EditTerritory', { id: route.params.id })}>
-                    <FontAwesome name='pencil' size={23} color={'white'} />
-                </TouchableOpacity>
-                <TouchableOpacity  onPress={() => navigation.navigate('DeleteConfirmTerritory', {id: route.params.id})}>
-                    <FontAwesome name='trash' size={23} color={'white'} />
-                </TouchableOpacity>
-                
-            </View>
-        })
         const unsubscribe = navigation.addListener('focus', () => {
           loadTerritoryHistory(route.params.id)
         });
 
-        
-  
       return unsubscribe;
     }, [route.params.id, navigation, refreshing])
 
@@ -92,8 +79,20 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
     }
 
     if(state.errMessage){
-      Alert.alert("Server error", state.errMessage)
-  }
+      Alert.alert("Server error", state.errMessage, [{ text: "OK", onPress: () => clearError() }])
+    }
+
+    navigation.setOptions({
+      headerRight: () => <View style={styles.headerRight}>
+          <TouchableOpacity onPress={() => navigation.navigate('EditTerritory', { territory: state.territory })}>
+              <FontAwesome name='pencil' size={23} color={'white'} />
+          </TouchableOpacity>
+          <TouchableOpacity  onPress={() => navigation.navigate('DeleteConfirmTerritory', {territory: state.territory})}>
+              <FontAwesome name='trash' size={23} color={'white'} />
+          </TouchableOpacity>
+          
+      </View>
+    })
 
     let backgroundColor;
     let territoryKindText;

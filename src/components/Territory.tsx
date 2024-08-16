@@ -69,7 +69,7 @@ const Territory: React.FC<TerritoryProps> = ({ territory, preachers }) => {
             onPress={() =>
               navigation.navigate("Tereny", {
                 screen: "EditTerritory",
-                params: { id: territory._id },
+                params: { territory },
               } as never)
             }
           >
@@ -79,7 +79,7 @@ const Territory: React.FC<TerritoryProps> = ({ territory, preachers }) => {
             onPress={() =>
               navigation.navigate("Tereny", {
                 screen: "DeleteConfirmTerritory",
-                params: { id: territory._id },
+                params: { territory },
               } as never)
             }
           >

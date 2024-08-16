@@ -1,7 +1,7 @@
 import { Entypo, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, ScrollView, TouchableOpacity, Alert, Platform } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ScrollView, TouchableOpacity, Alert, Platform } from 'react-native';
 import { Context as TerritoryContext } from '../../contexts/TerritoriesContext';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
@@ -9,10 +9,7 @@ import Territory from '../../components/Territory';
 import Loading from '../../components/Loading';
 import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import Pagination from '../../components/Pagination';
-import TerritoriesNavigator from '../../navigators/TerritoriesNavigator';
-import { navigate } from '../../RootNavigation';
 import { columnsNum } from '../../helpers/devices';
-import FlashMessage, { showMessage } from 'react-native-flash-message';
 
 
 interface TerritoriesAvailableScreenProps {
@@ -22,7 +19,7 @@ interface TerritoriesAvailableScreenProps {
 
 const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({ navigation }) => {
 
-    const { state, loadAvailableTerritories } = useContext(TerritoryContext);
+    const { state, loadAvailableTerritories, clearError } = useContext(TerritoryContext);
     const congregationContext = useContext(AuthContext)
     const preachersContext = useContext(PreachersContext)
     const [page, setPage] = useState(1)
@@ -40,8 +37,6 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
         })
         const unsubscribe = navigation.addListener('focus', () => {
             loadAvailableTerritories(page, limit);
-            congregationContext.loadCongregationInfo()
-            preachersContext.loadAllPreachers();
         });
     
         return unsubscribe;
@@ -52,11 +47,19 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
     }
 
     if(state.errMessage || congregationContext.state.errMessage || preachersContext.state.errMessage){
-        Alert.alert("Server error", state.errMessage || congregationContext.state.errMessage || preachersContext.state.errMessage)
+        Alert.alert("Server error", state.errMessage || congregationContext.state.errMessage || preachersContext.state.errMessage, [{ text: 'OK', onPress: () => {
+            if(preachersContext.state.errMessage){
+                preachersContext.clearError()
+            }
+            if(congregationContext.state.errMessage){
+                congregationContext.clearError()
+            }
+            if(state.errMessage){
+                clearError()
+            }
+        } }])
     }
-    navigation.setOptions({
-        headerTitle: `Wolne tereny: ${state.territories?.totalDocs}`,
-    })
+
     return (
         <ScrollView style={styles.container}>
             { congregationContext.state.congregation && <MapView 
@@ -76,11 +79,11 @@ const TerritoriesAvailableScreen: React.FC<TerritoriesAvailableScreenProps> = ({
             {state.territories?.docs?.length === 0 ? (
                 <View style={styles.noParamContainer}>
                     <Entypo name="emoji-sad" size={45} />
-                <Text style={styles.noParamText}>Niestety, nie ma już wolnych terenów</Text>
+                    <Text style={styles.noParamText}>Niestety, nie ma już wolnych terenów</Text>
                 </View>
             ) : (
                 <>
-                    
+                    <Text style={styles.resultsText}>Liczba wolnych terenów: {state.territories?.totalDocs}</Text>
                     <FlatList 
                         keyExtractor={((territory) => territory._id)}
                         data={state.territories?.docs}
@@ -123,7 +126,13 @@ const styles = StyleSheet.create({
         height: 200,
         width: '100%',
         marginBottom: 20
-    }
+    },
+    resultsText: {
+        fontSize: 21,
+        textAlign: "center",
+        fontFamily: "MontserratRegular",
+        marginVertical: 20
+    },
 })
 
 export default TerritoriesAvailableScreen;

@@ -1,12 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Loading: React.FC = () => {
-    const {state, loadColor} = useContext(SettingsContext);
-    useEffect(() => {
-      loadColor()
-    }, [state.mainColor])
+    const {state} = useContext(SettingsContext);
 
     return (
         <View style={styles.container}>

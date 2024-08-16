@@ -25,6 +25,7 @@ export interface IAuthContext {
   loadCongregationInfo: Function;
   loadCongregationActivities: Function;
   editCongregation: Function;
+  clearError: Function;
 }
 
 interface ISignIn {
@@ -38,6 +39,8 @@ const authReducer = (state: IAuth, action: { type: string; payload: any }) => {
   switch (action.type) {
     case 'add_error': 
         return { ...state, errMessage: action.payload, isLoading: false }
+    case 'clear_error': 
+      return { ...state, errMessage: '' }
     case 'add_success': 
         return { ...state, successMessage: action.payload.message, errMessage: '', userID: action.payload.userID, isLoading: false }
     case 'signin': 
@@ -51,7 +54,7 @@ const authReducer = (state: IAuth, action: { type: string; payload: any }) => {
     case 'turn_on_loading': 
       return {...state, isLoading: true, errMessage: ''}
     case 'turn_off_loading': 
-      return {...state, isLoading: false}
+      return {...state, isLoading: false, errMessage: ''}
     case 'debug':
         return state;
     default:
@@ -59,11 +62,17 @@ const authReducer = (state: IAuth, action: { type: string; payload: any }) => {
   }
 };
 
+const clearError = (dispatch: Function) => {
+  return () => {
+    dispatch({ type: "clear_error" })
+  }
+}
+
 const signIn = (dispatch: Function) => {
   return async (body: ISignIn) => {
     try {
       dispatch({ type: 'turn_on_loading' })
-      const response = await tmApi.post("/login", body);
+      const response = await tmApi.post("/login?locale=pl", body);
       if(response.data === 'Zła nazwa użytkownika lub hasło'){
         dispatch({ type: 'add_error', payload: response.data })
       } else {
@@ -87,7 +96,7 @@ const verifyUser = (dispatch: Function) => {
     return async(body: ITwoFactor) => {
         try {
           dispatch({ type: 'turn_on_loading' })
-            const response = await tmApi.post(`/congregations/${body?.userID}/two-factor`, body);
+            const response = await tmApi.post(`/congregations/${body?.userID}/two-factor?locale=pl`, body);
             await AsyncStorage.setItem('token', response.data.token);
             dispatch({ type: 'signin', payload: { token: response.data.token, message: response.data.message } });
             dispatch({ type: 'debug' })
@@ -167,6 +176,6 @@ const editCongregation = (dispatch: Function) => {
 
 export const { Context, Provider } = createDataContext<IAuth, IAuthContext>(
   authReducer,
-  { signIn, signOut, verifyUser, tryLocalSignIn, loadCongregationInfo, editCongregation, loadCongregationActivities },
+  { signIn, signOut, clearError, verifyUser, tryLocalSignIn, loadCongregationInfo, editCongregation, loadCongregationActivities },
   { token: "", errMessage: "", successMessage: "" }
 );

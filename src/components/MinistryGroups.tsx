@@ -23,9 +23,8 @@ const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
 
 
   useEffect(() => {
-    settings.loadColor()
     loadMinistryGroups(congregationID);
-  }, [settings.state.mainColor, congregationID]);
+  }, [congregationID]);
 
   if (state.isLoading) {
     return <ActivityIndicator size={"large"} color={settings.state.mainColor} />;

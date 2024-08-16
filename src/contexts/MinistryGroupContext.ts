@@ -18,6 +18,7 @@ interface IMinistryGroupContext {
     addMinistryGroup: Function,
     editMinistryGroup: Function,
     deleteMinistryGroup: Function,
+    clearError: Function;
 }
 
 const ministryGroupReducer = (state: IMinistryGroupState, action: { type: string, payload: any }) => {
@@ -27,9 +28,17 @@ const ministryGroupReducer = (state: IMinistryGroupState, action: { type: string
         case 'load_data':
             return { ...state, isLoading: false, ministryGroups: action.payload, errMessage: '' }
         case 'add_error': 
-            return { ...state, errMessage: action.payload }
+            return { ...state, isloading: false, errMessage: action.payload }
+        case 'clear_error':
+            return { ...state, errMessage: '' }
         default:
             return state;
+    }
+}
+
+const clearError = (dispatch: Function) => {
+    return () => {
+        dispatch({ type: "clear_error" })
     }
 }
 
@@ -128,4 +137,4 @@ const deleteMinistryGroup = (dispatch: Function) => {
     }
 }
 
-export const { Context, Provider } = createDataContext<IMinistryGroupState, IMinistryGroupContext>(ministryGroupReducer, {loadMinistryGroups, addMinistryGroup, editMinistryGroup, deleteMinistryGroup}, { isLoading: false})
+export const { Context, Provider } = createDataContext<IMinistryGroupState, IMinistryGroupContext>(ministryGroupReducer, {loadMinistryGroups, addMinistryGroup, editMinistryGroup, deleteMinistryGroup, clearError}, { isLoading: false})

@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, Input, Text } from '@rneui/themed';
+import { Text } from '@rneui/themed';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import ButtonC from '../../components/Button';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
@@ -11,9 +11,6 @@ const CongregationsTwoFactorScreen: React.FC = () => {
     const { state, verifyUser } = useContext(AuthContext)
 
     const settings = useContext(SettingsContext);
-    useEffect(() => {
-      settings.loadColor()
-    }, [settings.state.mainColor])
 
     return (
         <View style={styles.container}>

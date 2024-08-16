@@ -29,6 +29,7 @@ interface ITerritoryContext {
     turnOffLoading: Function,
     assignTerritory: Function,
     makeTerritoryFreeAgain: Function,
+    clearError: Function;
 }
 
 const TerritoryReducer = (state: ITerritoryState, action: { type: string, payload: any }) => {
@@ -36,7 +37,7 @@ const TerritoryReducer = (state: ITerritoryState, action: { type: string, payloa
         case 'turn_on_loading':
             return { ...state, isLoading: true, errMessage: '' }
         case 'turn_off_loading':
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false, errMessage: '' }
         case 'load_data':
             return { ...state, isLoading: false, territories: action.payload, errMessage: '' }
         case 'load_territory':
@@ -49,9 +50,17 @@ const TerritoryReducer = (state: ITerritoryState, action: { type: string, payloa
                 errMessage: ''
             }
         case 'add_error': 
-            return { ...state, errMessage: action.payload }
+            return { ...state, isLoading: false, errMessage: action.payload }
+        case 'clear_error':
+            return { ...state, errMessage: '' }
         default:
             return state;
+    }
+}
+
+const clearError = (dispatch: Function) => {
+    return () => {
+        dispatch({ type: "clear_error" })
     }
 }
 
@@ -254,4 +263,4 @@ const turnOffLoading = (dispatch: Function) => {
     }
 }
 
-export const { Context, Provider } = createDataContext<ITerritoryState, ITerritoryContext>(TerritoryReducer, {loadTerritories, loadTerritoryHistory, searchTerritory, loadAvailableTerritories, assignTerritory, makeTerritoryFreeAgain, addTerritory, editTerritory, deleteTerritory, turnOffLoading, turnOnLoading}, { isLoading: false})
+export const { Context, Provider } = createDataContext<ITerritoryState, ITerritoryContext>(TerritoryReducer, {loadTerritories, loadTerritoryHistory, searchTerritory, loadAvailableTerritories, assignTerritory, makeTerritoryFreeAgain, addTerritory, editTerritory, deleteTerritory, turnOffLoading, turnOnLoading, clearError}, { isLoading: false})

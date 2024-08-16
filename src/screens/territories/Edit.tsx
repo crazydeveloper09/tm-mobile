@@ -32,7 +32,7 @@ export interface ITerritoryForm {
 interface TerritoriesEditScreenProps {
     route: {
         params: {
-            id: string
+            territory: ITerritory
         }
     }
 }
@@ -52,41 +52,23 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
     const [kindItems, setKindItems] = useState([
         { label: "Tereny miejskie", value: "city" },
         { label: "Tereny wiejskie", value: "village" },
-        { label: "tereny handlowe", value: "market" },
+        { label: "Tereny handlowe", value: "market" },
     ]);
-    const {editTerritory, loadTerritoryHistory, state, turnOffLoading, turnOnLoading} = useContext(TerritoriesContext);
+    const {editTerritory, state} = useContext(TerritoriesContext);
     const settings = useContext(SettingsContext)
 
-
-    const loadTerritory = async (id: string) => {
-        turnOnLoading()
-        const token = await AsyncStorage.getItem('token')
-        territories.get<{territory: ITerritory}>(`/territories/${id}`, {
-            headers: {
-                'Authorization': `bearer ${token}`
-            }
-        })
-        .then((response) => {
-            setNumber(response.data.territory?.number!.toString()!)
-            setEndNumber(response.data.territory.endNumber?.toString()!)
-            setBeginNumber(response.data.territory.beginNumber?.toString()!)
-            setCity(response.data.territory.city!)
-            setStreet(response.data.territory.street!);
-            setKindValue(response.data.territory.kind!);
-            setLocation(response.data.territory.location!);
-            setDescription(response.data.territory.description!)
-            
-            setPhysicalCard(response.data.territory.isPhysicalCard)
-            
-            turnOffLoading()
-        })
-        .catch((err) => console.log(err))
-    }
     useEffect(() => {
-        setTerritoryID(route.params.id)
-        loadTerritory(territoryID);
-        settings.loadColor()
-    }, [route.params.id, territoryID])
+        setNumber(route.params.territory?.number!.toString()!)
+            setEndNumber(route.params.territory.endNumber?.toString()!)
+            setBeginNumber(route.params.territory.beginNumber?.toString()!)
+            setCity(route.params.territory.city!)
+            setStreet(route.params.territory.street!);
+            setKindValue(route.params.territory.kind!);
+            setLocation(route.params.territory.location!);
+            setDescription(route.params.territory.description!)
+            
+            setPhysicalCard(route.params.territory.isPhysicalCard)
+    }, [route.params.territory])
 
     if(state.isLoading){
         return <Loading />

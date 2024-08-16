@@ -13,11 +13,11 @@ import MyInput from "../../components/MyInput";
 const PreachersSearchScreen: React.FC = () => {
   const [param, setParam] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const { searchPreacher, state } = useContext(PreachersContext);
+  const { searchPreacher, state, clearError } = useContext(PreachersContext);
 
   
   if(state.errMessage){
-    Alert.alert("Server error", state.errMessage)
+    Alert.alert("Server error", state.errMessage, [{ text: "OK", onPress: () => clearError() }])
   }
 
   return (

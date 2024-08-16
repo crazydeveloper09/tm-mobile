@@ -9,11 +9,7 @@ const Stack = createStackNavigator()
 
 const AuthNavigator = () => {
     
-    const {state, loadColor} = useContext(SettingsContext);
-    useEffect(() => {
-      loadColor()
-      StatusBar.setBackgroundColor(state.mainColor)
-    }, [state.mainColor])
+    const {state} = useContext(SettingsContext);
 
     return (
         <Stack.Navigator screenOptions={{

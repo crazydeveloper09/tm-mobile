@@ -12,10 +12,7 @@ interface ButtonProps {
 
 const ButtonC: React.FC<ButtonProps> = ({ title, onPress, isLoading, color }) => {
 
-    const {state, loadColor} = useContext(SettingsContext);
-    useEffect(() => {
-      loadColor()
-    }, [state.mainColor])
+    const {state} = useContext(SettingsContext);
 
     return <Button 
             mode="contained"

@@ -1,10 +1,8 @@
 import { NavigationProp } from '@react-navigation/native';
-import React, { useEffect, useContext, useState } from 'react';
-import { View, StyleSheet, Alert} from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, StyleSheet} from 'react-native';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import ButtonC from '../../components/Button';
-import { Input } from '@rneui/themed';
-import Loading from '../../components/Loading';
 import MyInput from '../../components/MyInput';
 
 interface PreachersEditScreenProps {
@@ -19,22 +17,8 @@ interface PreachersEditScreenProps {
 
 const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, route }) => {
     const { id, preacherName } = route.params;
-    const { state, loadPreacherInfo, editPreacher} = useContext(PreachersContext)
+    const { editPreacher, state } = useContext(PreachersContext)
     const [name, setName] = useState(preacherName)
-
-    useEffect(() => {
-        loadPreacherInfo(id)
-    }, [id])
-
-    if(state.isLoading){
-        return <Loading />
-    }
-
-    
-    if(state.errMessage){
-        Alert.alert("Server error", state.errMessage)
-    }
-
 
     return (
         <View style={styles.container}>
@@ -44,7 +28,7 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
                 value={name}
                 onChangeText={setName}
             />
-            <ButtonC title="Edytuj głosiciela" onPress={() => editPreacher(name, id)} />
+            <ButtonC title="Edytuj głosiciela" onPress={() => editPreacher(name, id)} isLoading={state.isLoading} />
         </View>
     )
 }

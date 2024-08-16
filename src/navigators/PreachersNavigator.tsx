@@ -13,10 +13,7 @@ const Stack = createStackNavigator()
 
 const PreachersNavigator = () => {
 
-    const {state, loadColor} = useContext(SettingsContext);
-    useEffect(() => {
-      StatusBar.setBackgroundColor(state.mainColor)
-    }, [state.mainColor])
+    const {state} = useContext(SettingsContext);
     
     return (
         <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: state?.mainColor }, headerTitleStyle: headerStyles.title, headerTintColor: 'white'}}>

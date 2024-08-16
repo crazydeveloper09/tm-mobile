@@ -7,11 +7,11 @@ import MyInput from '../../components/MyInput';
 
 const PreachersNewScreen: React.FC = () => {
     const [name, setName] = useState('');
-    const {addPreacher, state} = useContext(PreachersContext)
+    const {addPreacher, state, clearError} = useContext(PreachersContext)
 
     
     if(state.errMessage){
-        Alert.alert("Server error", state.errMessage)
+        Alert.alert("Server error", state.errMessage, [{ text: "OK", onPress: () => clearError() }])
     }
 
     return (

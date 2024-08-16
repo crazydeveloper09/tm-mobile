@@ -23,7 +23,7 @@ const PreacherTerritoriesScreen: React.FC<PreacherTerritoriesScreenProps> = ({ n
     const [preacherID, setPreacherID] = useState(route.params.preacherID);
     const [page, setPage] = useState(1)
     const [limit, setLimit] = useState(40)
-    const { state, searchTerritory } = useContext(TerritoriesContext);
+    const { state, searchTerritory, clearError } = useContext(TerritoriesContext);
 
     const onShare = async (territories: ITerritory[]) => {
         console.log(territories.length)
@@ -56,7 +56,7 @@ const PreacherTerritoriesScreen: React.FC<PreacherTerritoriesScreenProps> = ({ n
 
     
     if(state.errMessage){
-      Alert.alert("Server error", state.errMessage)
+      Alert.alert("Server error", state.errMessage, [{ text: "OK", onPress: () => clearError() }])
     }
 
     navigation.setOptions({

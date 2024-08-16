@@ -68,7 +68,10 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
     }
 
     if(preachers.state.errMessage || ministryGroup.state.errMessage){
-        Alert.alert("Server error", preachers.state.errMessage || ministryGroup.state.errMessage)
+        Alert.alert("Server error", preachers.state.errMessage || ministryGroup.state.errMessage, [{ text: 'OK', onPress: () => {
+            preachers.clearError()
+            ministryGroup.clearError()
+        } }])
     }
 
     return (

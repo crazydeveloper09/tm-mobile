@@ -6,40 +6,35 @@ import Loading from "../../components/Loading";
 import ButtonC from "../../components/Button";
 import { Context as TerritoriesContext } from "../../contexts/TerritoriesContext";
 import Territory from "../../components/Territory";
+import { ITerritory } from "../../contexts/interfaces";
 
 interface TerritoryDeleteConfirmScreenProps {
     navigation: NavigationProp<any>;
     route: {
         params: {
-            id: string
+            territory: ITerritory
         }
     }
 }
 
 const TerritoryDeleteConfirmScreen: React.FC<TerritoryDeleteConfirmScreenProps> = ({ navigation, route }) => {
-    const [TerritoryID, setTerritoryID] = useState(route.params.id)
-    const {state, loadTerritoryHistory, deleteTerritory} = useContext(TerritoriesContext)
-
-    useEffect(() => {
-        loadTerritoryHistory(TerritoryID)
-    }, [TerritoryID])
-
-    if(state.isLoading) {
-        return <Loading />
-    }
-
-    
-    if(state.errMessage){
-        Alert.alert("Server error", state.errMessage)
-    }
+    const {state, deleteTerritory} = useContext(TerritoriesContext)
 
     return (
         <View style={styles.container}>
             <FontAwesome name='exclamation-circle' size={75} color={'red'} />
-            <Text style={styles.text}>Czy na pewno chcesz usunąć teren nr {state.territory?.number}?</Text>
-            <View>
-                <ButtonC title="Tak" onPress={() => deleteTerritory(TerritoryID)} />
-                <ButtonC title="Nie" onPress={() => navigation.navigate('TerritoriesList')} />
+            <Text style={styles.text}>Czy na pewno chcesz usunąć teren nr {route.params.territory.number}?</Text>
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+                <View style={{ width: '48%' }}>
+                    <ButtonC title="Tak" onPress={() => deleteTerritory(route.params.territory._id)} isLoading={state.isLoading} color="#AD371F" />
+                </View>
+                <View style={{ width: '48%' }}>
+                    <ButtonC title="Nie" onPress={() => navigation.navigate('Tereny', {
+                screen: "TerritoryHistory",
+                params: { id: route.params.territory._id },
+              } as never)} />
+                </View>
+            
             </View>
             
         </View>

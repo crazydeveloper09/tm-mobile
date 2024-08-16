@@ -18,7 +18,7 @@ interface TerritoriesIndexScreenProps {
 
 const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigation }) => {
 
-    const { state, loadTerritories } = useContext(TerritoryContext)
+    const { state, loadTerritories, clearError } = useContext(TerritoryContext)
     const congregationContext = useContext(AuthContext)
     const preachersContext = useContext(PreachersContext)
     const [page, setPage] = useState(1)
@@ -26,7 +26,6 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
 
 
     useEffect(() => {
-        
         loadTerritories(page, limit);
         navigation.setOptions({
             headerRight: () => <View style={styles.headerRight}>
@@ -51,12 +50,8 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
     }
 
     if(state.errMessage){
-        Alert.alert("Server error", state.errMessage)
+        Alert.alert("Server error", state.errMessage, [{ text: "OK", onPress: () => clearError() }])
     }
-
-    navigation.setOptions({
-        headerTitle: `Tereny: ${state.territories?.totalDocs}`,
-    })
 
     return (
         <ScrollView style={styles.container}>
@@ -72,6 +67,7 @@ const TerritoriesIndexScreen: React.FC<TerritoriesIndexScreenProps> = ({ navigat
                 { state.territories?.docs?.map((item) => item.location && <Marker coordinate={{longitude: item.longitude, latitude: item.latitude}} title={`Teren nr ${item.number} - ${item.kind}`} key={item._id}/>)}
                 
             </MapView>}
+            <Text style={styles.resultsText}>Liczba wszystkich terenów: {state.territories?.totalDocs}</Text>
             <FlatList 
                 keyExtractor={((territory) => territory._id)}
                 data={state.territories?.docs}
@@ -101,7 +97,13 @@ const styles = StyleSheet.create({
         height: 200,
         width: '100%',
         marginBottom: 20
-    }
+    },
+    resultsText: {
+        fontSize: 21,
+        textAlign: "center",
+        fontFamily: "MontserratRegular",
+        marginVertical: 20
+    },
 })
 
 export default TerritoriesIndexScreen;

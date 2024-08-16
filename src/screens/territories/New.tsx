@@ -45,7 +45,7 @@ const TerritoriesNewScreen: React.FC = () => {
     const [kindItems, setKindItems] = useState([
         { label: "Tereny miejskie", value: "city" },
         { label: "Tereny wiejskie", value: "village" },
-        { label: "tereny handlowe", value: "market" },
+        { label: "Tereny handlowe", value: "market" },
     ]);
     const [preacherValue, setPreacherValue] = useState("");
     const [preacherOpen, setPreacherOpen] = useState(false);
@@ -56,7 +56,7 @@ const TerritoriesNewScreen: React.FC = () => {
     const [lastWorked, setLastWorked] = useState(new Date())
     const [takenOpen, setTakenOpen] = useState(false)
     const [taken, setTaken] = useState(new Date())
-    const {addTerritory, state} = useContext(TerritoriesContext);
+    const {addTerritory, state, clearError} = useContext(TerritoriesContext);
     const settings = useContext(SettingsContext)
 
     const loadPreachers = async () => {
@@ -82,7 +82,7 @@ const TerritoriesNewScreen: React.FC = () => {
 
     
     if(state.errMessage){
-        Alert.alert("Server error", state.errMessage)
+        Alert.alert("Server error", state.errMessage, [{ text: "OK", onPress: () => clearError() }])
     }    
 
     return (

@@ -13,7 +13,7 @@ interface CongregationsInfoScreenProps {
 }
 
 const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navigation }) => {
-    const { signOut, state, loadCongregationInfo } = useContext(AuthContext);
+    const { signOut, state, loadCongregationInfo, clearError } = useContext(AuthContext);
 
     useEffect(() => {
         loadCongregationInfo();
@@ -43,7 +43,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
     }
 
     if(state.errMessage){
-        Alert.alert("Server error", state.errMessage)
+        Alert.alert("Server error", state.errMessage, [{ text: "OK", onPress: () => clearError() }])
     }
 
     navigation.setOptions({

@@ -13,10 +13,7 @@ interface PreacherProps {
 const Preacher: React.FC<PreacherProps> = ({ preacher }) => {
     const navigation = useNavigation();
 
-    const {state, loadColor} = useContext(SettingsContext);
-    useEffect(() => {
-        loadColor()
-    }, [state.mainColor])
+    const {state} = useContext(SettingsContext);
 
     return (
         <View style={styles.container}>
@@ -26,7 +23,7 @@ const Preacher: React.FC<PreacherProps> = ({ preacher }) => {
                     <TouchableOpacity onPress={() => navigation.navigate('EditPreacher', {id: preacher._id, preacherName: preacher.name} as unknown as never)}>
                         <MaterialCommunityIcons name='pencil' color={state.mainColor} size={26} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('DeleteConfirmPreacher', {id: preacher._id} as unknown as never)}>
+                    <TouchableOpacity onPress={() => navigation.navigate('DeleteConfirmPreacher', {id: preacher._id, name: preacher.name} as unknown as never)}>
                         <MaterialCommunityIcons name='trash-can' color={state.mainColor} size={26} />
                     </TouchableOpacity>
                 </View>

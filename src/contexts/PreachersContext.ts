@@ -23,7 +23,8 @@ interface IPreacherContext {
     addPreacher: Function,
     editPreacher: Function,
     deletePreacher: Function,
-    searchPreacher: Function
+    searchPreacher: Function;
+    clearError: Function;
 }
 
 const preacherReducer = (state: IPreacherState, action: { type: string, payload: any }) => {
@@ -31,7 +32,7 @@ const preacherReducer = (state: IPreacherState, action: { type: string, payload:
         case 'turn_on_loading':
             return { ...state, isLoading: true, errMessage: '' }
         case 'turn_off_loading':
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false, errMessage: '' }
         case 'load_data':
             return { ...state, isLoading: false, preachers: action.payload, errMessage: '' }
         case 'load_all':
@@ -42,9 +43,17 @@ const preacherReducer = (state: IPreacherState, action: { type: string, payload:
             return { ...state, isLoading: false, searchResults: action.payload, errMessage: '' }
         }
         case 'add_error': 
-            return { ...state, errMessage: action.payload }
+            return { ...state, isLoading: false, errMessage: action.payload }
+        case 'clear_error':
+            return { ...state, errMessage: '' }
         default:
             return state;
+    }
+}
+
+const clearError = (dispatch: Function) => {
+    return () => {
+        dispatch({ type: "clear_error" })
     }
 }
 
@@ -197,4 +206,4 @@ const deletePreacher = (dispatch: Function) => {
     }
 }
 
-export const { Context, Provider } = createDataContext<IPreacherState, IPreacherContext>(preacherReducer, {loadPreachers, loadAllPreachers, searchPreacher, loadPreacherInfo, addPreacher, editPreacher, deletePreacher}, { isLoading: false})
+export const { Context, Provider } = createDataContext<IPreacherState, IPreacherContext>(preacherReducer, {loadPreachers, loadAllPreachers, searchPreacher, loadPreacherInfo, addPreacher, editPreacher, deletePreacher, clearError}, { isLoading: false})

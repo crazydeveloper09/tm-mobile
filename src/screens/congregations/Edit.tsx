@@ -7,7 +7,7 @@ import ButtonC from "../../components/Button";
 import MyInput from "../../components/MyInput";
 
 const CongregationEditScreen: React.FC = () => {
-    const { editCongregation, state, loadCongregationInfo } = useContext(AuthContext);
+    const { editCongregation, state, loadCongregationInfo, clearError } = useContext(AuthContext);
     const [username, setUsername] = useState('')
     const [ministryOverseerEmail, setMinistryOverseerEmail] = useState('')
     const [territoryServantEmail, setTerritoryServantEmail] = useState('')
@@ -26,7 +26,7 @@ const CongregationEditScreen: React.FC = () => {
     }
 
     if(state.errMessage){
-        Alert.alert("Server error", state.errMessage)
+        Alert.alert("Server error", state.errMessage, [{ text: "OK", onPress: () => clearError() }])
     }
     return (
         <View style={styles.container}>

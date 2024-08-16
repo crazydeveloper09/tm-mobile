@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 
@@ -10,10 +10,7 @@ interface PaginationProps {
 
 const Pagination: React.FC<PaginationProps> = ({ activePage, totalPages, updateState }) => {
 
-  const {state, loadColor} = useContext(SettingsContext);
-  useEffect(() => {
-    loadColor()
-  }, [state.mainColor])
+  const {state} = useContext(SettingsContext);
 
   let pages = [];
   for (let i = 1; i <= totalPages; i++) {

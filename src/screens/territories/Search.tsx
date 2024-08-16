@@ -38,7 +38,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
   const [kindItems, setKindItems] = useState([
     { label: "Tereny miejskie", value: "city" },
     { label: "Tereny wiejskie", value: "village" },
-    { label: "tereny handlowe", value: "market" },
+    { label: "Tereny handlowe", value: "market" },
   ]);
   const [typeOpen, setTypeOpen] = useState(false);
   const [typeValue, setTypeValue] = useState(route.params.type);
@@ -50,7 +50,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
 
-  const { searchTerritory, state } = useContext(TerritoriesContext);
+  const { searchTerritory, state, clearError } = useContext(TerritoriesContext);
   const preacherContext = useContext(PreachersContext)
 
   useEffect(() => {
@@ -58,14 +58,14 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
   }, [page])
 
   if(state.errMessage){
-    Alert.alert("Server error", state.errMessage)
+    Alert.alert("Server error", state.errMessage, [{ text: "OK", onPress: () => clearError() }])
   }
 
   return (
     <ScrollView style={styles.container}>
-      <Label text="Wybierz typ wyszukiwania" />
+      <Label text="Wybierz rodzaj wyszukiwania" />
       <DropDownPicker
-        placeholder='Wybierz rodzaj wyszukiwania'
+        placeholder='Rodzaj wyszukiwania'
         open={mainOpen}
         value={mainValue}
         items={mainItems}
@@ -130,7 +130,7 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
       )}
 
         { !mainOpen && !kindOpen && <>
-          <Label text="Wybierz rodzaj wyszukiwania" />
+          <Label text="Wybierz typ terenów" />
           <DropDownPicker
             open={typeOpen}
             value={typeValue}

@@ -11,12 +11,11 @@ import { columnsNum } from "../../helpers/devices";
 
 const CongregationActivityScreen: React.FC = () => {
     const [applicationType, setApplicationType] = useState('Aplikacja mobilna');
-    const {state, loadCongregationActivities} = useContext(CongregationContext);
+    const {state, loadCongregationActivities, clearError} = useContext(CongregationContext);
     const settingsContext = useContext(SettingsContext)
 
     useEffect(() => {
         loadCongregationActivities(state.congregation?._id);
-        settingsContext.loadColor()
     }, [state.congregation?._id])
 
     if(state.isLoading){
@@ -24,7 +23,7 @@ const CongregationActivityScreen: React.FC = () => {
     }
 
     if(state.errMessage){
-        Alert.alert("Server error", state.errMessage)
+        Alert.alert("Server error", state.errMessage, [{ text: "OK", onPress: () => clearError() }])
     }
 
     const groupedActivities = state.activities && groupBy<IActivity>(state.activities, 'applicationType')

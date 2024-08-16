@@ -14,10 +14,7 @@ const Stack = createStackNavigator()
 
 const TerritoriesNavigator = () => {
 
-    const {state, loadColor} = useContext(SettingsContext);
-    useEffect(() => {
-      StatusBar.setBackgroundColor(state.mainColor)
-    }, [state.mainColor])
+    const {state} = useContext(SettingsContext);
 
     return (
         <Stack.Navigator initialRouteName='Territories List' screenOptions={{

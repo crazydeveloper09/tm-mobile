@@ -3,11 +3,12 @@ import { IPreacher, ITerritory } from "../contexts/interfaces";
 import { Context as TerritoriesContext } from "../contexts/TerritoriesContext";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 import { ListItem, Switch } from "@rneui/base";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { StyleSheet, Text } from "react-native";
 import ButtonC from "./Button";
 import DropDownPicker from "react-native-dropdown-picker";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import Label from "./Label";
+import ChooseDate from "./ChooseDate";
+import { defaultStyles } from "../screens/defaultStyles";
+import { View } from "react-native";
 
 interface TerritoryAssignmentProps {
     territory: ITerritory;
@@ -34,7 +35,6 @@ const TerritoryAssignment:React.FC<TerritoryAssignmentProps> = ({ territory, pre
             return { label: preacher.name, value: preacher._id } as never
         })
         setPreacherItems(selectItems!)
-        settings.loadColor()
       }, [])
  
     return territory?.preacher ? (
@@ -56,33 +56,24 @@ const TerritoryAssignment:React.FC<TerritoryAssignmentProps> = ({ territory, pre
           }}
         >
 
-            <TouchableOpacity onPress={() => setLastWorkedOpen(true)} style={{...styles.inputContainer, padding: 15, marginVertical: 15}}>
-                <Text>
-                    Ostatnio opracowane - aktualna data: {lastWorked.toLocaleDateString()}
-                </Text> 
-            </TouchableOpacity>
-            <DateTimePickerModal
-                isVisible={lastWorkedOpen}
-                 date={lastWorked} 
-                 onConfirm={(date) => {
-                     setLastWorked(date)
-                     setLastWorkedOpen(false)
-                     }
-                 } 
-                 onCancel={() => setLastWorkedOpen(false)}
-                 isDarkModeEnabled={false}
-                display='inline'
-                locale='pl'
-
-            />
-            <ButtonC 
-              title="Zdaj teren" 
-              isLoading={state.isLoading} 
-              onPress={() => {
-                makeTerritoryFreeAgain(territory._id, lastWorked)
-                refresh && refresh()
-              }} 
-            />
+              <ChooseDate 
+                date={lastWorked}
+                dateOpen={lastWorkedOpen}
+                label="Ostatnio opracowane"
+                setDate={setLastWorked}
+                setDateOpen={setLastWorkedOpen}
+              />
+              <View style={{ marginTop: 15 }}>
+                <ButtonC 
+                  title="Zdaj teren" 
+                  isLoading={state.isLoading} 
+                  onPress={() => {
+                    makeTerritoryFreeAgain(territory._id, lastWorked)
+                    refresh && refresh()
+                  }} 
+                />
+              </View>
+          
         </ListItem.Accordion>
       ) : (
         <ListItem.Accordion
@@ -111,6 +102,8 @@ const TerritoryAssignment:React.FC<TerritoryAssignmentProps> = ({ territory, pre
                 setValue={setPreacherValue}
                 searchable={true}
                 listMode="MODAL"
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 modalTitle={`Przydzielenie głosiciela do terenu nr ${territory?.number}`}
                 modalTitleStyle={{ color: 'black' }}
                 containerStyle={{
@@ -120,9 +113,7 @@ const TerritoryAssignment:React.FC<TerritoryAssignmentProps> = ({ territory, pre
                 }}
             />
 
-            <Text style={styles.labelStyle}>
-              Własna data przydzielenia
-            </Text>
+            <Label text="Własna data przydzielenia" />
 
             <Switch 
                 value={isChosenDate}
@@ -133,25 +124,14 @@ const TerritoryAssignment:React.FC<TerritoryAssignmentProps> = ({ territory, pre
             />
 
             {isChosenDate && <>
-              <TouchableOpacity onPress={() => setTakenOpen(true)} style={{...styles.inputContainer, padding: 15, marginVertical: 15}}>
-                <Text>
-                    Pobrany - aktualna data: {taken.toLocaleDateString()}
-                </Text> 
-            </TouchableOpacity>
-            <DateTimePickerModal
-                isVisible={takenOpen}
-                 date={taken} 
-                 onConfirm={(date) => {
-                     setTaken(date)
-                     setTakenOpen(false)
-                     }
-                 } 
-                 onCancel={() => setTakenOpen(false)}
-                 isDarkModeEnabled={false}
-                display='inline'
-                locale='pl'
-
-            />
+              <ChooseDate 
+                date={taken}
+                dateOpen={takenOpen}
+                label="Pobrany"
+                setDate={setTaken}
+                setDateOpen={setTakenOpen}
+              />
+              
             </>}
             {preacherValue !== "" && <ButtonC 
                                           title="Przydziel teren" 
@@ -164,20 +144,5 @@ const TerritoryAssignment:React.FC<TerritoryAssignmentProps> = ({ territory, pre
         </ListItem.Accordion>
       )
 }
-
-const styles = StyleSheet.create({
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-      fontFamily: 'MontserratSemiBold',
-      marginBottom: 6,
-      color: 'black'
-  },
-})
 
 export default TerritoryAssignment;
