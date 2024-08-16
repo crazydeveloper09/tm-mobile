@@ -8,21 +8,24 @@ import SettingsNavigator from "./SettingsNavigator";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import HomeNavigator from "./HomeNavigator";
 import { PaperProvider, useTheme } from "react-native-paper";
+import { StatusBar } from "react-native";
 
 const Tab = createMaterialBottomTabNavigator()
 
 const MainNavigator = () => {
     const [secondaryContainerColor, setSecondaryContainerColor] = useState<string>('#28a74540');
-    const {state} = useContext(SettingsContext);
+    const {state, loadColor} = useContext(SettingsContext);
   
     useEffect(() => {
+      loadColor()
+      StatusBar.setBackgroundColor(state.mainColor);
       setSecondaryContainerColor(`${state.mainColor}50`)
-    }, [])
+    }, [state.mainColor])
     const theme = useTheme();
     theme.colors.secondaryContainer = secondaryContainerColor;
   
     return (
-      <PaperProvider>
+      <PaperProvider theme={theme}>
         <Tab.Navigator barStyle={{ backgroundColor: `${state.mainColor}15` }}>
             <Tab.Screen 
               name="Home"
