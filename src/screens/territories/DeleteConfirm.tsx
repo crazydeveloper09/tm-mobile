@@ -7,6 +7,8 @@ import ButtonC from "../../components/Button";
 import { Context as TerritoriesContext } from "../../contexts/TerritoriesContext";
 import Territory from "../../components/Territory";
 import { ITerritory } from "../../contexts/interfaces";
+import useLocaLization from "../../hooks/useLocalization";
+import { mainTranslations } from "../../../localization";
 
 interface TerritoryDeleteConfirmScreenProps {
     navigation: NavigationProp<any>;
@@ -19,6 +21,7 @@ interface TerritoryDeleteConfirmScreenProps {
 
 const TerritoryDeleteConfirmScreen: React.FC<TerritoryDeleteConfirmScreenProps> = ({ navigation, route }) => {
     const {state, deleteTerritory} = useContext(TerritoriesContext)
+    const mainTranslate = useLocaLization(mainTranslations)
 
     return (
         <View style={styles.container}>
@@ -26,10 +29,10 @@ const TerritoryDeleteConfirmScreen: React.FC<TerritoryDeleteConfirmScreenProps> 
             <Text style={styles.text}>Czy na pewno chcesz usunąć teren nr {route.params.territory.number}?</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
-                    <ButtonC title="Tak" onPress={() => deleteTerritory(route.params.territory._id)} isLoading={state.isLoading} color="#AD371F" />
+                    <ButtonC title={mainTranslate.t("yes")} onPress={() => deleteTerritory(route.params.territory._id)} isLoading={state.isLoading} color="#AD371F" />
                 </View>
                 <View style={{ width: '48%' }}>
-                    <ButtonC title="Nie" onPress={() => navigation.navigate('Tereny', {
+                    <ButtonC title={mainTranslate.t("no")} onPress={() => navigation.navigate('Tereny', {
                 screen: "TerritoryHistory",
                 params: { id: route.params.territory._id },
               } as never)} />

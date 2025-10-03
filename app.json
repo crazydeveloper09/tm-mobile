@@ -2,7 +2,7 @@
   "expo": {
     "name": "Territory Manager",
     "slug": "territorymanager_mobile",
-    "version": "3.1.1",
+    "version": "4.0.0",
     "owner": "miszki",
     "orientation": "default",
     "icon": "./assets/tm_icon.png",
@@ -27,7 +27,7 @@
         "backgroundColor": "#28a745"
       },
       "package": "com.territorymanager_mobile.territorymanager_mobile",
-      "versionCode": 33,
+      "versionCode": 34,
       "jsEngine": "hermes",
       "permissions": [
         "android.permission.USE_BIOMETRIC",
@@ -57,7 +57,8 @@
           "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
         }
       ],
-      "expo-font"
+      "expo-font",
+      "expo-localization"
     ],
     "updates": {
       "url": "https://u.expo.dev/0c1566a8-d70c-4d6b-bec3-43e399b735d9"

@@ -5,6 +5,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import ButtonC from "../../components/Button";
 import { Context as TerritoriesContext } from "../../contexts/TerritoriesContext";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import Territory from "../../components/Territory";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import Loading from "../../components/Loading";
@@ -12,7 +13,7 @@ import Pagination from "../../components/Pagination";
 import { columnsNum } from "../../helpers/devices";
 import { NavigationProp } from "@react-navigation/native";
 import MyInput from "../../components/MyInput";
-import { defaultStyles } from "../defaultStyles";
+import { defaultDropdownStyles } from "../defaultStyles";
 import Label from "../../components/Label";
 
 interface TerritoriesSearchScreenProps {
@@ -52,6 +53,8 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
 
   const { searchTerritory, state, clearError } = useContext(TerritoriesContext);
   const preacherContext = useContext(PreachersContext)
+  const settingsContext = useContext(SettingsContext);
+  const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
   useEffect(() => {
     searchTerritory(mainValue, paramValue, page, limit, typeValue)
@@ -72,8 +75,8 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
         setOpen={setMainOpen}
         setValue={setMainValue}
         setItems={setMainItems}
-        labelStyle={defaultStyles.dropdown}
-        placeholderStyle={defaultStyles.dropdown}
+        labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+        placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
         flatListProps={{
           scrollEnabled: false,
         }}
@@ -120,8 +123,8 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
             items={kindItems}
             setOpen={setKindOpen}
             setValue={setParamValue}
-            labelStyle={defaultStyles.dropdown}
-            placeholderStyle={defaultStyles.dropdown}
+            labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+            placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
             flatListProps={{ scrollEnabled: false }}
             containerStyle={{
                 marginVertical: 15
@@ -137,8 +140,8 @@ const TerritoriesSearchScreen: React.FC<TerritoriesSearchScreenProps> = ({ navig
             items={typeItems}
             setOpen={setTypeOpen}
             setValue={setTypeValue}
-            labelStyle={defaultStyles.dropdown}
-            placeholderStyle={defaultStyles.dropdown}
+            labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+            placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
             flatListProps={{ scrollEnabled: false }}
             containerStyle={{
                 marginBottom: 15

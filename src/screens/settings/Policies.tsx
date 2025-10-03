@@ -5,7 +5,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import numeric from '@jsamr/counter-style/presets/decimal';
 import point from '@jsamr/counter-style/presets/circle';
 import square from '@jsamr/counter-style/presets/square';
-import { Context as SettingsContext } from "../contexts/SettingsContext";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 const PoliciesScreen: React.FC = () => {
     const {state} = useContext(SettingsContext)
@@ -55,6 +55,45 @@ const PoliciesScreen: React.FC = () => {
                         </Text>
                     </MarkedList>
                 </View>
+                <View style={{ flexShrink: 1 }}>
+                    <Text style={styles.listHeader}>
+                        Uzasadnienie zgodności z RODO – prezentacja danych adresowych
+                    </Text>
+                    <MarkedList counterRenderer={point}>
+                        <Text style={styles.listElement}>
+                        W aplikacji prezentowane są jedynie nazwy miejscowości, nazwy ulic oraz
+                        numery budynków lub ich zakresy. Informacje te pochodzą z publicznych
+                        rejestrów adresowych, w szczególności z krajowego rejestru TERYT
+                        prowadzonego przez Główny Urząd Geodezji i Kartografii, oraz z innych
+                        powszechnie dostępnych źródeł.
+                        </Text>
+                        <Text style={styles.listElement}>
+                        Zgodnie z art. 4 pkt 1 RODO dane osobowe to informacje o zidentyfikowanej
+                        lub możliwej do zidentyfikowania osobie fizycznej. Prezentowane dane
+                        adresowe nie pozwalają na bezpośrednią ani pośrednią identyfikację osoby
+                        fizycznej, ponieważ nie są zestawiane z innymi danymi pozwalającymi
+                        ustalić jej tożsamość.
+                        </Text>
+                        <Text style={styles.listElement}>
+                        Zakresy adresowe (np. „Chopina 5–75”) obejmują wiele lokali, co uniemożliwia
+                        powiązanie ich z konkretnym lokatorem lub właścicielem. Brak jest w aplikacji
+                        informacji o imionach, nazwiskach, numerach telefonów lub innych danych
+                        identyfikujących.
+                        </Text>
+                        <Text style={styles.listElement}>
+                        Urząd Ochrony Danych Osobowych wskazuje, że sam adres nieruchomości (ulica i
+                        numer budynku) nie jest co do zasady daną osobową, o ile nie pozwala zidentyfikować
+                        konkretnej osoby. Identyfikacja jest możliwa dopiero w połączeniu z dodatkowymi
+                        informacjami, których aplikacja nie gromadzi.
+                        </Text>
+                        <Text style={styles.listElement}>
+                        Mając powyższe na uwadze, prezentowane dane adresowe nie spełniają definicji danych
+                        osobowych określonej w art. 4 pkt 1 RODO i ich przetwarzanie nie podlega reżimowi RODO.
+                        </Text>
+                    </MarkedList>
+                    
+                </View>
+
                 <View style={{ flexShrink: 1 }}>
                     <Text style={styles.listHeader}>Hosting</Text> 
                     <MarkedList counterRenderer={point}>

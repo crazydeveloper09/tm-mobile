@@ -4,10 +4,13 @@ import { View, Text, StyleSheet, Alert } from 'react-native';
 import ButtonC from '../../components/Button';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import MyInput from '../../components/MyInput';
+import useLocaLization from '../../hooks/useLocalization';
+import { preachersTranslations } from './translations';
 
 const PreachersNewScreen: React.FC = () => {
     const [name, setName] = useState('');
-    const {addPreacher, state, clearError} = useContext(PreachersContext)
+    const {addPreacher, state, clearError} = useContext(PreachersContext);
+    const preacherTranslate = useLocaLization(preachersTranslations)
 
     
     if(state.errMessage){
@@ -17,12 +20,12 @@ const PreachersNewScreen: React.FC = () => {
     return (
         <View style={styles.container}>
             <MyInput 
-                label="Imię i nazwisko głosiciela"
-                placeholder='Wpisz imię i nazwisko'
+                label={preacherTranslate.t("nameLabel")}
+                placeholder={preacherTranslate.t("namePlaceholder")}
                 value={name}
                 onChangeText={setName}
             />
-            <ButtonC title="Dodaj głosiciela" isLoading={state.isLoading} onPress={() => addPreacher(name)} />
+            <ButtonC title={preacherTranslate.t("addButtonText")} isLoading={state.isLoading} onPress={() => addPreacher(name)} />
         </View>
     )
 }

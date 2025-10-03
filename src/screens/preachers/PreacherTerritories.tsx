@@ -9,6 +9,8 @@ import { ITerritory } from "../../contexts/interfaces";
 import { NavigationProp } from "@react-navigation/native";
 import { columnsNum } from "../../helpers/devices";
 import { countDaysFromNow } from "../../helpers/dates";
+import useLocaLization from "../../hooks/useLocalization";
+import { preachersTranslations } from "./translations";
 
 interface PreacherTerritoriesScreenProps {
     navigation: NavigationProp<any>
@@ -24,13 +26,14 @@ const PreacherTerritoriesScreen: React.FC<PreacherTerritoriesScreenProps> = ({ n
     const [page, setPage] = useState(1)
     const [limit, setLimit] = useState(40)
     const { state, searchTerritory, clearError } = useContext(TerritoriesContext);
+    const preacherTranslate = useLocaLization(preachersTranslations);
 
     const onShare = async (territories: ITerritory[]) => {
         console.log(territories.length)
+        const territoriesMap = territories.map((territory) => `• Teren nr ${territory.number} - ${territory.city}, ${territory?.street} ${territory?.beginNumber ? territory?.beginNumber : ''} ${territory.endNumber ? '- ' + territory?.endNumber: ''} ${territory.description || territory?.description !== ''  ? '(' + territory?.description + ')' : ''} ${countDaysFromNow(territory.taken) >= 120 ? '(do oddania)' : ''} \n`);
         try {
           const result = await Share.share({
-            message:
-                `Witaj \n Twoje tereny to: \n ${territories.map((territory) => `• Teren nr ${territory.number} - ${territory.city}, ${territory?.street} ${territory?.beginNumber ? territory?.beginNumber : ''} ${territory.endNumber ? '- ' + territory?.endNumber: ''} ${territory.description || territory?.description !== ''  ? '(' + territory?.description + ')' : ''} ${countDaysFromNow(territory.taken) >= 120 ? '(do oddania)' : ''} \n`)}`,
+            message: preacherTranslate.t("territoriesReminder", { territories: territoriesMap })!,
           });
           if (result.action === Share.sharedAction) {
             if (result.activityType) {
@@ -72,7 +75,7 @@ const PreacherTerritoriesScreen: React.FC<PreacherTerritoriesScreenProps> = ({ n
             {state.territories?.docs?.length === 0 ? (
                 <View style={styles.noParamContainer}>
                     <Entypo name="emoji-sad" size={45} />
-                <Text style={styles.noParamText}>Niestety, dany głosiciel nie ma żadnych terenów</Text>
+                <Text style={styles.noParamText}>{preacherTranslate.t("noPreacherTerritory")}</Text>
                 </View>
             ) : (
                 <View style={styles.resultsContainer}>

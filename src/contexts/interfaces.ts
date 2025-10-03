@@ -17,7 +17,8 @@ export interface PaginateResult<T> {
 export interface IPreacher {
     _id: string;
     name: string;
-    congregation: ICongregation
+    congregation: ICongregation,
+    privileges: string[],
 }
 
 export interface ICongregation {

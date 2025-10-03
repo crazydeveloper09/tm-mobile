@@ -5,6 +5,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 import { isTablet } from "../helpers/devices";
+import { preachersTranslations } from "../screens/preachers/translations";
+import useLocaLization from "../hooks/useLocalization";
 
 interface PreacherProps {
     preacher: IPreacher;
@@ -14,6 +16,7 @@ const Preacher: React.FC<PreacherProps> = ({ preacher }) => {
     const navigation = useNavigation();
 
     const {state} = useContext(SettingsContext);
+    const preacerTranslate = useLocaLization(preachersTranslations)
 
     return (
         <View style={styles.container}>
@@ -29,7 +32,7 @@ const Preacher: React.FC<PreacherProps> = ({ preacher }) => {
                 </View>
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('PreacherTerritories', {preacherID: preacher._id})}>
-                <Text style={[styles.link, { color: state.mainColor }]}>Zobacz tereny głosiciela</Text>
+                <Text style={[styles.link, { color: state.mainColor }]}>{preacerTranslate.t("preacherTerritories")}</Text>
             </TouchableOpacity>
         </View>
     )

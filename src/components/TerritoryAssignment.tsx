@@ -7,7 +7,7 @@ import ButtonC from "./Button";
 import DropDownPicker from "react-native-dropdown-picker";
 import Label from "./Label";
 import ChooseDate from "./ChooseDate";
-import { defaultStyles } from "../screens/defaultStyles";
+import { defaultDropdownStyles } from "../screens/defaultStyles";
 import { View } from "react-native";
 
 interface TerritoryAssignmentProps {
@@ -28,7 +28,8 @@ const TerritoryAssignment:React.FC<TerritoryAssignmentProps> = ({ territory, pre
       const [preacherOpen, setPreacherOpen] = useState(false);
       const [preacherItems, setPreacherItems] = useState([]);
       const { state, assignTerritory, makeTerritoryFreeAgain } = useContext(TerritoriesContext)
-      const settings = useContext(SettingsContext)
+      const settingsContext = useContext(SettingsContext);
+      const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
       useEffect(() => {
         const selectItems = preachers?.map((preacher) => {
@@ -102,10 +103,10 @@ const TerritoryAssignment:React.FC<TerritoryAssignmentProps> = ({ territory, pre
                 setValue={setPreacherValue}
                 searchable={true}
                 listMode="MODAL"
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 modalTitle={`Przydzielenie głosiciela do terenu nr ${territory?.number}`}
-                modalTitleStyle={{ color: 'black' }}
                 containerStyle={{
                     position: 'relative',
                     marginVertical: 15,
@@ -120,7 +121,7 @@ const TerritoryAssignment:React.FC<TerritoryAssignmentProps> = ({ territory, pre
                 onValueChange={(value) => setIsChosenDate(value)}
                 style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
 
-                color={settings.state.mainColor}
+                color={settingsContext.state.mainColor}
             />
 
             {isChosenDate && <>

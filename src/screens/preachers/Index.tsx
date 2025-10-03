@@ -7,6 +7,8 @@ import { NavigationProp } from '@react-navigation/native';
 import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
 import { columnsNum } from '../../helpers/devices';
+import useLocaLization from '../../hooks/useLocalization';
+import { preachersTranslations } from './translations';
 
 interface PreachersIndexScreenProps {
     navigation: NavigationProp<any>
@@ -16,7 +18,8 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
 
     const { state, loadPreachers, clearError } = useContext(PreachersContext);
     const [page, setPage] = useState(1)
-    const [limit, setLimit] = useState(10)
+    const [limit, setLimit] = useState(10);
+    const preacherTranslate = useLocaLization(preachersTranslations)
 
     useEffect(() => {
         navigation.setOptions({
@@ -49,7 +52,7 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.resultsText}>Liczba głosicieli: {state.preachers?.totalDocs}</Text>
+            <Text style={styles.resultsText}>{preacherTranslate.t("preachersCount", { count: state.preachers?.totalDocs })}</Text>
             <FlatList 
                 keyExtractor={((preacher) => preacher._id)}
                 data={state.preachers?.docs}

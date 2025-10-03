@@ -1,16 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as MinistryGroupContext } from "../../contexts/MinistryGroupContext";
-import { Input } from "@rneui/themed";
 import DropDownPicker from "react-native-dropdown-picker";
 import Loading from "../../components/Loading";
 import ButtonC from "../../components/Button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import territories from "../../api/territories";
 import { IPreacher } from "../../contexts/interfaces";
-import { defaultStyles } from "../defaultStyles";
 import MyInput from "../../components/MyInput";
+import { defaultDropdownStyles } from "../defaultStyles";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import Label from "../../components/Label";
+import useLocaLization from "../../hooks/useLocalization";
+import { ministryGroupsTranslations } from "./translations";
+import { storage } from "../../helpers/storage";
 
 interface MinistryGroupEditScreenProps {
     route: {
@@ -24,7 +28,6 @@ interface MinistryGroupEditScreenProps {
 const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route }) => {
     const ministryGroup = useContext(MinistryGroupContext);
     const preachers = useContext(PreachersContext);
-
     const [name, setName] = useState('')
     const [ministryGroupID, setMinistryGroupID] = useState(route.params.ministryGroupID)
     const [preachersValue, setPreachersValue] = useState([]);
@@ -33,9 +36,14 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
     const [overseerOpen, setOverseerOpen] = useState(false);
     const [overseerValue, setOverseerValue] = useState(null);
     const [overseerItems, setOverseerItems] = useState([]);
+    const settingsContext = useContext(SettingsContext);
+    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
+
+
+    const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
 
     const loadPreachers = async () => {
-        const token = await AsyncStorage.getItem('token')
+        const token = await storage.getItem('token', "session")
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
                 'Authorization': `bearer ${token}`
@@ -43,10 +51,19 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
         })
         .then((response) => {
             const selectItems = response.data.map((preacher) => {
-                return { label: preacher.name, value: preacher._id } as never
-            })
-            setPreachersItems(selectItems)
-            setOverseerItems(selectItems)
+          return { label: preacher.name, value: preacher._id } as never;
+        });
+        const selectOverseerItems = response.data
+          .filter(
+            (preacher) =>
+              preacher.privileges.includes('elder') ||
+              preacher.privileges.includes('mini_servant')
+          )
+          .map((preacher) => {
+            return { label: preacher.name, value: preacher._id } as never;
+          });
+        setPreachersItems(selectItems);
+        setOverseerItems(selectOverseerItems);
         })
         .catch((err) => console.log(err))
     }
@@ -68,20 +85,18 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
     }
 
     if(preachers.state.errMessage || ministryGroup.state.errMessage){
-        Alert.alert("Server error", preachers.state.errMessage || ministryGroup.state.errMessage, [{ text: 'OK', onPress: () => {
-            preachers.clearError()
-            ministryGroup.clearError()
-        } }])
+        Alert.alert("Server error", preachers.state.errMessage || ministryGroup.state.errMessage)
     }
 
     return (
         <View style={styles.container}>
             <MyInput 
-                label='Edytuj nazwę grupy'
-                placeholder="Wpisz nazwę grupy"
+                label={ministryGroupTranslate.t("nameLabel")}
+                placeholder={ministryGroupTranslate.t("namePlaceholder")}
                 value={name}
                 onChangeText={setName}
             />
+            <Label text={ministryGroupTranslate.t("preacherLabel")} />
             <DropDownPicker
                 multiple={true}
                 open={preachersOpen}
@@ -89,33 +104,41 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
                 items={preachersItems}
                 setOpen={setPreachersOpen}
                 setValue={setPreachersValue}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
                 searchable={true}
-                containerStyle={{
-                    marginVertical: 20
-                }}
+                placeholder={ministryGroupTranslate.t("preacherPlaceholder")}
+                listMode="MODAL"
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
             />
 
-            {!preachersOpen && <DropDownPicker
-                open={overseerOpen}
-                value={overseerValue}
-                items={overseerItems}
-                setOpen={setOverseerOpen}
-                setValue={setOverseerValue}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
-                searchable={true}
-            />}
+            {!preachersOpen && <>
+                <Label text={ministryGroupTranslate.t("overseerLabel")} />
+                <DropDownPicker
+                    open={overseerOpen}
+                    value={overseerValue}
+                    items={overseerItems}
+                    setOpen={setOverseerOpen}
+                    setValue={setOverseerValue}
+                    modalTitleStyle={dropdownStyles.text}
+                    labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    searchable={true}
+                    listMode="MODAL"
+                    containerStyle={{
+                        marginBottom: 20
+                    }}
+                    placeholder={ministryGroupTranslate.t("overseerPlaceholder")}
+                />
+            </>}
 
-            <ButtonC title="Edytuj grupę" isLoading={ministryGroup.state.isLoading} onPress={() => ministryGroup.editMinistryGroup(route.params.congregationID, ministryGroupID, name, preachersValue, overseerValue)} />
+            <ButtonC title={ministryGroupTranslate.t("editText")} isLoading={ministryGroup.state.isLoading} onPress={() => ministryGroup.editMinistryGroup(route.params.congregationID, ministryGroupID, name, preachersValue, overseerValue)} />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#ece9e9',
         padding: 15,
         flex: 1,
         justifyContent: 'center'

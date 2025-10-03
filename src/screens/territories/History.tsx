@@ -259,13 +259,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             
                     
 
-                      <Dialog
-                        isVisible={infoOpen}
-                        onBackdropPress={toggleInfo}
-                      >
-                        <Dialog.Title title="Ważna informacja !!" titleStyle={{ color: 'white' }} />
-                        <Text style={{ color: 'white' }}>Niedawno zmieniłem strukturę rekodu historii. W związku z tym, jeśli chcesz, żeby poprawnie się wszystko wyświetlało zachęcam do edycji tego rekordu w aplikacji internetowej. Wszelkie szczegóły są tam podane.</Text>
-                      </Dialog>
+              
                       <DescriptionAndValue 
                         description='Data opracowania' 
                         value={new Date(item.passedBackDate)?.toLocaleDateString()} 
