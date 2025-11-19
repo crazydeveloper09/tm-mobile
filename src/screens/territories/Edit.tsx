@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IPreacher, ITerritory } from '../../contexts/interfaces';
 import ButtonC from '../../components/Button';
 import { Context as SettingsContext } from '../../contexts/SettingsContext';
-import { defaultStyles } from '../defaultStyles';
+import { defaultDropdownStyles } from '../defaultStyles';
 import MyInput from '../../components/MyInput';
 import Label from '../../components/Label';
 
@@ -56,8 +56,10 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
     ]);
     const {editTerritory, state} = useContext(TerritoriesContext);
     const settings = useContext(SettingsContext)
+    const defaultStyles = defaultDropdownStyles(settings.state.fontIncrement)
 
     useEffect(() => {
+        setTerritoryID(route.params.territory._id)
         setNumber(route.params.territory?.number!.toString()!)
             setEndNumber(route.params.territory.endNumber?.toString()!)
             setBeginNumber(route.params.territory.beginNumber?.toString()!)
@@ -89,8 +91,8 @@ const TerritoriesEditScreen: React.FC<TerritoriesEditScreenProps> = ({ route }) 
                 items={kindItems}
                 setOpen={setKindOpen}
                 setValue={setKindValue}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                labelStyle={[defaultStyles.container, defaultStyles.text]}
+                placeholderStyle={[defaultStyles.container, defaultStyles.text]}
                 flatListProps={{ scrollEnabled: false }}
                 containerStyle={{
                     marginVertical: 15,

@@ -10,7 +10,8 @@ import territories from '../../api/territories';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IPreacher } from '../../contexts/interfaces';
 import ButtonC from '../../components/Button';
-import { defaultStyles } from '../defaultStyles';
+import { defaultDropdownStyles } from '../defaultStyles';
+
 import MyInput from '../../components/MyInput';
 import Label from '../../components/Label';
 import ChooseDate from '../../components/ChooseDate';
@@ -58,6 +59,7 @@ const TerritoriesNewScreen: React.FC = () => {
     const [taken, setTaken] = useState(new Date())
     const {addTerritory, state, clearError} = useContext(TerritoriesContext);
     const settings = useContext(SettingsContext)
+     const defaultStyles = defaultDropdownStyles(settings.state.fontIncrement)
 
     const loadPreachers = async () => {
         const token = await AsyncStorage.getItem('token')
@@ -102,8 +104,8 @@ const TerritoriesNewScreen: React.FC = () => {
                 items={kindItems}
                 setOpen={setKindOpen}
                 setValue={setKindValue}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                labelStyle={[defaultStyles.container, defaultStyles.text]}
+                placeholderStyle={[defaultStyles.container, defaultStyles.text]}
                 flatListProps={{ scrollEnabled: false }}
                 containerStyle={{
                     marginBottom: 15,
@@ -163,8 +165,8 @@ const TerritoriesNewScreen: React.FC = () => {
                 items={preacherItems}
                 setOpen={setPreacherOpen}
                 setValue={setPreacherValue}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                labelStyle={[defaultStyles.container, defaultStyles.text]}
+                placeholderStyle={[defaultStyles.container, defaultStyles.text]}
                 searchable={true}
                 flatListProps={{ scrollEnabled: false }}
                 containerStyle={{
