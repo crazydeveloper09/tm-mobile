@@ -1,11 +1,10 @@
-export const groupBy = function<T>(data: T[], key: string) {
-    return data?.reduce(function(storage, item) {
-        let group = item[key];
-        
-        storage[group] = storage[group] || [];
-        
-        storage[group].push(item);
-        
-        return storage; 
-    }, {});
+export const groupBy = <T, K extends PropertyKey>(
+  data: T[],
+  getKey: (item: T) => K
+): Record<K, T[]> => {
+  return data.reduce((acc, item) => {
+    const key = getKey(item);
+    (acc[key] = acc[key] || []).push(item);
+    return acc;
+  }, {} as Record<K, T[]>);
 };

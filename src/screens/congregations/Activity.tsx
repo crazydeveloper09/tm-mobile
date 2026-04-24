@@ -26,7 +26,7 @@ const CongregationActivityScreen: React.FC = () => {
         Alert.alert("Server error", state.errMessage, [{ text: "OK", onPress: () => clearError() }])
     }
 
-    const groupedActivities = state.activities && groupBy<IActivity>(state.activities, 'applicationType')
+    const groupedActivities = state.activities && groupBy(state.activities, item => item.applicationType);
     return (
         <ScrollView style={styles.container}>
             <FlatList 

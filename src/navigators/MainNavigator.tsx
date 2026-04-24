@@ -26,13 +26,6 @@ const MainNavigator = () => {
       <PaperProvider theme={theme}>
         <Tab.Navigator barStyle={{ backgroundColor: `${state.mainColor}15` }}>
             <Tab.Screen 
-              name="Home"
-              component={HomeNavigator}
-              options={{
-                tabBarIcon: ({color}) => <MaterialCommunityIcons name='home' color={color} size={28} />,
-              }}
-            />
-            <Tab.Screen 
               name="Tereny"
               component={TerritoriesNavigator}
               options={{

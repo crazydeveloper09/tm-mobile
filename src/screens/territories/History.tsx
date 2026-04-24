@@ -112,7 +112,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
       default:
           break;
   }
-  const serviceYears = groupBy<ICheckout>(state.territory?.history!, 'serviceYear')
+  const serviceYears = state.territory?.history && groupBy(state.territory?.history, item => item.serviceYear);
     return (
       <ScrollView style={[styles.container, { backgroundColor }]} refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> }>
         <View style={styles.titleContainer}>
@@ -234,7 +234,7 @@ const TerritoriesHistoryScreen: React.FC<TerritoriesHistoryScreenProps> = ({ nav
             <Divider />
             <Text style={styles.historyTitle}>Historia</Text>
             <FlatList 
-              data={state.territory?.history && Object.keys(groupBy<ICheckout>(state.territory?.history!, 'serviceYear')).reverse()}
+              data={state.territory?.history && Object.keys(groupBy(state.territory?.history!, item => item.serviceYear)).reverse()}
               scrollEnabled={false}
               renderItem={(serviceYear) => <View>
                   <Text style={styles.serviceYearTitle}>Rok służbowy {serviceYear.item}</Text>

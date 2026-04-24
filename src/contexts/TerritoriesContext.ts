@@ -17,7 +17,8 @@ interface ITerritoryState {
 }
 
 interface ITerritoryContext {
-    state: ITerritoryState
+    state: ITerritoryState,
+    loadAllTerritories: Function,
     loadTerritories: Function,
     loadTerritoryHistory: Function,
     loadAvailableTerritories: Function,
@@ -40,6 +41,8 @@ const TerritoryReducer = (state: ITerritoryState, action: { type: string, payloa
             return { ...state, isLoading: false, errMessage: '' }
         case 'load_data':
             return { ...state, isLoading: false, territories: action.payload, errMessage: '' }
+        case 'load_all':
+            return { ...state, isLoading: false, allTerritories: action.payload, errMessage: '' }
         case 'load_territory':
             return { 
                 ...state, 
@@ -65,16 +68,34 @@ const clearError = (dispatch: Function) => {
 }
 
 const loadTerritories = (dispatch: Function) => {
-    return async (page: number, limit: number) => {
+    return async (page: number, limit: number, status: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
             const token = await AsyncStorage.getItem('token');
-            const response = await territories.get(`/territories?page=${page}&limit=${limit}`, {
+            const response = await territories.get(`/territories?page=${page}&limit=${limit}&status=${status}`, {
                 headers: {
                     'Authorization': `bearer ${token}`
                 }
             });
             dispatch({ type: 'load_data', payload: response.data })
+        } catch (err) {
+            dispatch({ type: 'add_error', payload: (err as AxiosError).message })
+        }
+    
+    }
+}
+
+const loadAllTerritories = (dispatch: Function) => {
+    return async () => {
+        try {
+            dispatch({ type: 'turn_on_loading' })
+            const token = await AsyncStorage.getItem('token');
+            const response = await territories.get(`/territories/all`, {
+                headers: {
+                    'Authorization': `bearer ${token}`
+                }
+            });
+            dispatch({ type: 'load_all', payload: response.data })
         } catch (err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
@@ -263,4 +284,4 @@ const turnOffLoading = (dispatch: Function) => {
     }
 }
 
-export const { Context, Provider } = createDataContext<ITerritoryState, ITerritoryContext>(TerritoryReducer, {loadTerritories, loadTerritoryHistory, searchTerritory, loadAvailableTerritories, assignTerritory, makeTerritoryFreeAgain, addTerritory, editTerritory, deleteTerritory, turnOffLoading, turnOnLoading, clearError}, { isLoading: false})
+export const { Context, Provider } = createDataContext<ITerritoryState, ITerritoryContext>(TerritoryReducer, {loadTerritories, loadAllTerritories, loadTerritoryHistory, searchTerritory, loadAvailableTerritories, assignTerritory, makeTerritoryFreeAgain, addTerritory, editTerritory, deleteTerritory, turnOffLoading, turnOnLoading, clearError}, { isLoading: false})
